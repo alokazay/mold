@@ -246,14 +246,14 @@
                 <div class="row mb-5">
                     <div class="col-6">
                         <div class="d-flex flex-column mb-0 fv-row">
-                            <label class="fs-5 fw-bold mb-2">Фамилия</label>
+                            <label class="required fs-5 fw-bold mb-2">Фамилия</label>
                             <input id="modal_users_add__lastName"
                                    class="form-control form-control-sm form-control-solid" type="text"/>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="d-flex flex-column mb-0 fv-row">
-                            <label class="fs-5 fw-bold mb-2">Имя</label>
+                            <label class="required fs-5 fw-bold mb-2">Имя</label>
                             <input id="modal_users_add__firstName"
                                    class="form-control form-control-sm form-control-solid" type="text"/>
                         </div>
@@ -263,7 +263,7 @@
                 <div class="row mb-5">
                     <div class="col-6">
                         <div class="d-flex flex-column mb-0 fv-row">
-                            <label class="fs-5 fw-bold mb-2">Телефон</label>
+                            <label class="required fs-5 fw-bold mb-2">Телефон</label>
                             <input id="modal_users_add__phone" class="form-control form-control-sm form-control-solid"
                                    type="text"/>
                         </div>
@@ -317,7 +317,7 @@
                 <div class="row mb-5">
                     <div class="col">
                         <div class="d-flex flex-column mb-0 fv-row">
-                            <label class="fs-5 fw-bold mb-2">пароль</label>
+                            <label class="required fs-5 fw-bold mb-2">Пароль</label>
 
                             <div class="input-group input-group-solid mb-5">
                                 <span onclick="generatePassword();" style="cursor: pointer" class="input-group-text"
@@ -494,7 +494,7 @@
     });
 
     function generatePassword() {
-        var length = 8,
+        var length = 11,
             charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
             retVal = "";
         for (var i = 0, n = charset.length; i < length; ++i) {

@@ -205,12 +205,12 @@ sup {
 }
 
 a {
-    color: #009ef7;
+    color: #FF5612;
     text-decoration: none
 }
 
 a:hover {
-    color: #006dab;
+    color: #ed4400;
     text-decoration: underline
 }
 
@@ -5275,7 +5275,7 @@ textarea.form-control-lg {
 
 .page-link:focus {
     z-index: 3;
-    color: #009ef7;
+    color: #FF5612;
     background-color: #f1faff;
     outline: 0;
     box-shadow: none
@@ -5288,7 +5288,7 @@ textarea.form-control-lg {
 .page-item.active .page-link {
     z-index: 3;
     color: #fff;
-    background-color: #009ef7;
+    background-color: #FF5612;
     border-color: transparent
 }
 
@@ -32374,7 +32374,7 @@ textarea.form-control-lg {
 }
 
 .text-primary {
-    color: #009ef7 !important
+    color: #FF5612 !important
 }
 
 .text-inverse-primary {
@@ -34091,11 +34091,11 @@ a:hover {
 }
 
 .page-item:hover:not(.offset) .page-link {
-    color: #009ef7
+    color: #fff;
 }
 
 .page-item:hover:not(.offset) .page-link i {
-    color: #009ef7
+    color: #fff;
 }
 
 .page-item:hover:not(.offset) .page-link .previous {
@@ -37091,19 +37091,19 @@ a:hover {
 
 .menu-state-primary .menu-item.hover:not(.here) > .menu-link:not(.disabled):not(.active):not(.here), .menu-state-primary .menu-item:not(.here) .menu-link:hover:not(.disabled):not(.active):not(.here) {
     transition: color .2s ease, background-color .2s ease;
-    color: #009ef7
+    color: #FF5612;
 }
 
 .menu-state-primary .menu-item.hover:not(.here) > .menu-link:not(.disabled):not(.active):not(.here) .menu-title, .menu-state-primary .menu-item:not(.here) .menu-link:hover:not(.disabled):not(.active):not(.here) .menu-title {
-    color: #009ef7
+    color: #FF5612
 }
 
 .menu-state-primary .menu-item.hover:not(.here) > .menu-link:not(.disabled):not(.active):not(.here) .menu-icon, .menu-state-primary .menu-item.hover:not(.here) > .menu-link:not(.disabled):not(.active):not(.here) .menu-icon .svg-icon, .menu-state-primary .menu-item.hover:not(.here) > .menu-link:not(.disabled):not(.active):not(.here) .menu-icon i, .menu-state-primary .menu-item:not(.here) .menu-link:hover:not(.disabled):not(.active):not(.here) .menu-icon, .menu-state-primary .menu-item:not(.here) .menu-link:hover:not(.disabled):not(.active):not(.here) .menu-icon .svg-icon, .menu-state-primary .menu-item:not(.here) .menu-link:hover:not(.disabled):not(.active):not(.here) .menu-icon i {
-    color: #009ef7
+    color: #FF5612
 }
 
 .menu-state-primary .menu-item.hover:not(.here) > .menu-link:not(.disabled):not(.active):not(.here) .menu-bullet .bullet, .menu-state-primary .menu-item:not(.here) .menu-link:hover:not(.disabled):not(.active):not(.here) .menu-bullet .bullet {
-    background-color: #009ef7
+    background-color: #FF5612
 }
 
 .menu-state-primary .menu-item.hover:not(.here) > .menu-link:not(.disabled):not(.active):not(.here) .menu-arrow:after, .menu-state-primary .menu-item:not(.here) .menu-link:hover:not(.disabled):not(.active):not(.here) .menu-arrow:after {
@@ -38185,8 +38185,8 @@ a:hover {
 
 .btn.btn-primary {
     color: #fff;
-    border-color: #009ef7;
-    background-color: #009ef7
+    border-color: #ff4800;
+    background-color: #FF5612;
 }
 
 .btn.btn-primary .svg-icon, .btn.btn-primary i {
@@ -38199,8 +38199,8 @@ a:hover {
 
 .btn-check:active + .btn.btn-primary, .btn-check:checked + .btn.btn-primary, .btn.btn-primary.active, .btn.btn-primary.show, .btn.btn-primary:active:not(.btn-active), .btn.btn-primary:focus:not(.btn-active), .btn.btn-primary:hover:not(.btn-active), .show > .btn.btn-primary {
     color: #fff;
-    border-color: #0095e8;
-    background-color: #0095e8 !important
+    border-color: #ed4400;
+    background-color: #ed4400  !important
 }
 
 .btn-check:active + .btn.btn-primary .svg-icon, .btn-check:active + .btn.btn-primary i, .btn-check:checked + .btn.btn-primary .svg-icon, .btn-check:checked + .btn.btn-primary i, .btn.btn-primary.active .svg-icon, .btn.btn-primary.active i, .btn.btn-primary.show .svg-icon, .btn.btn-primary.show i, .btn.btn-primary:active:not(.btn-active) .svg-icon, .btn.btn-primary:active:not(.btn-active) i, .btn.btn-primary:focus:not(.btn-active) .svg-icon, .btn.btn-primary:focus:not(.btn-active) i, .btn.btn-primary:hover:not(.btn-active) .svg-icon, .btn.btn-primary:hover:not(.btn-active) i, .show > .btn.btn-primary .svg-icon, .show > .btn.btn-primary i {
@@ -38837,51 +38837,51 @@ a:hover {
 }
 
 .btn.btn-color-primary {
-    color: #009ef7
+    color: #FF5612
 }
 
 .btn.btn-color-primary .svg-icon, .btn.btn-color-primary i {
-    color: #009ef7
+    color: #FF5612
 }
 
 .btn.btn-color-primary.dropdown-toggle:after {
-    color: #009ef7
+    color: #FF5612
 }
 
 .btn-check:active + .btn.btn-active-color-primary, .btn-check:checked + .btn.btn-active-color-primary, .btn.btn-active-color-primary.active, .btn.btn-active-color-primary.show, .btn.btn-active-color-primary:active:not(.btn-active), .btn.btn-active-color-primary:focus:not(.btn-active), .btn.btn-active-color-primary:hover:not(.btn-active), .show > .btn.btn-active-color-primary {
-    color: #009ef7
+    color: #FF5612
 }
 
 .btn-check:active + .btn.btn-active-color-primary .svg-icon, .btn-check:active + .btn.btn-active-color-primary i, .btn-check:checked + .btn.btn-active-color-primary .svg-icon, .btn-check:checked + .btn.btn-active-color-primary i, .btn.btn-active-color-primary.active .svg-icon, .btn.btn-active-color-primary.active i, .btn.btn-active-color-primary.show .svg-icon, .btn.btn-active-color-primary.show i, .btn.btn-active-color-primary:active:not(.btn-active) .svg-icon, .btn.btn-active-color-primary:active:not(.btn-active) i, .btn.btn-active-color-primary:focus:not(.btn-active) .svg-icon, .btn.btn-active-color-primary:focus:not(.btn-active) i, .btn.btn-active-color-primary:hover:not(.btn-active) .svg-icon, .btn.btn-active-color-primary:hover:not(.btn-active) i, .show > .btn.btn-active-color-primary .svg-icon, .show > .btn.btn-active-color-primary i {
-    color: #009ef7
+    color: #FF5612
 }
 
 .btn-check:active + .btn.btn-active-color-primary.dropdown-toggle:after, .btn-check:checked + .btn.btn-active-color-primary.dropdown-toggle:after, .btn.btn-active-color-primary.active.dropdown-toggle:after, .btn.btn-active-color-primary.show.dropdown-toggle:after, .btn.btn-active-color-primary:active:not(.btn-active).dropdown-toggle:after, .btn.btn-active-color-primary:focus:not(.btn-active).dropdown-toggle:after, .btn.btn-active-color-primary:hover:not(.btn-active).dropdown-toggle:after, .show > .btn.btn-active-color-primary.dropdown-toggle:after {
-    color: #009ef7
+    color: #FF5612
 }
 
 .btn.btn-icon-primary .svg-icon, .btn.btn-icon-primary i {
-    color: #009ef7
+    color: #FF5612
 }
 
 .btn.btn-icon-primary.dropdown-toggle:after {
-    color: #009ef7
+    color: #FF5612
 }
 
 .btn-check:active + .btn.btn-active-icon-primary .svg-icon, .btn-check:active + .btn.btn-active-icon-primary i, .btn-check:checked + .btn.btn-active-icon-primary .svg-icon, .btn-check:checked + .btn.btn-active-icon-primary i, .btn.btn-active-icon-primary.active .svg-icon, .btn.btn-active-icon-primary.active i, .btn.btn-active-icon-primary.show .svg-icon, .btn.btn-active-icon-primary.show i, .btn.btn-active-icon-primary:active:not(.btn-active) .svg-icon, .btn.btn-active-icon-primary:active:not(.btn-active) i, .btn.btn-active-icon-primary:focus:not(.btn-active) .svg-icon, .btn.btn-active-icon-primary:focus:not(.btn-active) i, .btn.btn-active-icon-primary:hover:not(.btn-active) .svg-icon, .btn.btn-active-icon-primary:hover:not(.btn-active) i, .show > .btn.btn-active-icon-primary .svg-icon, .show > .btn.btn-active-icon-primary i {
-    color: #009ef7
+    color: #FF5612
 }
 
 .btn-check:active + .btn.btn-active-icon-primary.dropdown-toggle:after, .btn-check:checked + .btn.btn-active-icon-primary.dropdown-toggle:after, .btn.btn-active-icon-primary.active.dropdown-toggle:after, .btn.btn-active-icon-primary.show.dropdown-toggle:after, .btn.btn-active-icon-primary:active:not(.btn-active).dropdown-toggle:after, .btn.btn-active-icon-primary:focus:not(.btn-active).dropdown-toggle:after, .btn.btn-active-icon-primary:hover:not(.btn-active).dropdown-toggle:after, .show > .btn.btn-active-icon-primary.dropdown-toggle:after {
-    color: #009ef7
+    color: #FF5612
 }
 
 .btn.btn-text-primary {
-    color: #009ef7
+    color: #FF5612
 }
 
 .btn-check:active + .btn.btn-active-text-primary, .btn-check:checked + .btn.btn-active-text-primary, .btn.btn-active-text-primary.active, .btn.btn-active-text-primary.show, .btn.btn-active-text-primary:active:not(.btn-active), .btn.btn-active-text-primary:focus:not(.btn-active), .btn.btn-active-text-primary:hover:not(.btn-active), .show > .btn.btn-active-text-primary {
-    color: #009ef7
+    color: #FF5612
 }
 
 .btn.btn-color-secondary {
@@ -46691,7 +46691,7 @@ code:not([class*=language-]) {
     height: 36px;
     bottom: 40px;
     right: 20px;
-    background-color: #009ef7;
+    background-color: #FF5612;
     box-shadow: 0 .5rem 1.5rem .5rem rgba(0, 0, 0, .075);
     opacity: 0;
     transition: color .2s ease, background-color .2s ease;
@@ -46768,7 +46768,7 @@ code:not([class*=language-]) {
 }
 
 .svg-icon.svg-icon-primary {
-    color: #009ef7
+    color: #FF5612
 }
 
 .svg-icon.svg-icon-secondary {

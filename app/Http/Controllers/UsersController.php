@@ -155,7 +155,7 @@ class UsersController extends Controller
                 'firstName' => 'required',
                 'lastName' => 'required',
                 'phone' => 'required',
-                'email' => 'required|email|unique:users,email',
+                'email' => 'required|email:rfc,dns|unique:users,email',
             ]);
             if ($validator->fails()) {
                 $error = $validator->errors()->first();
@@ -164,7 +164,7 @@ class UsersController extends Controller
 
         } else {
             $validator = Validator::make($r->all(), [
-                'email' => 'required|email',
+                'email' => 'required|email:rfc,dns',
                 'firstName' => 'required',
                 'lastName' => 'required',
                 'phone' => 'required',
