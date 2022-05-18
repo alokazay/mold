@@ -14,6 +14,7 @@
 <body id="kt_body"
       class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed"
       style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
+@csrf
 <!--begin::Main-->
 <!--begin::Root-->
 <div class="d-flex flex-column flex-root">
@@ -80,7 +81,7 @@
                             <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
                                 <!--begin::Item-->
                                 <li class="breadcrumb-item text-muted">
-                                    <a href="{{url('/')}}/dashboard" class="text-muted text-hover-primary">Home</a>
+                                    <a href="{{url('/')}}/dashboard" class="text-muted text-hover-primary">Главная</a>
                                 </li>
                                 <!--end::Item-->
                                 <!--begin::Item-->

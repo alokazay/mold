@@ -63,6 +63,18 @@ class User extends Authenticatable
             return 'Менеджер поддержки';
         }
     }
+
+    public function getActivation(){
+        if ($this->activation == 1) {
+            return 'Активирован';
+        } else if ($this->activation == 2) {
+            return 'Деактивирован';
+        }
+    }
+
+    public function D_file(){
+        return $this->hasOne(C_file::class)->where('type', 1);
+    }
 }
 
 

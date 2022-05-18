@@ -28,5 +28,16 @@ Route::get('login', [AuthController::class, 'getLogin'])->name("login");
 Route::post('login', [AuthController::class, 'postLogin']);
 Route::get('logout', [AuthController::class, 'getLogout']);
 
-Route::get('users', [UsersController::class, 'getIndex']);
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('users', [UsersController::class, 'getIndex']);
+    Route::post('users/getJson', [UsersController::class, 'getJson'])->name('users.json');
+    Route::post('users/add', [UsersController::class, 'addUser'])->name('users.add');
+    Route::post('/files/user/add', [UsersController::class, 'filesUserAdd']);
+    Route::get('/users/ajax/id/{id}', [UsersController::class, 'getUserAjax'])->name('users.ajax.id');
+    Route::get('/users/activation', [UsersController::class, 'usersActivation']);
+    Route::get('/users/auth_by/{id}', [UsersController::class, 'authBy'])->middleware('is_admin');
+
+});
+
+
 
