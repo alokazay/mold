@@ -195,8 +195,6 @@
                                             <th class="min-w-125px sorting_disabled">Роль</th>
                                             <th class="max-w-65px sorting_disabled">Телефон</th>
                                             <th class="max-w-65px sorting_disabled">Email</th>
-                                            <th class="min-w-125px sorting_disabled">Счет</th>
-                                            <th class="min-w-125px sorting_disabled">Логин</th>
                                             <th class="w-35px sorting_disabled">Файл</th>
                                             <th class="min-w-100px sorting_disabled">Статус</th>
                                         </tr>
@@ -306,21 +304,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mb-5">
-                    <div class="col-6">
+                <div style="display: none;" c class="row mb-5">
+                    <div  lass="col-6">
                         <div class="d-flex flex-column mb-0 fv-row">
                             <label class="fs-5 fw-bold mb-2">Cчет</label>
                             <input id="modal_users_add__account" class="form-control form-control-sm form-control-solid"
                                    type="text"/>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <div class="d-flex flex-column mb-0 fv-row">
-                            <label class="required fs-5 fw-bold mb-2">Логин</label>
-                            <input id="modal_users_add__login" class="form-control form-control-sm form-control-solid"
-                                   type="text"/>
-                        </div>
-                    </div>
+
                 </div>
                 <div class="row mb-5">
                     <div class="col">
@@ -391,7 +383,6 @@
         $('#modal_users_add__lastName').val('');
         $('#modal_users_add__phone').val('');
         $('#modal_users_add__account').val('');
-        $('#modal_users_add__login').val('');
         $('#modal_users_add').modal('show');
     });
 
@@ -410,7 +401,6 @@
             lastName: $('#modal_users_add__lastName').val(),
             phone: $('#modal_users_add__phone').val(),
             account: $('#modal_users_add__account').val(),
-            login: $('#modal_users_add__login').val(),
             _token: $('input[name=_token]').val(),
         };
 
@@ -523,7 +513,6 @@
             $('#modal_users_add__lastName').val(res.user.lastName);
             $('#modal_users_add__phone').val(res.user.phone);
             $('#modal_users_add__account').val(res.user.account);
-            $('#modal_users_add__login').val(res.user.login);
             $('#modal_users_add__group_id').val(res.user.group_id);
             $('#modal_users_add__activation').val(res.user.activation);
 

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Password;
 
 class UsersController extends Controller
 {
@@ -126,8 +127,6 @@ class UsersController extends Controller
                 $u->getGroup(),
                 $u->phone,
                 $u->email,
-                $u->account,
-                '<a href="/users/auth_by/' . $u->id . '">' . $u->login . '</a>',
                 $file,
                 $select_active
 
@@ -152,8 +151,11 @@ class UsersController extends Controller
             $user = new User();
 
             $validator = Validator::make($r->all(), [
-                'email' => 'required|unique:users,email',
-                'login' => 'required|unique:users,login',
+                'password' => ['required', Password::min(10)],
+                'firstName' => 'required',
+                'lastName' => 'required',
+                'phone' => 'required',
+                'email' => 'required|email|unique:users,email',
             ]);
             if ($validator->fails()) {
                 $error = $validator->errors()->first();
@@ -162,8 +164,10 @@ class UsersController extends Controller
 
         } else {
             $validator = Validator::make($r->all(), [
-                'email' => 'required',
-                'login' => 'required',
+                'email' => 'required|email',
+                'firstName' => 'required',
+                'lastName' => 'required',
+                'phone' => 'required',
             ]);
             if ($validator->fails()) {
                 $error = $validator->errors()->first();
@@ -185,9 +189,7 @@ class UsersController extends Controller
         if ($r->has('account')) {
             $user->account = $r->account;
         }
-        if ($r->has('login')) {
-            $user->login = $r->login;
-        }
+
 
 
         if ($r->has('password') && $r->password != '') {
