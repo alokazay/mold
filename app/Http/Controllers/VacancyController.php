@@ -253,6 +253,10 @@ class VacancyController extends Controller
                     $order_direction = 'desc';
                 }
 
+                if ($data == 2) {
+                    $order_col = 'deadline_to';
+                }
+
             }
         }
         // search

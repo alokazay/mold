@@ -202,7 +202,7 @@
 
                                             <th class="max-w-55px sorting_disabled">Id</th>
                                             <th class="max-w-85px sorting_disabled">Отрасль</th>
-                                            <th class="sorting_disabled">Дедлайн</th>
+                                            <th>Дедлайн</th>
                                             <th class="sorting_disabled">Мужчины, кол-во</th>
                                             <th class="sorting_disabled">Женщины, кол-во</th>
                                             <th class="sorting_disabled">Ставка</th>
