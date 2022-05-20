@@ -224,7 +224,7 @@ class UsersController extends Controller
         $file = request()->file('file');
         if ($file->isValid()) {
 
-            $path = '/uploads/' . Carbon::now()->format('m.Y') . '/' . $user_id . '/files/';
+            $path = '/uploads/users/' . Carbon::now()->format('m.Y') . '/' . $user_id . '/files/';
             $name = Str::random(12) . '.' . $file->getClientOriginalExtension();
 
             $file->move(public_path($path), $name);

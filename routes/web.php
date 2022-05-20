@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\VacancyController;
+use App\Http\Controllers\SearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +20,7 @@ use App\Http\Controllers\UsersController;
 
 Route::get('/', [AuthController::class, 'getMain'])->middleware('auth');
 
-Route::get('/dashboard', function (){
+Route::get('/dashboard', function () {
     if (Auth::user()->group_id == 1) {
         return Redirect::to('users');
     }
@@ -37,6 +39,22 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/users/activation', [UsersController::class, 'usersActivation']);
     Route::get('/users/auth_by/{id}', [UsersController::class, 'authBy'])->middleware('is_admin');
 
+    // vacancies
+    Route::get('vacancies', [VacancyController::class, 'getIndex']);
+    Route::get('vacancy/add', [VacancyController::class, 'getAdd']);
+    Route::post('vacancy/add', [VacancyController::class, 'postAdd'])->name('vacancy.add');
+    Route::post('files/add', [VacancyController::class, 'filesAdd']);
+    Route::post('vacancy/getJson', [VacancyController::class, 'getJson'])->name('vacancy.json');
+    Route::get('vacancy/activation', [VacancyController::class, 'vacancyActivation']);
+
+
+
+    // ajax search
+    Route::get('search/vacancy/client', [SearchController::class, 'getAjaxVacancyClients']);
+    Route::get('search/vacancy/industry', [SearchController::class, 'getAjaxVacancyIndustry']);
+    Route::get('search/vacancy/nationality', [SearchController::class, 'getAjaxVacancyNationality']);
+    Route::get('search/vacancy/workplace', [SearchController::class, 'getAjaxVacancyWorkplace']);
+    Route::get('search/vacancy/docs', [SearchController::class, 'getAjaxVacancyDocs']);
 });
 
 

@@ -31,7 +31,7 @@
                     </a>
                 </div>
                 <div data-kt-menu-placement="bottom-start" class="menu-item   me-lg-1">
-                    <a  href="{{url('/')}}/jobs" class="menu-link py-3">
+                    <a  href="{{url('/')}}/vacancies" class="menu-link py-3">
                         <span class="menu-title">Вакансии</span>
                         <span class="menu-arrow d-lg-none"></span>
                     </a>

@@ -13,15 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('c_files', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->integer('type');
-            $table->integer('autor_id');
-            $table->integer('user_id');
-            $table->integer('vacancy_id');
-            $table->string('path');
-            $table->string('original_name');
-            $table->string('ext');
+        Schema::create('handbook_categories', function (Blueprint $table) {
+            $table->id();
+            $table->integer('active');
             $table->string('name')->nullable();
             $table->timestamps();
         });
@@ -34,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('c_files');
+        Schema::dropIfExists('handbook_categories');
     }
 };

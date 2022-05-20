@@ -17,19 +17,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $NOW = Carbon::now();
-        User::insert([
-            [
-                'id'=> 1,
-                'name' => 'Administrator',
-                'group_id ='=>1,
-                'email'=>'admin@test.net',
-                'password'=>Hash::make('1111'),
-                'remember_token'=>Hash::make(Hash::make('oK5sU4rM')),
-                'activation'=>1,
-                'created_at'=>$NOW,
-                'updated_at'=>$NOW,
-            ],
+
+
+        $this->call([
+            UserSeeder::class,
+            HandbookSeeder::class,
         ]);
+
     }
 }
