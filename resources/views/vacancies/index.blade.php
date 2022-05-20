@@ -201,10 +201,12 @@
                                         <tr class="text-start text-muted fw-bolder fs-7 gs-0">
 
                                             <th class="max-w-55px sorting_disabled">Id</th>
+                                            <th class="max-w-55px sorting_disabled">Название</th>
                                             <th class="max-w-85px sorting_disabled">Отрасль</th>
                                             <th>Дедлайн</th>
-                                            <th class="sorting_disabled">Мужчины, кол-во</th>
-                                            <th class="sorting_disabled">Женщины, кол-во</th>
+                                            <th class="max-w-25px sorting_disabled">М</th>
+                                            <th class="max-w-25px sorting_disabled">Ж</th>
+                                            <th class="max-w-25px sorting_disabled">Н</th>
                                             <th class="sorting_disabled">Ставка</th>
                                             <th class="sorting_disabled">Описание</th>
                                             <th class="sorting_disabled">Жилье</th>

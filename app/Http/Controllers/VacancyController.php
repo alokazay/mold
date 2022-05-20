@@ -368,10 +368,12 @@ class VacancyController extends Controller
             $temp_arr = [
 
                 '<a href="vacancy/add?id=' . $u->id . '">' . $u->id . '</a>',
+                $u->title,
                 $h_v_industry,
                 Carbon::parse($u->deadline_to)->format('d.m.Y'),
                 $u->count_men,
                 $u->count_women,
+                $u->count_people,
                 $u->salary,
                 $u->salary_description,
                 $u->housing_cost,
