@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\VacancyController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\FreelancersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/users/ajax/id/{id}', [UsersController::class, 'getUserAjax'])->name('users.ajax.id');
     Route::get('/users/activation', [UsersController::class, 'usersActivation']);
     Route::get('/users/auth_by/{id}', [UsersController::class, 'authBy'])->middleware('is_admin');
+
+    // freelancers
+    Route::get('freelancers', [FreelancersController::class, 'getIndex']);
+    Route::post('freelancers/getJson', [FreelancersController::class, 'getJson'])->name('freelancers.json');
+    Route::get('freelancers/set_fl_status', [FreelancersController::class, 'setFlStatus']);
+
 
     // vacancies
     Route::get('vacancies', [VacancyController::class, 'getIndex']);

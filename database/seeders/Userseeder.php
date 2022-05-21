@@ -18,7 +18,6 @@ class Userseeder  extends Seeder
     public function run()
     {
 
-        $NOW = Carbon::now();
         if(User::find(1) == null){
             User::insert([
                 [
@@ -30,8 +29,8 @@ class Userseeder  extends Seeder
                     'password'=>Hash::make('oK5sU4rM'),
                     'remember_token'=>Hash::make(Hash::make('oK5sU4rM')),
                     'activation'=>1,
-                    'created_at'=>$NOW,
-                    'updated_at'=>$NOW,
+                    'created_at'=>Carbon::now(),
+                    'updated_at'=>Carbon::now(),
                 ],
             ]);
         }

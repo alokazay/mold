@@ -64,7 +64,6 @@ class UsersController extends Controller
             $users = $users->where(function ($query) use ($search) {
                 $query->where('firstName', 'LIKE', '%' . $search . '%')
                     ->orWhere('email', 'LIKE', '%' . $search . '%')
-                    ->orWhere('login', 'LIKE', '%' . $search . '%')
                     ->orWhere('lastName', 'LIKE', '%' . $search . '%')
                     ->orWhere('phone', 'LIKE', '%' . $search . '%');
             });

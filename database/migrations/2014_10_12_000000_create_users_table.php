@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('password')->nullable();
             $table->integer('group_id')->nullable();
             $table->integer('activation')->nullable();
+            $table->integer('fl_status')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
