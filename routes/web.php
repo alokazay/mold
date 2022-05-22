@@ -7,6 +7,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\VacancyController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\FreelancersController;
+use App\Http\Controllers\ClientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +46,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('freelancers/getJson', [FreelancersController::class, 'getJson'])->name('freelancers.json');
     Route::get('freelancers/set_fl_status', [FreelancersController::class, 'setFlStatus']);
 
+    // clients
+    Route::get('clients', [ClientController::class, 'getIndex']);
+    Route::post('clients/getJson', [ClientController::class, 'getJson'])->name('clients.json');
+    Route::get('clients/activation', [ClientController::class, 'clientsActivation']);
+    Route::get('client/add', [ClientController::class, 'getAdd']);
+    Route::post('client/add', [ClientController::class, 'postAdd'])->name('clients.add');
+
 
     // vacancies
     Route::get('vacancies', [VacancyController::class, 'getIndex']);
@@ -62,6 +70,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('search/vacancy/nationality', [SearchController::class, 'getAjaxVacancyNationality']);
     Route::get('search/vacancy/workplace', [SearchController::class, 'getAjaxVacancyWorkplace']);
     Route::get('search/vacancy/docs', [SearchController::class, 'getAjaxVacancyDocs']);
+
+    Route::get('search/client/industry', [SearchController::class, 'getAjaxClientIndustry']);
+    Route::get('search/client/workplace', [SearchController::class, 'getAjaxClientWorkplace']);
+    Route::get('search/client/coordinator', [SearchController::class, 'getAjaxClientCoordinator']);
 });
 
 

@@ -13,11 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('handbook_clients', function (Blueprint $table) {
-            $table->id();
+        Schema::create('client_contacts', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->integer('user_id');
             $table->integer('client_id');
-            $table->integer('handbook_id');
-            $table->integer('handbook_category_id');
+            $table->string('firstName');
+            $table->string('lastName');
+            $table->string('position');
+            $table->string('phone');
+            $table->string('email');
             $table->timestamps();
         });
     }
@@ -29,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('handbook_clients');
+        Schema::dropIfExists('client_contacts');
     }
 };

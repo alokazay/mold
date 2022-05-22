@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Client;
+use App\Models\User;
 use App\Models\Handbook_category;
 use App\Models\Handbook_client;
 use App\Models\Handbook;
@@ -126,6 +127,33 @@ class SearchController extends Controller
         }
     }
 
+    public function getAjaxClientIndustry()
+    {
+        $search = request('f_search');
+
+        $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
+            ->where('handbook_category_id', 1)
+            ->take(10)
+            ->get();
+
+        $p_temp = [];
+
+        if (count($Course)) {
+            foreach ($Course as $c) {
+                $p_temp_arr = [];
+                $p_temp_arr['value'] = $c->name;
+                $p_temp_arr['id'] = $c->id;
+                $p_temp[] = $p_temp_arr;
+            }
+        }
+
+        if (count($Course)) {
+            return response($p_temp, 200);
+        } else {
+            return response(array('success' => "false"), 200);
+        }
+    }
+
     public function getAjaxVacancyDocs()
     {
         $search = request('f_search');
@@ -152,4 +180,61 @@ class SearchController extends Controller
             return response(array('success' => "false"), 200);
         }
     }
+    public function getAjaxClientWorkplace()
+    {
+        $search = request('f_search');
+
+        $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
+            ->where('handbook_category_id', 3)
+            ->take(10)
+            ->get();
+
+        $p_temp = [];
+
+        if (count($Course)) {
+            foreach ($Course as $c) {
+                $p_temp_arr = [];
+                $p_temp_arr['value'] = $c->name;
+                $p_temp_arr['id'] = $c->id;
+                $p_temp[] = $p_temp_arr;
+            }
+        }
+
+        if (count($Course)) {
+            return response($p_temp, 200);
+        } else {
+            return response(array('success' => "false"), 200);
+        }
+    }
+    public function getAjaxClientCoordinator()
+    {
+        $search = request('f_search');
+
+        $Course = User::where(function ($query) use ($search) {
+            $query->where('firstName', 'LIKE', '%' . $search . '%')
+                ->orWhere('email', 'LIKE', '%' . $search . '%')
+                ->orWhere('lastName', 'LIKE', '%' . $search . '%')
+                ->orWhere('phone', 'LIKE', '%' . $search . '%');
+        })->where('group_id', 6)
+            ->take(10)
+            ->get();
+
+        $p_temp = [];
+
+        if (count($Course)) {
+            foreach ($Course as $c) {
+                $p_temp_arr = [];
+                $p_temp_arr['value'] = $c->firstName .' '.$c->lastName;
+                $p_temp_arr['id'] = $c->id;
+                $p_temp[] = $p_temp_arr;
+            }
+        }
+
+        if (count($Course)) {
+            return response($p_temp, 200);
+        } else {
+            return response(array('success' => "false"), 200);
+        }
+    }
+
 }
