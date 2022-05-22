@@ -318,6 +318,16 @@
             }
         });
     }
+    function changeCost(id) {
+        var changeCost = $('.changeCost' + id).val();
+        $.get('{{url('/')}}/vacancy/changecost?s=' + changeCost + '&id=' + id, function (res) {
+            if (res.error) {
+                toastr.error(res.error);
+            } else {
+                toastr.success('Успешно');
+            }
+        });
+    }
 </script>
 </body>
 <!--end::Body-->

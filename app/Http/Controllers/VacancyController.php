@@ -35,7 +35,7 @@ class VacancyController extends Controller
             $h_v_city = [];
             $Client = [];
             $Doc = [];
-            $vacancy = Vacancy::where('id',$r->id)
+            $vacancy = Vacancy::where('id', $r->id)
                 ->with('h_v_industry')
                 ->with('h_v_industry.Handbooks')
                 ->with('h_v_nacionality')
@@ -46,26 +46,26 @@ class VacancyController extends Controller
                 ->with('Doc')
                 ->first();
 
-            foreach ($vacancy->h_v_industry as $industry){
-                if($industry->Handbooks != null){
+            foreach ($vacancy->h_v_industry as $industry) {
+                if ($industry->Handbooks != null) {
                     $h_v_industry[] = [$industry->Handbooks->id, $industry->Handbooks->name];
                 }
             }
-            foreach ($vacancy->h_v_nacionality as $industry){
-                if($industry->Handbooks != null){
+            foreach ($vacancy->h_v_nacionality as $industry) {
+                if ($industry->Handbooks != null) {
                     $h_v_nacionality[] = [$industry->Handbooks->id, $industry->Handbooks->name];
                 }
             }
-            foreach ($vacancy->h_v_city as $industry){
-                if($industry->Handbooks != null){
+            foreach ($vacancy->h_v_city as $industry) {
+                if ($industry->Handbooks != null) {
                     $h_v_city[] = [$industry->Handbooks->id, $industry->Handbooks->name];
                 }
             }
 
-            if($vacancy->Client != null){
+            if ($vacancy->Client != null) {
                 $Client = [$vacancy->Client->id, $vacancy->Client->name];
             }
-            if($vacancy->Doc != null){
+            if ($vacancy->Doc != null) {
                 $Doc = [$vacancy->Doc->id, $vacancy->Doc->name];
             }
 
@@ -124,7 +124,7 @@ class VacancyController extends Controller
             ), 200);
         } else {
             return Response::json(array('success' => "false",
-                    'error' => 'file not valid!'
+                'error' => 'file not valid!'
             ), 200);
         }
     }
@@ -364,6 +364,7 @@ class VacancyController extends Controller
                             </select>';
             }
 
+            $recruting_cost = '<input  onchange="changeCost(' . $u->id . ')" class="changeCost' . $u->id . '" value="' . $u->recruting_cost . '" style="border: none;" type="text">';
 
             $temp_arr = [
 
@@ -377,7 +378,7 @@ class VacancyController extends Controller
                 $u->salary,
                 $u->salary_description,
                 $u->housing_cost,
-                $u->recruting_cost,
+                $recruting_cost,
                 $select_active
 
             ];
@@ -395,6 +396,11 @@ class VacancyController extends Controller
     public function vacancyActivation(Request $r)
     {
         Vacancy::where('id', $r->id)->update(['activation' => $r->s]);
+        return response(array('success' => "true"), 200);
+    }
+    public function vacancyChangecost(Request $r)
+    {
+        Vacancy::where('id', $r->id)->update(['recruting_cost' => $r->s]);
         return response(array('success' => "true"), 200);
     }
 

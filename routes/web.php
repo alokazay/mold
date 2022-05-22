@@ -61,6 +61,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('files/add', [VacancyController::class, 'filesAdd']);
     Route::post('vacancy/getJson', [VacancyController::class, 'getJson'])->name('vacancy.json');
     Route::get('vacancy/activation', [VacancyController::class, 'vacancyActivation']);
+    Route::get('vacancy/changecost', [VacancyController::class, 'vacancyChangecost']);
 
 
 
