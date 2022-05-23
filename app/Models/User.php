@@ -75,6 +75,12 @@ class User extends Authenticatable
     public function D_file(){
         return $this->hasOne(C_file::class)->where('type', 1);
     }
+
+    public function Recruter()
+    {
+        return $this->belongsTo(User::class, 'recruter_id');
+    }
+
 }
 
 

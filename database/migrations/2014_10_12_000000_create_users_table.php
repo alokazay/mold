@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('group_id')->nullable();
             $table->integer('activation')->nullable();
             $table->integer('fl_status')->nullable();
+            $table->integer('recruter_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -181,8 +181,7 @@
                                             <th class="max-w-85px sorting_disabled">Имя</th>
                                             <th class="max-w-85px sorting_disabled">Фамилия</th>
                                             <th class="w-65px sorting_disabled">Приглашен</th>
-                                            <th class="w-45px sorting_disabled">Оплачен</th>
-                                            <th class="max-w-45px sorting_disabled">Телефон</th>
+                                             <th class="max-w-45px sorting_disabled">Телефон</th>
                                             <th class="max-w-65px sorting_disabled">Email</th>
                                             <th class="w-35px sorting_disabled">Скан</th>
                                             <th class="min-w-100px sorting_disabled">Статус</th>

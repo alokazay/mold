@@ -76,6 +76,7 @@ class FreelancersController extends Controller
 
         $users = $users
             ->with('D_file')
+            ->with('Recruter')
             ->skip($start)
             ->take($rowperpage)
             ->get();
@@ -134,14 +135,17 @@ class FreelancersController extends Controller
                             </select>';
             }
 
+            $Recruter  = '';
+            if($u->Recruter != null){
+                $Recruter = $u->Recruter->firstName .' '.$u->Recruter->lastName;
+            }
 
             $temp_arr = [
                 //  $checkbox,
                 '<a href="javascript:;" onclick="editUser(' . $u->id . ')">' . $u->id . '</a>',
                 $u->firstName,
                 $u->lastName,
-                'приглашен',
-                'оплачен',
+                $Recruter,
                 $u->phone,
                 $u->email,
                 $file,
