@@ -283,6 +283,7 @@
 
     $('#filter__coordinator').select2({
         placeholder: 'Поиск координатора',
+        allowClear: true,
         ajax: {
             url: "{{url('/')}}/search/client/coordinator",
             dataType: 'json',

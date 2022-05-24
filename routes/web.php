@@ -8,6 +8,7 @@ use App\Http\Controllers\VacancyController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\FreelancersController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\CandidateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +65,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('vacancy/changecost', [VacancyController::class, 'vacancyChangecost']);
 
 
+    // candidates
+    Route::get('candidates', [CandidateController::class, 'getIndex']);
+    Route::post('candidates/getJson', [CandidateController::class, 'getJson'])->name('candidates.json');
+    Route::get('candidate/set_status', [CandidateController::class, 'setFlStatus']);
+
 
     // ajax search
     Route::get('search/vacancy/client', [SearchController::class, 'getAjaxVacancyClients']);
@@ -75,6 +81,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('search/client/industry', [SearchController::class, 'getAjaxClientIndustry']);
     Route::get('search/client/workplace', [SearchController::class, 'getAjaxClientWorkplace']);
     Route::get('search/client/coordinator', [SearchController::class, 'getAjaxClientCoordinator']);
+
+    Route::get('search/candidate/vacancy', [SearchController::class, 'getAjaxCandidateVacancy']);
 });
 
 

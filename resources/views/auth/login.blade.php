@@ -8,7 +8,7 @@
     <meta property="og:locale" content="en_US" />
 
 
-    <link rel="shortcut icon" href="{{URL::to('/')}}/assets/media/logos/ap_logos-04.svg" />
+    <link rel="shortcut icon" href="{{URL::to('/')}}/favicon.ico" />
     <!--begin::Fonts-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
     <!--end::Fonts-->

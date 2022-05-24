@@ -16,9 +16,10 @@ return new class extends Migration
         Schema::create('c_files', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->integer('type');
-            $table->integer('autor_id');
-            $table->integer('user_id');
-            $table->integer('vacancy_id');
+            $table->integer('autor_id')->nullable();
+            $table->integer('user_id')->nullable();
+            $table->integer('vacancy_id')->nullable();
+            $table->integer('candidate_id')->nullable();
             $table->string('path');
             $table->string('original_name');
             $table->string('ext');

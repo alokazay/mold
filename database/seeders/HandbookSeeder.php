@@ -64,5 +64,62 @@ class HandbookSeeder extends Seeder
             ]);
         }
 
+        if(Handbook_category::find(5) == null){
+            Handbook_category::insert([
+                [
+                    'id'=> 5,
+                    'name' => 'Страна',
+                    'active'=>1,
+                    'created_at'=>$NOW,
+                    'updated_at'=>$NOW,
+                ],
+            ]);
+        }
+        if(Handbook_category::find(6) == null){
+            Handbook_category::insert([
+                [
+                    'id'=> 6,
+                    'name' => 'Тип документа',
+                    'active'=>1,
+                    'created_at'=>$NOW,
+                    'updated_at'=>$NOW,
+                ],
+            ]);
+        }
+        if(Handbook_category::find(7) == null){
+            Handbook_category::insert([
+                [
+                    'id'=> 7,
+                    'name' => 'Транспортные расходы',
+                    'active'=>1,
+                    'created_at'=>$NOW,
+                    'updated_at'=>$NOW,
+                ],
+            ]);
+        }
+        if(Handbook_category::find(8) == null){
+            Handbook_category::insert([
+                [
+                    'id'=> 8,
+                    'name' => 'Место приезда',
+                    'active'=>1,
+                    'created_at'=>$NOW,
+                    'updated_at'=>$NOW,
+                ],
+            ]);
+        }
+
+        if(Handbook_category::find(9) == null){
+            Handbook_category::insert([
+                [
+                    'id'=> 9,
+                    'name' => 'Статус труостуройства',
+                    'active'=>1,
+                    'created_at'=>$NOW,
+                    'updated_at'=>$NOW,
+                ],
+            ]);
+        }
+
     }
 }

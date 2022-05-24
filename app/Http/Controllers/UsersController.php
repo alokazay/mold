@@ -212,7 +212,7 @@ class UsersController extends Controller
             $user->save();
             $user_id = $user->id;
         } else {
-            $C_files = C_file::where('user_id', $user_id)->get();
+            $C_files = C_file::where('user_id', $user_id)->where('type', 1)->get();
             foreach ($C_files as $C_file) {
                 unlink(public_path() . $C_file->path);
                 C_file::where('id', $C_file->id)->delete();
