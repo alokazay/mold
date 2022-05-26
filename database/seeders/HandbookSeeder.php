@@ -23,7 +23,7 @@ class HandbookSeeder extends Seeder
             Handbook_category::insert([
                 [
                     'id'=> 1,
-                    'name' => 'Отрасли',
+                    'name' => 'Отрасль',
                     'active'=>1,
                     'created_at'=>$NOW,
                     'updated_at'=>$NOW,
@@ -34,7 +34,7 @@ class HandbookSeeder extends Seeder
             Handbook_category::insert([
                 [
                     'id'=> 2,
-                    'name' => 'Национальности',
+                    'name' => 'Национальность',
                     'active'=>1,
                     'created_at'=>$NOW,
                     'updated_at'=>$NOW,
@@ -45,7 +45,7 @@ class HandbookSeeder extends Seeder
             Handbook_category::insert([
                 [
                     'id'=> 3,
-                    'name' => 'Города',
+                    'name' => 'Город',
                     'active'=>1,
                     'created_at'=>$NOW,
                     'updated_at'=>$NOW,
@@ -113,7 +113,18 @@ class HandbookSeeder extends Seeder
             Handbook_category::insert([
                 [
                     'id'=> 9,
-                    'name' => 'Статус труостуройства',
+                    'name' => 'Статус трудоустройства',
+                    'active'=>1,
+                    'created_at'=>$NOW,
+                    'updated_at'=>$NOW,
+                ],
+            ]);
+        }
+        if(Handbook_category::find(10) == null){
+            Handbook_category::insert([
+                [
+                    'id'=> 10,
+                    'name' => 'Гражданство',
                     'active'=>1,
                     'created_at'=>$NOW,
                     'updated_at'=>$NOW,

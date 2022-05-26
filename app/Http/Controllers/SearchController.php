@@ -50,6 +50,7 @@ class SearchController extends Controller
 
         $ids = Handbook_client::where('client_id', request('client_id'))->pluck('handbook_id');
         $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
+            ->where('active',1)
             ->where('handbook_category_id', 2)
             ->whereIn('id', $ids)
             ->take(10)
@@ -79,6 +80,7 @@ class SearchController extends Controller
         $ids = Handbook_client::where('client_id', request('client_id'))->pluck('handbook_id');
 
         $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
+            ->where('active',1)
             ->where('handbook_category_id', 3)
             ->whereIn('id', $ids)
             ->take(10)
@@ -108,6 +110,7 @@ class SearchController extends Controller
         $ids = Handbook_client::where('client_id', request('client_id'))->pluck('handbook_id');
 
         $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
+            ->where('active',1)
             ->where('handbook_category_id', 1)
             ->whereIn('id', $ids)
             ->take(10)
@@ -136,6 +139,7 @@ class SearchController extends Controller
         $search = request('f_search');
 
         $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
+            ->where('active',1)
             ->where('handbook_category_id', 1)
             ->take(10)
             ->get();
@@ -163,6 +167,7 @@ class SearchController extends Controller
         $search = request('f_search');
 
         $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
+            ->where('active',1)
             ->where('handbook_category_id', 4)
             ->take(10)
             ->get();
@@ -190,6 +195,7 @@ class SearchController extends Controller
         $search = request('f_search');
 
         $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
+            ->where('active',1)
             ->where('handbook_category_id', 3)
             ->take(10)
             ->get();

@@ -20,8 +20,8 @@ class VacancyController extends Controller
 {
     public function getIndex()
     {
-        $industries = Handbook::where('handbook_category_id', 1)->get();
-        $cities = Handbook::where('handbook_category_id', 3)->get();
+        $industries = Handbook::where('handbook_category_id', 1)->where('active',1)->get();
+        $cities = Handbook::where('handbook_category_id', 3)->where('active',1)->get();
         return view('vacancies.index')
             ->with('cities', $cities)
             ->with('industries', $industries);

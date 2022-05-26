@@ -17,7 +17,7 @@ class ClientController extends Controller
 {
     public function getIndex()
     {
-        $industries = Handbook::where('handbook_category_id', 1)->get();
+        $industries = Handbook::where('handbook_category_id', 1)->where('active',1)->get();
         return view('clients.index')->with('industries', $industries);
     }
 

@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('handbooks', function (Blueprint $table) {
             $table->id();
+            $table->integer('active')->nullable();
             $table->integer('handbook_category_id')->nullable();
             $table->string('name')->nullable();
             $table->timestamps();

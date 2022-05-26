@@ -9,6 +9,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\FreelancersController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CandidateController;
+use App\Http\Controllers\HandbookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,6 +70,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('candidates', [CandidateController::class, 'getIndex']);
     Route::post('candidates/getJson', [CandidateController::class, 'getJson'])->name('candidates.json');
     Route::get('candidate/set_status', [CandidateController::class, 'setFlStatus']);
+
+    // handbooks
+    Route::get('handbooks', [HandbookController::class, 'getIndex']);
+    Route::get('handbooks/delete', [HandbookController::class, 'deleteHandbook']);
+    Route::get('handbooks/add', [HandbookController::class, 'addHandbook']);
+
 
 
     // ajax search
