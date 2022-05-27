@@ -57,7 +57,7 @@ class FreelancersController extends Controller
         $users = $users->where('group_id', 3);
 
         if ($fl_status == '') {
-            $users = $users->whereIn('fl_status', [1,2,3,4]);
+            $users = $users->whereIn('fl_status', [1, 2, 3, 4]);
         } else {
             $users = $users->where('fl_status', $fl_status);
         }
@@ -101,43 +101,48 @@ class FreelancersController extends Controller
                 $file = '';
             }
 
-            if ($u->fl_status == 1 || $u->fl_status == '') {
-                $select_active = '<select onchange="changeFl_status(' . $u->id . ')"
+            if (Auth::user()->group_id == 1 || Auth::user()->group_id == 2) {
+                if ($u->fl_status == 1 || $u->fl_status == '') {
+                    $select_active = '<select onchange="changeFl_status(' . $u->id . ')"
                                     class="form-select form-select-sm form-select-solid changeActivation' . $u->id . '">
                                     <option selected value="1">Новый</option>
                                             <option value="2">Верифицирован</option>
                                             <option value="3">Отклонён</option>
                                             <option value="4">Уволен</option>
                             </select>';
-            } else if ($u->fl_status == 2) {
-                $select_active = '<select onchange="changeFl_status(' . $u->id . ')"
+                } else if ($u->fl_status == 2) {
+                    $select_active = '<select onchange="changeFl_status(' . $u->id . ')"
                                     class="form-select form-select-sm form-select-solid changeActivation' . $u->id . '">
                                     <option  value="1">Новый</option>
                                             <option selected value="2">Верифицирован</option>
                                             <option  value="3">Отклонён</option>
                                             <option value="4">Уволен</option>
                             </select>';
-            } else if ($u->fl_status == 3) {
-                $select_active = '<select onchange="changeFl_status(' . $u->id . ')"
+                } else if ($u->fl_status == 3) {
+                    $select_active = '<select onchange="changeFl_status(' . $u->id . ')"
                                     class="form-select form-select-sm form-select-solid changeActivation' . $u->id . '">
                                     <option   value="1">Новый</option>
                                             <option value="2">Верифицирован</option>
                                             <option selected value="3">Отклонён</option>
                                             <option value="4">Уволен</option>
                             </select>';
-            } else if ($u->fl_status == 4) {
-                $select_active = '<select onchange="changeFl_status(' . $u->id . ')"
+                } else if ($u->fl_status == 4) {
+                    $select_active = '<select onchange="changeFl_status(' . $u->id . ')"
                                     class="form-select form-select-sm form-select-solid changeActivation' . $u->id . '">
                                     <option   value="1">Новый</option>
                                             <option value="2">Верифицирован</option>
                                             <option value="3">Отклонён</option>
                                             <option selected value="4">Уволен</option>
                             </select>';
+                }
+            } else {
+                $select_active = $u->getFl_status();
             }
 
-            $Recruter  = '';
-            if($u->Recruter != null){
-                $Recruter = $u->Recruter->firstName .' '.$u->Recruter->lastName;
+
+            $Recruter = '';
+            if ($u->Recruter != null) {
+                $Recruter = $u->Recruter->firstName . ' ' . $u->Recruter->lastName;
             }
 
             $temp_arr = [
@@ -163,7 +168,8 @@ class FreelancersController extends Controller
         ), 200);
     }
 
-    function setFlStatus (Request $r){
+    function setFlStatus(Request $r)
+    {
         User::where('id', $r->id)->update(['fl_status' => $r->s]);
         return response(array('success' => "true"), 200);
     }

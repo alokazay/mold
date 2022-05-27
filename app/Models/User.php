@@ -71,6 +71,17 @@ class User extends Authenticatable
             return 'Деактивирован';
         }
     }
+    public function getFl_status(){
+        if ($this->fl_status == 1) {
+            return 'Новый';
+        } else if ($this->fl_status == 2) {
+            return 'Верифицирован';
+        }else if ($this->fl_status == 2) {
+            return 'Отклонён';
+        }else if ($this->fl_status == 2) {
+            return 'Уволен';
+        }
+    }
 
     public function D_file(){
         return $this->hasOne(C_file::class)->where('type', 1);

@@ -25,6 +25,16 @@ return new class extends Migration
             $table->integer('activation')->nullable();
             $table->integer('fl_status')->nullable();
             $table->integer('recruter_id')->nullable();
+
+            $table->string('viber')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('account_poland')->nullable();
+            $table->string('account_paypal')->nullable();
+            $table->integer('account_type')->nullable();
+            $table->string('account_bank_name')->nullable();
+            $table->string('account_iban')->nullable();
+            $table->string('account_card')->nullable();
+            $table->string('account_swift')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

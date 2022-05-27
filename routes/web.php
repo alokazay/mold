@@ -28,6 +28,9 @@ Route::get('/dashboard', function () {
     if (Auth::user()->group_id == 1) {
         return Redirect::to('users');
     }
+    if (Auth::user()->group_id == 2) {
+        return Redirect::to('freelancers');
+    }
 })->middleware('auth');
 
 Route::get('login', [AuthController::class, 'getLogin'])->name("login");
@@ -38,15 +41,20 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('users', [UsersController::class, 'getIndex']);
     Route::post('users/getJson', [UsersController::class, 'getJson'])->name('users.json');
     Route::post('users/add', [UsersController::class, 'addUser'])->name('users.add');
+    Route::post('users/fl/add', [UsersController::class, 'addFlUser'])->name('users.fl.add');
     Route::post('/files/user/add', [UsersController::class, 'filesUserAdd']);
     Route::get('/users/ajax/id/{id}', [UsersController::class, 'getUserAjax'])->name('users.ajax.id');
     Route::get('/users/activation', [UsersController::class, 'usersActivation']);
     Route::get('/users/auth_by/{id}', [UsersController::class, 'authBy'])->middleware('is_admin');
 
+    Route::get('user/profile', [UsersController::class, 'getProfile']);
+    Route::post('user/profile', [UsersController::class, 'postProfile'])->name('users.profile.save');
+
     // freelancers
-    Route::get('freelancers', [FreelancersController::class, 'getIndex']);
-    Route::post('freelancers/getJson', [FreelancersController::class, 'getJson'])->name('freelancers.json');
-    Route::get('freelancers/set_fl_status', [FreelancersController::class, 'setFlStatus']);
+    Route::get('freelancers', [FreelancersController::class, 'getIndex'])->middleware('roles:1|2');
+    Route::post('freelancers/getJson', [FreelancersController::class, 'getJson'])->name('freelancers.json')->middleware('roles:1|2');
+    Route::get('freelancers/set_fl_status', [FreelancersController::class, 'setFlStatus'])->middleware('roles:1|2');
+
 
     // clients
     Route::get('clients', [ClientController::class, 'getIndex']);
@@ -75,7 +83,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('handbooks', [HandbookController::class, 'getIndex']);
     Route::get('handbooks/delete', [HandbookController::class, 'deleteHandbook']);
     Route::get('handbooks/add', [HandbookController::class, 'addHandbook']);
-
 
 
     // ajax search

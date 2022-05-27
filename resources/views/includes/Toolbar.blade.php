@@ -1237,22 +1237,17 @@
             <!--begin::Menu separator-->
             <div class="separator my-2"></div>
             <!--end::Menu separator-->
-
+            <div    class="menu-item px-5">
+                <a href="{{url('/')}}/user/profile" class="menu-link px-5">
+                    <span class="menu-text">Профиль</span>
+                </a>
+            </div>
             <!--begin::Menu item-->
             <div class="menu-item px-5">
                 <a href="{{url('/')}}/logout" class="menu-link px-5">Выйти</a>
             </div>
             <!--end::Menu item-->
-            <!--begin::Menu item-->
-            <div  style="display:none !important;" class="menu-item px-5">
-                <a href="../../demo1/dist/apps/projects/list.html" class="menu-link px-5">
-                    <span class="menu-text">My Projects</span>
-                    <span class="menu-badge">
-														<span class="badge badge-light-danger badge-circle fw-bolder fs-7">3</span>
-													</span>
-                </a>
-            </div>
-            <!--end::Menu item-->
+
             <!--begin::Menu item-->
             <div style="display:none !important;" class="menu-item px-5" data-kt-menu-trigger="hover" data-kt-menu-placement="left-start">
                 <a href="#" class="menu-link px-5">

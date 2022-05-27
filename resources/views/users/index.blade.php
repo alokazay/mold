@@ -304,8 +304,8 @@
                         </div>
                     </div>
                 </div>
-                <div style="display: none;" c class="row mb-5">
-                    <div  lass="col-6">
+                <div style="display: none;"  class="row mb-5">
+                    <div  сlass="col-6">
                         <div class="d-flex flex-column mb-0 fv-row">
                             <label class="fs-5 fw-bold mb-2">Cчет</label>
                             <input id="modal_users_add__account" class="form-control form-control-sm form-control-solid"

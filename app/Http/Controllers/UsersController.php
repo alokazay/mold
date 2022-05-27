@@ -21,6 +21,7 @@ class UsersController extends Controller
         return view('users.index');
     }
 
+
     public function getJson()
     {
 
@@ -190,6 +191,96 @@ class UsersController extends Controller
         }
 
 
+        if ($r->has('password') && $r->password != '') {
+            $user->password = Hash::make($r->password);
+            $user->remember_token = Hash::make($user->password);
+        }
+
+        $user->save();
+        return response(array('success' => "true"), 200);
+    }
+
+    public function addFlUser(Request $r)
+    {
+
+
+        $user = User::find($r->id);
+        if ($user == null) {
+            $user = new User();
+            $user->group_id = 3;
+            $user->activation = 1;
+            $user->fl_status = 1;
+            $user->recruter_id = Auth::user()->id;
+
+            $validator = Validator::make($r->all(), [
+                'password' => ['required', Password::min(10)],
+                'firstName' => 'required',
+                'lastName' => 'required',
+                'phone' => 'required',
+                'email' => 'required|email:rfc,dns|unique:users,email',
+            ]);
+            if ($validator->fails()) {
+                $error = $validator->errors()->first();
+                return response(array('success' => "false", 'error' => $error), 200);
+            }
+
+        } else {
+            $validator = Validator::make($r->all(), [
+                'email' => 'required|email:rfc,dns',
+                'firstName' => 'required',
+                'lastName' => 'required',
+                'phone' => 'required',
+            ]);
+            if ($validator->fails()) {
+                $error = $validator->errors()->first();
+                return response(array('success' => "false", 'error' => $error), 200);
+            }
+        }
+        $user->email = $r->email;
+        $user->firstName = $r->firstName;
+        $user->lastName = $r->lastName;
+        $user->phone = $r->phone;
+        $user->viber = $r->viber;
+        $user->facebook = $r->facebook;
+        $user->account_type = $r->account_type;
+        $user->account_poland = $r->account_poland;
+        $user->account_paypal = $r->account_paypal;
+        $user->account_bank_name = $r->account_bank_name;
+        $user->account_iban = $r->account_iban;
+        $user->account_card = $r->account_card;
+        $user->account_swift = $r->account_swift;
+
+
+        if ($r->has('password') && $r->password != '') {
+            $user->password = Hash::make($r->password);
+            $user->remember_token = Hash::make($user->password);
+        }
+
+        $user->save();
+        return response(array('success' => "true"), 200);
+    }
+
+    public function postProfile(Request $r)
+    {
+
+
+        $user = User::where('id', Auth::user()->id)->first();
+
+        $validator = Validator::make($r->all(), [
+            'email' => 'required|email:rfc,dns',
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'phone' => 'required',
+        ]);
+        if ($validator->fails()) {
+            $error = $validator->errors()->first();
+            return response(array('success' => "false", 'error' => $error), 200);
+        }
+
+        $user->email = $r->email;
+        $user->firstName = $r->firstName;
+        $user->lastName = $r->lastName;
+        $user->phone = $r->phone;
 
         if ($r->has('password') && $r->password != '') {
             $user->password = Hash::make($r->password);
@@ -269,4 +360,8 @@ class UsersController extends Controller
         return Redirect::to(url('/') . '/dashboard');
     }
 
+    public function getProfile()
+    {
+        return view('users.profile.index');
+    }
 }

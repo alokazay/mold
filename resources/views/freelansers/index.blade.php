@@ -170,18 +170,18 @@
                                         <thead>
                                         <!--begin::Table row-->
                                         <tr class="text-start text-muted fw-bolder fs-7 gs-0">
-                                          {{--  <th class="w-10px pe-2 sorting_disabled" style="width: 29.25px;">
-                                                <div
-                                                    class="form-check form-check-sm form-check-custom form-check-solid me-3">
-                                                    <input class="form-check-input" type="checkbox"
-                                                           value="1">
-                                                </div>
-                                            </th>--}}
+                                            {{--  <th class="w-10px pe-2 sorting_disabled" style="width: 29.25px;">
+                                                  <div
+                                                      class="form-check form-check-sm form-check-custom form-check-solid me-3">
+                                                      <input class="form-check-input" type="checkbox"
+                                                             value="1">
+                                                  </div>
+                                              </th>--}}
                                             <th class="max-w-55px sorting_disabled">Id</th>
                                             <th class="max-w-85px sorting_disabled">Имя</th>
                                             <th class="max-w-85px sorting_disabled">Фамилия</th>
                                             <th class="w-65px sorting_disabled">Приглашен</th>
-                                             <th class="max-w-45px sorting_disabled">Телефон</th>
+                                            <th class="max-w-45px sorting_disabled">Телефон</th>
                                             <th class="max-w-65px sorting_disabled">Email</th>
                                             <th class="w-35px sorting_disabled">Скан</th>
                                             <th class="min-w-100px sorting_disabled">Статус</th>
@@ -218,6 +218,197 @@
 <!--begin::Page Vendors Javascript(used by this page)-->
 <script src="{{url('/')}}/assets/plugins/custom/datatables/datatables.bundle.js"></script>
 <!--end::Page Vendors Javascript-->
+
+<div class="modal fade" tabindex="-1" id="modal_users_add">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Добавления фрилансера</h3>
+
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal"
+                     aria-label="Close">
+                    <span class="svg-icon svg-icon-2x"></span>
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal body-->
+            <div class="modal-body">
+
+                <input type="hidden" id="modal_users_add__id">
+
+                <div class="row mb-5">
+                    <div class="col-6">
+                        <div class="d-flex flex-column mb-0 fv-row">
+                            <label class="required fs-5 fw-bold mb-2">Фамилия</label>
+                            <input id="modal_users_add__lastName"
+                                   class="form-control form-control-sm form-control-solid" type="text"/>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex flex-column mb-0 fv-row">
+                            <label class="required fs-5 fw-bold mb-2">Имя</label>
+                            <input id="modal_users_add__firstName"
+                                   class="form-control form-control-sm form-control-solid" type="text"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-5">
+                    <div class="col-6">
+                        <div class="d-flex flex-column mb-0 fv-row">
+                            <label class="required fs-5 fw-bold mb-2">Телефон</label>
+                            <input id="modal_users_add__phone" class="form-control form-control-sm form-control-solid"
+                                   type="text"/>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex flex-column mb-0 fv-row">
+                            <label class="required fs-5 fw-bold mb-2">Email</label>
+                            <input id="modal_users_add__email" class="form-control form-control-sm form-control-solid"
+                                   type="email"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <div class="col-6">
+                        <div class="d-flex flex-column mb-0 fv-row">
+                            <label class="required fs-5 fw-bold mb-2">Viber</label>
+                            <input id="modal_users_add__viber" class="form-control form-control-sm form-control-solid"
+                                   type="text"/>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex flex-column mb-0 fv-row">
+                            <label class="required fs-5 fw-bold mb-2">Facebook</label>
+                            <input id="modal_users_add__facebook"
+                                   class="form-control form-control-sm form-control-solid"
+                                   type="email"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <div class="col-6">
+                        <div class="d-flex flex-column mb-0 fv-row">
+                            <label class="required fs-5 fw-bold mb-2">Банк</label>
+                            <select class="form-control form-control-sm form-control-solid"
+                                    id="modal_users_add__account_type">
+                                <option value="1">Польский</option>
+                                <option value="2">Заграничный</option>
+                                <option value="3">PayPal</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row mb-5">
+                    <div class="col-6">
+                        <div class="d-flex flex-column mb-0 fv-row">
+                            <label class="fs-5 fw-bold mb-2">Польский</label>
+                            <input placeholder="Номер банковского счета" id="modal_users_add__account_poland"
+                                   class="form-control form-control-sm form-control-solid"
+                                   type="text"/>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex flex-column mb-0 fv-row">
+                            <label class="fs-5 fw-bold mb-2">PayPal</label>
+                            <input placeholder="email" id="modal_users_add__account_paypal"
+                                   class="form-control form-control-sm form-control-solid"
+                                   type="email"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <div class="col-6">
+                        <div class="d-flex flex-column mb-0 fv-row">
+                            <label class="fs-5 fw-bold mb-2">Название банка</label>
+                            <input id="modal_users_add__account_bank_name"
+                                   class="form-control form-control-sm form-control-solid"
+                                   type="text"/>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex flex-column mb-0 fv-row">
+                            <label class="fs-5 fw-bold mb-2">IBAN</label>
+                            <input id="modal_users_add__account_iban"
+                                   class="form-control form-control-sm form-control-solid"
+                                   type="email"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <div class="col-6">
+                        <div class="d-flex flex-column mb-0 fv-row">
+                            <label class="fs-5 fw-bold mb-2">Номер карты</label>
+                            <input id="modal_users_add__account_card"
+                                   class="form-control form-control-sm form-control-solid"
+                                   type="text"/>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex flex-column mb-0 fv-row">
+                            <label class="fs-5 fw-bold mb-2">SWIFT</label>
+                            <input id="modal_users_add__account_swift"
+                                   class="form-control form-control-sm form-control-solid"
+                                   type="email"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-5">
+                    <div class="col">
+                        <div class="d-flex flex-column mb-0 fv-row">
+                            <label class="required fs-5 fw-bold mb-2">Пароль</label>
+
+                            <div class="input-group input-group-solid mb-5">
+                                <span onclick="generatePassword();" style="cursor: pointer" class="input-group-text"
+                                ><i class="far fa-keyboard fs-6"></i></span>
+                                <input id="modal_users_add__password"
+                                       class="form-control form-control-sm form-control-solid"
+                                       type="text"/>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="fv-row">
+                            <!--begin::Dropzone-->
+                            <div class="dropzone" id="kt_ecommerce_add_product_media">
+                                <!--begin::Message-->
+                                <div class="dz-message needsclick">
+                                    <!--begin::Icon-->
+                                    <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
+                                    <!--end::Icon-->
+
+                                    <!--begin::Info-->
+                                    <div class="ms-4">
+                                        <h3 class="fs-5 fw-bolder text-gray-900 mb-1">Загрузить документ</h3>
+                                        <span class="fs-7 fw-bold text-gray-400">Перетащите документ сюда</span>
+                                    </div>
+                                    <!--end::Info-->
+                                </div>
+                            </div>
+                            <!--end::Dropzone-->
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <!--end::Modal body-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Отмена</button>
+                <button id="modal_users_add__save" type="button" class="btn btn-primary btn-sm">Сохранить
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 
 
@@ -268,7 +459,15 @@
         oTable.draw();
     });
 
-
+    function generatePassword() {
+        var length = 11,
+            charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+            retVal = "";
+        for (var i = 0, n = charset.length; i < length; ++i) {
+            retVal += charset.charAt(Math.floor(Math.random() * n));
+        }
+        $('#modal_users_add__password').val(retVal);
+    }
 
     function changeFl_status(id) {
         var changeActivation = $('.changeActivation' + id).val();
@@ -281,6 +480,117 @@
         });
     }
 
+    $('#users__add_btn').click(function () {
+        $('.dz-preview').remove();
+        $('.dz-message').show();
+        $('#modal_users_add__id').val('');
+
+        $('#modal_users_add__email').val('');
+        $('#modal_users_add__password').val('');
+        $('#modal_users_add__firstName').val('');
+        $('#modal_users_add__lastName').val('');
+        $('#modal_users_add__phone').val('');
+
+        $('#modal_users_add__viber').val('');
+        $('#modal_users_add__facebook').val('');
+        $('#modal_users_add__account_type').val('');
+        $('#modal_users_add__account_poland').val('');
+        $('#modal_users_add__account_paypal').val('');
+        $('#modal_users_add__account_bank_name').val('');
+        $('#modal_users_add__account_iban').val('');
+        $('#modal_users_add__account_card').val('');
+        $('#modal_users_add__account_swift').val('');
+        $('#modal_users_add').modal('show');
+    });
+
+    function editUser(id) {
+        $('.dz-preview').remove();
+        $('.dz-message').show();
+        $.get('{{url('/')}}/users/ajax/id/' + id, function (res) {
+            $('#modal_users_add__id').val(id);
+            $('#modal_users_add__email').val(res.user.email);
+            $('#modal_users_add__firstName').val(res.user.firstName);
+            $('#modal_users_add__lastName').val(res.user.lastName);
+            $('#modal_users_add__phone').val(res.user.phone);
+
+
+            $('#modal_users_add__viber').val(res.user.viber);
+            $('#modal_users_add__facebook').val(res.user.facebook);
+            $('#modal_users_add__account_type').val(res.user.account_type);
+            $('#modal_users_add__account_poland').val(res.user.account_poland);
+            $('#modal_users_add__account_paypal').val(res.user.account_paypal);
+            $('#modal_users_add__account_bank_name').val(res.user.account_bank_name);
+            $('#modal_users_add__account_iban').val(res.user.account_iban);
+            $('#modal_users_add__account_card').val(res.user.account_card);
+            $('#modal_users_add__account_swift').val(res.user.account_swift);
+
+            $('#modal_users_add').modal('show');
+        });
+    }
+
+    $('#modal_users_add__save').click(function (e) {
+        e.preventDefault();
+        let self = $(this);
+
+        self.prop('disabled', true);
+
+        var data = {
+            email: $('#modal_users_add__email').val(),
+            password: $('#modal_users_add__password').val(),
+            firstName: $('#modal_users_add__firstName').val(),
+            lastName: $('#modal_users_add__lastName').val(),
+            phone: $('#modal_users_add__phone').val(),
+            viber: $('#modal_users_add__viber').val(),
+            facebook: $('#modal_users_add__facebook').val(),
+            account_type: $('#modal_users_add__account_type').val(),
+            account_poland: $('#modal_users_add__account_poland').val(),
+            account_paypal: $('#modal_users_add__account_paypal').val(),
+            account_bank_name: $('#modal_users_add__account_bank_name').val(),
+            account_iban: $('#modal_users_add__account_iban').val(),
+            account_card: $('#modal_users_add__account_card').val(),
+            account_swift: $('#modal_users_add__account_swift').val(),
+
+            _token: $('input[name=_token]').val(),
+        };
+
+        let id = $('#modal_users_add__id').val();
+        if (id !== '') {
+            data.id = id;
+        }
+
+        $.ajax({
+            url: "{{route('users.fl.add')}}",
+            method: 'post',
+            data: data,
+            success: function (response, status, xhr, $form) {
+                if (response.error) {
+                    toastr.error(response.error);
+                } else {
+                    $('#modal_users_add').modal('hide');
+                    oTable.draw();
+                }
+                self.prop('disabled', false);
+            }
+        });
+    });
+
+    var myDropzone = new Dropzone("#kt_ecommerce_add_product_media", {
+        url: "{{url('/')}}/files/user/add", // Set the url for your upload script location
+        paramName: "file",
+        maxFiles: 1,
+        maxFilesize: 10, // MB
+        addRemoveLinks: true,
+        sending: function (file, xhr, formData) {
+            formData.append('_token', $('input[name=_token]').val());
+            formData.append('user_id', $('#modal_users_add__id').val());
+        },
+        success: function (file, done) {
+            $('#modal_users_add__id').val(done.user_id);
+        },
+        accept: function (file, done) {
+            done();
+        }
+    });
 </script>
 
 </body>
