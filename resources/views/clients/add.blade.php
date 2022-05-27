@@ -175,6 +175,13 @@
                                                         class="form-select form-select-sm form-select-solid"></select>
                                             </div>
                                         </div>
+                                        <div class="row mb-5">
+                                            <div class="col">
+                                                <label for="nationality_id" class="required form-label">Национальность</label>
+                                                <select id="nationality_id" multiple="multiple"
+                                                        class="form-select form-select-sm form-select-solid"></select>
+                                            </div>
+                                        </div>
 
                                         <div class="row mb-5">
                                             <div class="col">
@@ -411,6 +418,32 @@
             }
         },
     });
+    $('#nationality_id').select2({
+        placeholder: 'Национальность',
+        ajax: {
+            url: "{{url('/')}}/search/client/nationality",
+            dataType: 'json',
+            // delay: 250,
+            data: function (params) {
+                return {
+                    s: '{{request('s')}}',
+                    f_search: params.term,
+                };
+            },
+            processResults: function (data) {
+                var results = [];
+                $.each(data, function (index, item) {
+                    results.push({
+                        id: item.id,
+                        text: item.value
+                    });
+                });
+                return {
+                    results: results
+                };
+            }
+        },
+    });
     $('#coordinator_id').select2({
         placeholder: 'Координатор',
         ajax: {
@@ -459,6 +492,7 @@
             address: $('#address').val(),
             industry_id: $('#industry_id').val().join(','),
             work_place_id: $('#work_place_id').val().join(','),
+            nationality_id: $('#nationality_id').val().join(','),
             _token: $('input[name=_token]').val(),
         };
 
@@ -536,6 +570,12 @@
     @if($h_v_city != null)
     @foreach($h_v_city as $city)
     $('#work_place_id').append(new Option('{{$city[1]}}', {{$city[0]}}, true, true)).trigger('change');
+    @endforeach
+    @endif
+
+    @if($h_v_nationality != null)
+    @foreach($h_v_nationality as $nationality)
+    $('#nationality_id').append(new Option('{{$nationality[1]}}', {{$nationality[0]}}, true, true)).trigger('change');
     @endforeach
     @endif
 

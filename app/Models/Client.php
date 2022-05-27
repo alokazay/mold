@@ -18,6 +18,10 @@ class Client extends Model
     {
         return $this->hasMany(Handbook_client::class)->where('handbook_category_id', 3);
     }
+    public function h_v_nationality()
+    {
+        return $this->hasMany(Handbook_client::class)->where('handbook_category_id', 2);
+    }
 
     public function Coordinator()
     {

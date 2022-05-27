@@ -152,6 +152,8 @@ class ClientController extends Controller
                 ->with('h_v_industry.Handbooks')
                 ->with('h_v_city')
                 ->with('h_v_city.Handbooks')
+                ->with('h_v_nationality')
+                ->with('h_v_nationality.Handbooks')
                 ->with('Contacts')
                 ->first();
             if ($client->Coordinator != null) {
@@ -159,6 +161,7 @@ class ClientController extends Controller
             }
             $h_v_industry = [];
             $h_v_city = [];
+            $h_v_nationality = [];
 
             foreach ($client->h_v_industry as $industry) {
                 if ($industry->Handbooks != null) {
@@ -170,13 +173,20 @@ class ClientController extends Controller
                     $h_v_city[] = [$city->Handbooks->id, $city->Handbooks->name];
                 }
             }
+            foreach ($client->h_v_nationality as $nationality) {
+                if ($nationality->Handbooks != null) {
+                    $h_v_nationality[] = [$nationality->Handbooks->id, $nationality->Handbooks->name];
+                }
+            }
         } else {
             $client = null;
             $Coordinator = null;
             $h_v_industry = null;
             $h_v_city = null;
+            $h_v_nationality = null;
         }
         return view('clients.add')
+            ->with('h_v_nationality', $h_v_nationality)
             ->with('h_v_city', $h_v_city)
             ->with('h_v_industry', $h_v_industry)
             ->with('Coordinator', $Coordinator)
@@ -191,6 +201,7 @@ class ClientController extends Controller
             'coordinator_id' => '«координатор»',
             'industry_id' => '«отрасль»',
             'work_place_id' => '«место работы»',
+            'nationality_id' => '«Национальность»',
             'address' => '«адрес»',
         ];
 
@@ -201,6 +212,7 @@ class ClientController extends Controller
             'address' => 'required',
             'work_place_id' => 'required',
             'industry_id' => 'required',
+            'nationality_id' => 'required',
 
         ], [], $niceNames);
         if ($validator->fails()) {
@@ -236,6 +248,14 @@ class ClientController extends Controller
             $Hand->client_id = $client->id;
             $Hand->handbook_id = $arr;
             $Hand->handbook_category_id = 3;
+            $Hand->save();
+        }
+        $arrs = explode(',', $r->nationality_id);
+        foreach ($arrs as $arr) {
+            $Hand = new Handbook_client();
+            $Hand->client_id = $client->id;
+            $Hand->handbook_id = $arr;
+            $Hand->handbook_category_id = 2;
             $Hand->save();
         }
 

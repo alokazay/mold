@@ -273,6 +273,11 @@ class VacancyController extends Controller
             $users = Vacancy::where('activation', $filter__status);
         }
 
+        // Фрилансеры видят только свои
+        if(Auth::user()->group_id == 3){
+             $users = $users->where('user_id', Auth::user()->id);
+        }
+
 
         if ($filter__industry != '') {
             $users = $users->whereHas('h_v_industry', function (Builder $query) use ($filter__industry) {
