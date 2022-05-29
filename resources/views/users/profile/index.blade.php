@@ -154,7 +154,6 @@
                                         </div>
                                     </div>
 
-
                                     <div class="row mb-5">
                                         <div class="col">
                                             <div class="d-flex flex-column mb-0 fv-row">
@@ -231,7 +230,15 @@
             }
         });
     });
-
+    function generatePassword() {
+        var length = 11,
+            charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+            retVal = "";
+        for (var i = 0, n = charset.length; i < length; ++i) {
+            retVal += charset.charAt(Math.floor(Math.random() * n));
+        }
+        $('#modal_users_add__password').val(retVal);
+    }
 </script>
 </body>
 <!--end::Body-->

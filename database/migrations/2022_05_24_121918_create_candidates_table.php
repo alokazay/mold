@@ -16,13 +16,14 @@ return new class extends Migration
         Schema::create('candidates', function (Blueprint $table) {
             $table->id();
 
+            $table->string('user_id')->nullable();
             $table->string('firstName')->nullable();
             $table->string('lastName')->nullable();
             $table->timestamp('dateOfBirth')->nullable();
             $table->string('phone')->nullable();
             $table->string('viber')->nullable();
             $table->string('phone_parent')->nullable();
-            $table->integer('nationality_id')->nullable();
+            $table->integer('citizenship_id')->nullable();
             $table->integer('country_id')->nullable();
             $table->timestamp('date_arrive')->nullable();
             $table->integer('type_doc_id')->nullable();

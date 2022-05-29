@@ -50,7 +50,7 @@ class SearchController extends Controller
 
         $ids = Handbook_client::where('client_id', request('client_id'))->pluck('handbook_id');
         $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
-            ->where('active',1)
+            ->where('active', 1)
             ->where('handbook_category_id', 2)
             ->whereIn('id', $ids)
             ->take(10)
@@ -80,7 +80,7 @@ class SearchController extends Controller
         $ids = Handbook_client::where('client_id', request('client_id'))->pluck('handbook_id');
 
         $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
-            ->where('active',1)
+            ->where('active', 1)
             ->where('handbook_category_id', 3)
             ->whereIn('id', $ids)
             ->take(10)
@@ -110,7 +110,7 @@ class SearchController extends Controller
         $ids = Handbook_client::where('client_id', request('client_id'))->pluck('handbook_id');
 
         $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
-            ->where('active',1)
+            ->where('active', 1)
             ->where('handbook_category_id', 1)
             ->whereIn('id', $ids)
             ->take(10)
@@ -139,7 +139,7 @@ class SearchController extends Controller
         $search = request('f_search');
 
         $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
-            ->where('active',1)
+            ->where('active', 1)
             ->where('handbook_category_id', 1)
             ->take(10)
             ->get();
@@ -167,7 +167,7 @@ class SearchController extends Controller
         $search = request('f_search');
 
         $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
-            ->where('active',1)
+            ->where('active', 1)
             ->where('handbook_category_id', 4)
             ->take(10)
             ->get();
@@ -195,7 +195,7 @@ class SearchController extends Controller
         $search = request('f_search');
 
         $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
-            ->where('active',1)
+            ->where('active', 1)
             ->where('handbook_category_id', 3)
             ->take(10)
             ->get();
@@ -282,8 +282,182 @@ class SearchController extends Controller
 
 
         $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
-            ->where('active',1)
+            ->where('active', 1)
             ->where('handbook_category_id', 2)
+            ->take(10)
+            ->get();
+
+        $p_temp = [];
+
+        if (count($Course)) {
+            foreach ($Course as $c) {
+                $p_temp_arr = [];
+                $p_temp_arr['value'] = $c->name;
+                $p_temp_arr['id'] = $c->id;
+                $p_temp[] = $p_temp_arr;
+            }
+        }
+
+        if (count($Course)) {
+            return response($p_temp, 200);
+        } else {
+            return response(array('success' => "false"), 200);
+        }
+    }
+
+    public function getAjaxClientCitizenship()
+    {
+        $search = request('f_search');
+
+
+        $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
+            ->where('active', 1)
+            ->where('handbook_category_id', 10)
+            ->take(10)
+            ->get();
+
+        $p_temp = [];
+
+        if (count($Course)) {
+            foreach ($Course as $c) {
+                $p_temp_arr = [];
+                $p_temp_arr['value'] = $c->name;
+                $p_temp_arr['id'] = $c->id;
+                $p_temp[] = $p_temp_arr;
+            }
+        }
+
+        if (count($Course)) {
+            return response($p_temp, 200);
+        } else {
+            return response(array('success' => "false"), 200);
+        }
+    }
+
+    public function getAjaxClientCountry()
+    {
+        $search = request('f_search');
+
+
+        $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
+            ->where('active', 1)
+            ->where('handbook_category_id', 5)
+            ->take(10)
+            ->get();
+
+        $p_temp = [];
+
+        if (count($Course)) {
+            foreach ($Course as $c) {
+                $p_temp_arr = [];
+                $p_temp_arr['value'] = $c->name;
+                $p_temp_arr['id'] = $c->id;
+                $p_temp[] = $p_temp_arr;
+            }
+        }
+
+        if (count($Course)) {
+            return response($p_temp, 200);
+        } else {
+            return response(array('success' => "false"), 200);
+        }
+    }
+
+    public function getAjaxClientTypedocs()
+    {
+        $search = request('f_search');
+
+
+        $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
+            ->where('active', 1)
+            ->where('handbook_category_id', 6)
+            ->take(10)
+            ->get();
+
+        $p_temp = [];
+
+        if (count($Course)) {
+            foreach ($Course as $c) {
+                $p_temp_arr = [];
+                $p_temp_arr['value'] = $c->name;
+                $p_temp_arr['id'] = $c->id;
+                $p_temp[] = $p_temp_arr;
+            }
+        }
+
+        if (count($Course)) {
+            return response($p_temp, 200);
+        } else {
+            return response(array('success' => "false"), 200);
+        }
+    }
+
+    public function getAjaxClientPlacearrive()
+    {
+        $search = request('f_search');
+
+
+        $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
+            ->where('active', 1)
+            ->where('handbook_category_id', 8)
+            ->take(10)
+            ->get();
+
+        $p_temp = [];
+
+        if (count($Course)) {
+            foreach ($Course as $c) {
+                $p_temp_arr = [];
+                $p_temp_arr['value'] = $c->name;
+                $p_temp_arr['id'] = $c->id;
+                $p_temp[] = $p_temp_arr;
+            }
+        }
+
+        if (count($Course)) {
+            return response($p_temp, 200);
+        } else {
+            return response(array('success' => "false"), 200);
+        }
+    }
+
+    public function getAjaxClientRealstatuswork()
+    {
+        $search = request('f_search');
+
+
+        $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
+            ->where('active', 1)
+            ->where('handbook_category_id', 9)
+            ->take(10)
+            ->get();
+
+        $p_temp = [];
+
+        if (count($Course)) {
+            foreach ($Course as $c) {
+                $p_temp_arr = [];
+                $p_temp_arr['value'] = $c->name;
+                $p_temp_arr['id'] = $c->id;
+                $p_temp[] = $p_temp_arr;
+            }
+        }
+
+        if (count($Course)) {
+            return response($p_temp, 200);
+        } else {
+            return response(array('success' => "false"), 200);
+        }
+    }
+
+    public function getAjaxClientTransport()
+    {
+        $search = request('f_search');
+
+
+        $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
+            ->where('active', 1)
+            ->where('handbook_category_id', 7)
             ->take(10)
             ->get();
 

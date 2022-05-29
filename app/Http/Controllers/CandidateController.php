@@ -7,7 +7,9 @@ use App\Models\Candidate;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class CandidateController extends Controller
 {
@@ -53,6 +55,12 @@ class CandidateController extends Controller
         } else {
             $users = Candidate::where('active', $status);
         }
+
+        // Фрилансеры видят только свои
+        if (Auth::user()->group_id == 3) {
+            $users = $users->where('user_id', Auth::user()->id);
+        }
+
 
         if ($vacancies != '') {
             $users = $users->where('real_vacancy_id', $vacancies);
@@ -139,9 +147,121 @@ class CandidateController extends Controller
         ), 200);
     }
 
-    function setFlStatus (Request $r){
+    function setFlStatus(Request $r)
+    {
         Candidate::where('id', $r->id)->update(['active' => $r->s]);
         return response(array('success' => "true"), 200);
     }
+
+    public function getAdd(Request $r)
+    {
+        if ($r->has('id')) {
+            $canddaite = Candidate::where('id', $r->id)
+                ->with('Vacancy')
+                ->with('Citizenship')
+                ->with('Country')
+                ->with('Type_doc')
+                ->with('Logist_place_arrive')
+                ->with('Real_status_work')
+                ->with('Transport')
+                ->first();
+        } else {
+            $canddaite = null;
+        }
+
+        return view('candidates.add')->with('canddaite', $canddaite);
+    }
+
+    public function postAdd(Request $r)
+    {
+        $niceNames = [
+            'lastName' => '«Фамилия»',
+            'firstName' => '«Имя»',
+            'phone' => '«Телефон»',
+            'viber' => '«viber»',
+        ];
+        $validator = Validator::make($r->all(), [
+            'lastName' => 'required',
+            'firstName' => 'required',
+            'phone' => 'required',
+            'viber' => 'required',
+        ], [], $niceNames);
+        if ($validator->fails()) {
+            $error = $validator->errors()->first();
+            return response(array('success' => "false", 'error' => $error), 200);
+        }
+
+        $candidate = Candidate::find($r->id);
+        if ($candidate == null) {
+            $candidate = new Candidate();
+            $candidate->active = 1;
+        }
+
+        $candidate->lastName = $r->lastName;
+        $candidate->firstName = $r->firstName;
+        $candidate->phone = $r->phone;
+        $candidate->viber = $r->viber;
+
+        if ($r->dateOfBirth != '' && $r->dateOfBirth != 'undefined') {
+            $candidate->dateOfBirth = Carbon::createFromFormat('d.m.Y', $r->dateOfBirth);
+        }
+        if ($r->phone_parent != '' && $r->phone_parent != 'undefined') {
+            $candidate->phone_parent = $r->phone_parent;
+        }
+        if ($r->citizenship_id != '' && $r->citizenship_id != 'undefined') {
+            $candidate->citizenship_id = $r->citizenship_id;
+        }
+        if ($r->country_id != '' && $r->country_id != 'undefined') {
+            $candidate->country_id = $r->country_id;
+        }
+        if ($r->date_arrive != '' && $r->date_arrive != 'undefined') {
+            $candidate->date_arrive = Carbon::createFromFormat('d.m.Y', $r->date_arrive);
+        }
+        if ($r->type_doc_id != '' && $r->type_doc_id != 'undefined') {
+            $candidate->type_doc_id = $r->type_doc_id;
+        }
+        if ($r->transport_id != '' && $r->transport_id != 'undefined') {
+            $candidate->transport_id = $r->transport_id;
+        }
+        if ($r->inn != '' && $r->inn != 'undefined') {
+            $candidate->inn = $r->inn;
+        }
+        if ($r->comment != '' && $r->comment != 'undefined') {
+            $candidate->comment = $r->comment;
+        }
+        // logist
+        if ($r->logist_date_arrive != '' && $r->logist_date_arrive != 'undefined') {
+            $candidate->logist_date_arrive = Carbon::createFromFormat('d.m.Y H:i', $r->logist_date_arrive);
+        }
+        if ($r->logist_place_arrive_id != '' && $r->logist_place_arrive_id != 'undefined') {
+            $candidate->logist_place_arrive_id = $r->logist_place_arrive_id;
+        }
+        // logist
+
+        // trudo
+        if ($r->real_vacancy_id != '' && $r->real_vacancy_id != 'undefined') {
+            $candidate->real_vacancy_id = $r->real_vacancy_id;
+        }
+        if ($r->real_status_work_id != '' && $r->real_status_work_id != 'undefined') {
+            $candidate->real_status_work_id = $r->real_status_work_id;
+        }
+        // trudo
+        $candidate->save();
+        return Response::json(array('success' => "true", 200));
+    }
+
+    /*
+    1  Новый кандидат
+    2  Лид
+    3  Отказ
+    4  Готов к выезду
+    5  Архив
+    6  Подтвердил Выезд
+    7  Готов к Работе
+    8  Трудоустроен
+    9  Приступил к Работе
+    10  Отработал 7 дней
+    11  Уволен
+    12  Приехал*/
 
 }

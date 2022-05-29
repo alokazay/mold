@@ -78,15 +78,17 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     // candidates
-    Route::get('candidates', [CandidateController::class, 'getIndex'])->middleware('roles:1');
-    Route::post('candidates/getJson', [CandidateController::class, 'getJson'])->name('candidates.json')->middleware('roles:1');
-    Route::get('candidate/set_status', [CandidateController::class, 'setFlStatus'])->middleware('roles:1');
+    Route::get('candidates', [CandidateController::class, 'getIndex'])->middleware('roles:1|3');
+    Route::post('candidates/getJson', [CandidateController::class, 'getJson'])->name('candidates.json')->middleware('roles:1|3');
+    Route::get('candidate/set_status', [CandidateController::class, 'setFlStatus'])->middleware('roles:1|3');
+    Route::get('candidate/add', [CandidateController::class, 'getAdd'])->middleware('roles:1|3');
+    Route::post('candidate/add', [CandidateController::class, 'postAdd'])->name('candidate.add')->middleware('roles:1|3');
+
 
     // handbooks
     Route::get('handbooks', [HandbookController::class, 'getIndex'])->middleware('roles:1');
     Route::get('handbooks/delete', [HandbookController::class, 'deleteHandbook'])->middleware('roles:1');
     Route::get('handbooks/add', [HandbookController::class, 'addHandbook'])->middleware('roles:1');
-
 
     // ajax search
     Route::get('search/vacancy/client', [SearchController::class, 'getAjaxVacancyClients'])->middleware('roles:1|3');
@@ -100,6 +102,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('search/client/coordinator', [SearchController::class, 'getAjaxClientCoordinator'])->middleware('roles:1');
     Route::get('search/client/nationality', [SearchController::class, 'getAjaxClientNationality'])->middleware('roles:1');
 
+    Route::get('search/candidate/transport', [SearchController::class, 'getAjaxClientTransport'])->middleware('roles:1');
+    Route::get('search/candidate/realstatuswork', [SearchController::class, 'getAjaxClientRealstatuswork'])->middleware('roles:1');
+    Route::get('search/candidate/placearrive', [SearchController::class, 'getAjaxClientPlacearrive'])->middleware('roles:1');
+    Route::get('search/candidate/typedocs', [SearchController::class, 'getAjaxClientTypedocs'])->middleware('roles:1');
+    Route::get('search/candidate/country', [SearchController::class, 'getAjaxClientCountry'])->middleware('roles:1');
+    Route::get('search/candidate/citizenship', [SearchController::class, 'getAjaxClientCitizenship'])->middleware('roles:1');
     Route::get('search/candidate/vacancy', [SearchController::class, 'getAjaxCandidateVacancy'])->middleware('roles:1');
 });
 
