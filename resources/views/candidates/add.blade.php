@@ -594,25 +594,25 @@
     $('#id').val('{{request('id')}}');
     @endif
 
-    @if($canddaite->Vacancy != null)
+    @if($canddaite != null && $canddaite->Vacancy != null)
     $('#real_vacancy_id').append(new Option('{{ $canddaite->Vacancy->title }}', {{ $canddaite->Vacancy->id }}, true, true)).trigger('change');
     @endif
-    @if($canddaite->Citizenship != null)
+    @if($canddaite != null && $canddaite->Citizenship != null)
     $('#citizenship_id').append(new Option('{{ $canddaite->Citizenship->name }}', {{ $canddaite->Citizenship->id }}, true, true)).trigger('change');
     @endif
-    @if($canddaite->Country != null)
+    @if($canddaite != null && $canddaite->Country != null)
     $('#country_id').append(new Option('{{ $canddaite->Country->name }}', {{ $canddaite->Country->id }}, true, true)).trigger('change');
     @endif
-    @if($canddaite->Type_doc != null)
+    @if($canddaite != null && $canddaite->Type_doc != null)
     $('#type_doc_id').append(new Option('{{ $canddaite->Type_doc->name }}', {{ $canddaite->Type_doc->id }}, true, true)).trigger('change');
     @endif
-    @if($canddaite->Logist_place_arrive != null)
+    @if($canddaite != null && $canddaite->Logist_place_arrive != null)
     $('#logist_place_arrive_id').append(new Option('{{ $canddaite->Logist_place_arrive->name }}', {{ $canddaite->Logist_place_arrive->id }}, true, true)).trigger('change');
     @endif
-    @if($canddaite->Real_status_work != null)
+    @if($canddaite != null && $canddaite->Real_status_work != null)
     $('#real_status_work_id').append(new Option('{{ $canddaite->Real_status_work->name }}', {{ $canddaite->Real_status_work->id }}, true, true)).trigger('change');
     @endif
-    @if($canddaite->Transport != null)
+    @if($canddaite != null && $canddaite->Transport != null)
     $('#transport_id').append(new Option('{{ $canddaite->Transport->name }}', {{ $canddaite->Transport->id }}, true, true)).trigger('change');
     @endif
 
