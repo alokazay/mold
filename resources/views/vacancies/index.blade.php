@@ -199,19 +199,33 @@
                                         <thead>
                                         <!--begin::Table row-->
                                         <tr class="text-start text-muted fw-bolder fs-7 gs-0">
-
-                                            <th class="max-w-55px sorting_disabled">Id</th>
-                                            <th class="max-w-55px sorting_disabled">Название</th>
-                                            <th class="max-w-85px sorting_disabled">Отрасль</th>
-                                            <th>Дедлайн</th>
-                                            <th class="max-w-25px sorting_disabled">М</th>
-                                            <th class="max-w-25px sorting_disabled">Ж</th>
-                                            <th class="max-w-25px sorting_disabled">Н</th>
-                                            <th class="sorting_disabled">Ставка</th>
-                                            <th class="sorting_disabled">Описание</th>
-                                            <th class="sorting_disabled">Жилье</th>
-                                            <th class="sorting_disabled">Стоимость рекрутирования</th>
-                                            <th class="sorting_disabled">Статус</th>
+                                            @if(Auth::user()->group_id == 3)
+                                                <th class="max-w-55px sorting_disabled">Id</th>
+                                                <th class="max-w-55px sorting_disabled">Название</th>
+                                                <th class="max-w-85px sorting_disabled">Отрасль</th>
+                                                <th>Дедлайн</th>
+                                                <th class="max-w-25px sorting_disabled">М</th>
+                                                <th class="max-w-25px sorting_disabled">Ж</th>
+                                                <th class="max-w-25px sorting_disabled">Н</th>
+                                                <th class="sorting_disabled">Ставка</th>
+                                                <th class="sorting_disabled">Описание</th>
+                                                <th class="sorting_disabled">Жилье</th>
+                                                <th class="sorting_disabled">Стоимость рекрутирования</th>
+                                                <th class="sorting_disabled">Добавить</th>
+                                            @else
+                                                <th class="max-w-55px sorting_disabled">Id</th>
+                                                <th class="max-w-55px sorting_disabled">Название</th>
+                                                <th class="max-w-85px sorting_disabled">Отрасль</th>
+                                                <th>Дедлайн</th>
+                                                <th class="max-w-25px sorting_disabled">М</th>
+                                                <th class="max-w-25px sorting_disabled">Ж</th>
+                                                <th class="max-w-25px sorting_disabled">Н</th>
+                                                <th class="sorting_disabled">Ставка</th>
+                                                <th class="sorting_disabled">Описание</th>
+                                                <th class="sorting_disabled">Жилье</th>
+                                                <th class="sorting_disabled">Стоимость рекрутирования</th>
+                                                <th class="sorting_disabled">Статус</th>
+                                            @endif
                                         </tr>
                                         <!--end::Table row-->
                                         </thead>

@@ -102,13 +102,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('search/client/coordinator', [SearchController::class, 'getAjaxClientCoordinator'])->middleware('roles:1');
     Route::get('search/client/nationality', [SearchController::class, 'getAjaxClientNationality'])->middleware('roles:1');
 
-    Route::get('search/candidate/transport', [SearchController::class, 'getAjaxClientTransport'])->middleware('roles:1');
-    Route::get('search/candidate/realstatuswork', [SearchController::class, 'getAjaxClientRealstatuswork'])->middleware('roles:1');
-    Route::get('search/candidate/placearrive', [SearchController::class, 'getAjaxClientPlacearrive'])->middleware('roles:1');
-    Route::get('search/candidate/typedocs', [SearchController::class, 'getAjaxClientTypedocs'])->middleware('roles:1');
-    Route::get('search/candidate/country', [SearchController::class, 'getAjaxClientCountry'])->middleware('roles:1');
-    Route::get('search/candidate/citizenship', [SearchController::class, 'getAjaxClientCitizenship'])->middleware('roles:1');
-    Route::get('search/candidate/vacancy', [SearchController::class, 'getAjaxCandidateVacancy'])->middleware('roles:1');
+    Route::get('search/candidate/transport', [SearchController::class, 'getAjaxClientTransport'])->middleware('roles:1|3');
+    Route::get('search/candidate/realstatuswork', [SearchController::class, 'getAjaxClientRealstatuswork'])->middleware('roles:1|3');
+    Route::get('search/candidate/placearrive', [SearchController::class, 'getAjaxClientPlacearrive'])->middleware('roles:1|3');
+    Route::get('search/candidate/typedocs', [SearchController::class, 'getAjaxClientTypedocs'])->middleware('roles:1|3');
+    Route::get('search/candidate/country', [SearchController::class, 'getAjaxClientCountry'])->middleware('roles:1|3');
+    Route::get('search/candidate/citizenship', [SearchController::class, 'getAjaxClientCitizenship'])->middleware('roles:1|3');
+    Route::get('search/candidate/vacancy', [SearchController::class, 'getAjaxCandidateVacancy'])->middleware('roles:1|3');
 });
 
 

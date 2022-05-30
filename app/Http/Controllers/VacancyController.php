@@ -20,8 +20,8 @@ class VacancyController extends Controller
 {
     public function getIndex()
     {
-        $industries = Handbook::where('handbook_category_id', 1)->where('active',1)->get();
-        $cities = Handbook::where('handbook_category_id', 3)->where('active',1)->get();
+        $industries = Handbook::where('handbook_category_id', 1)->where('active', 1)->get();
+        $cities = Handbook::where('handbook_category_id', 3)->where('active', 1)->get();
         return view('vacancies.index')
             ->with('cities', $cities)
             ->with('industries', $industries);
@@ -76,6 +76,7 @@ class VacancyController extends Controller
             $h_v_city = null;
             $Client = null;
             $Doc = null;
+
         }
         return view('vacancies.add')
             ->with('h_v_city', $h_v_city)
@@ -366,23 +367,39 @@ class VacancyController extends Controller
             }
 
             $recruting_cost = '<input  onchange="changeCost(' . $u->id . ')" class="changeCost' . $u->id . '" value="' . $u->recruting_cost . '" style="border: none;" type="text">';
+            if (Auth::user()->group_id == 3) {
+                // Только фрилансер
+                $temp_arr = [
+                    '<a href="vacancy/add?id=' . $u->id . '">' . $u->id . '</a>',
+                    $u->title,
+                    $h_v_industry,
+                    Carbon::parse($u->deadline_to)->format('d.m.Y'),
+                    $u->count_men,
+                    $u->count_women,
+                    $u->count_people,
+                    $u->salary,
+                    $u->salary_description,
+                    $u->housing_cost,
+                    $recruting_cost,
+                    '<a href="' . url('/') . '/candidate/add?vid='.$u->id.'"><i class="fas fa-user-plus"></i></a>'
+                ];
+            } else {
+                $temp_arr = [
+                    '<a href="vacancy/add?id=' . $u->id . '">' . $u->id . '</a>',
+                    $u->title,
+                    $h_v_industry,
+                    Carbon::parse($u->deadline_to)->format('d.m.Y'),
+                    $u->count_men,
+                    $u->count_women,
+                    $u->count_people,
+                    $u->salary,
+                    $u->salary_description,
+                    $u->housing_cost,
+                    $recruting_cost,
+                    $select_active
+                ];
+            }
 
-            $temp_arr = [
-
-                '<a href="vacancy/add?id=' . $u->id . '">' . $u->id . '</a>',
-                $u->title,
-                $h_v_industry,
-                Carbon::parse($u->deadline_to)->format('d.m.Y'),
-                $u->count_men,
-                $u->count_women,
-                $u->count_people,
-                $u->salary,
-                $u->salary_description,
-                $u->housing_cost,
-                $recruting_cost,
-                $select_active
-
-            ];
             $data[] = $temp_arr;
         }
 
@@ -399,6 +416,7 @@ class VacancyController extends Controller
         Vacancy::where('id', $r->id)->update(['activation' => $r->s]);
         return response(array('success' => "true"), 200);
     }
+
     public function vacancyChangecost(Request $r)
     {
         Vacancy::where('id', $r->id)->update(['recruting_cost' => $r->s]);

@@ -127,7 +127,7 @@
                                                     <label class="required fs-5 fw-bold mb-2">Фамилия</label>
                                                     <input
                                                         @if($canddaite != null) value="{{$canddaite->lastName}}" @endif
-                                                        id="lastName"
+                                                    id="lastName"
                                                         class="form-control form-control-sm form-control-solid"
                                                         type="text"/>
                                                 </div>
@@ -137,7 +137,7 @@
                                                     <label class="required fs-5 fw-bold mb-2">Имя</label>
                                                     <input
                                                         @if($canddaite != null) value="{{$canddaite->firstName}}" @endif
-                                                        id="firstName"
+                                                    id="firstName"
                                                         class="form-control form-control-sm form-control-solid"
                                                         type="text"/>
                                                 </div>
@@ -148,10 +148,11 @@
                                                 <div class="d-flex flex-column mb-0 fv-row">
                                                     <label class="fs-5 fw-bold mb-2">Дата рождения</label>
                                                     <input
-                                                        @if($canddaite != null) value="{{\Carbon\Carbon::parse($canddaite->dateOfBirth)->format('d.m.Y')}}" @endif
+                                                        @if($canddaite != null) value="{{\Carbon\Carbon::parse($canddaite->dateOfBirth)->format('d.m.Y')}}"
+                                                        @endif
                                                         id="dateOfBirth"
-                                                           class="form-control form-control-sm form-control-solid"
-                                                           type="text"/>
+                                                        class="form-control form-control-sm form-control-solid"
+                                                        type="text"/>
                                                 </div>
                                             </div>
                                             <div class="col-6">
@@ -159,9 +160,9 @@
                                                     <label class="required fs-5 fw-bold mb-2">Телефон</label>
                                                     <input
                                                         @if($canddaite != null) value="{{$canddaite->phone}}" @endif
-                                                        id="phone"
-                                                           class="form-control form-control-sm form-control-solid"
-                                                           type="text"/>
+                                                    id="phone"
+                                                        class="form-control form-control-sm form-control-solid"
+                                                        type="text"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -180,10 +181,11 @@
                                                     <label class="required fs-5 fw-bold mb-2">Дополнительный
                                                         контакт</label>
                                                     <input
-                                                        @if($canddaite != null) value="{{$canddaite->phone_parent}}" @endif
+                                                        @if($canddaite != null) value="{{$canddaite->phone_parent}}"
+                                                        @endif
                                                         id="phone_parent"
-                                                           class="form-control form-control-sm form-control-solid"
-                                                           type="text"/>
+                                                        class="form-control form-control-sm form-control-solid"
+                                                        type="text"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -193,7 +195,7 @@
                                                     <label class=" fs-5 fw-bold mb-2">Гражданство</label>
                                                     <select
                                                         id="citizenship_id"
-                                                            class="form-select  form-select-sm form-select-solid"> </select>
+                                                        class="form-select  form-select-sm form-select-solid"> </select>
                                                 </div>
                                             </div>
                                             <div class="col-6">
@@ -210,7 +212,8 @@
                                                     <label class=" fs-5 fw-bold mb-2">Планируемая дата
                                                         приезда</label>
                                                     <input id="date_arrive"
-                                                           @if($canddaite != null) value="{{\Carbon\Carbon::parse($canddaite->date_arrive)->format('d.m.Y')}}" @endif
+                                                           @if($canddaite != null) value="{{\Carbon\Carbon::parse($canddaite->date_arrive)->format('d.m.Y')}}"
+                                                           @endif
                                                            class="form-control form-control-sm form-control-solid"
                                                            type="text"/>
                                                 </div>
@@ -249,7 +252,8 @@
                                                     <label class=" fs-5 fw-bold mb-2">Комментарий</label>
                                                     <textarea id="comment"
                                                               class="form-control form-control-sm form-control-solid"
-                                                              cols="30" rows="10"> @if($canddaite != null){{$canddaite->comment}}@endif</textarea>
+                                                              cols="30"
+                                                              rows="10"> @if($canddaite != null){{$canddaite->comment}}@endif</textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -264,7 +268,8 @@
                                                         <label class="fs-5 fw-bold mb-2">Дата и время
                                                             приезда</label>
                                                         <input
-                                                            @if($canddaite != null) value="{{\Carbon\Carbon::parse($canddaite->logist_date_arrive)->format('d.m.Y H:i')}}" @endif
+                                                            @if($canddaite != null) value="{{\Carbon\Carbon::parse($canddaite->logist_date_arrive)->format('d.m.Y H:i')}}"
+                                                            @endif
                                                             id="logist_date_arrive"
                                                             class="form-control form-control-sm form-control-solid"
                                                             type="text"/>
@@ -284,18 +289,19 @@
 
                                             </div>
                                         @endif
-                                        @if(Auth::user()->group_id == 5 || Auth::user()->group_id == 1)
-                                            <h3 class="mb-5">Трудоустройство</h3>
-                                            <div class="row mb-5">
-                                                <div class="col-6">
-                                                    <div class="d-flex flex-column mb-0 fv-row">
-                                                        <label class="fs-5 fw-bold mb-2">Вакансия по
-                                                            факту</label>
 
-                                                        <select id="real_vacancy_id"
-                                                                class="form-select  form-select-sm form-select-solid"> </select>
-                                                    </div>
+                                        <h3 class="mb-5">Трудоустройство</h3>
+                                        <div class="row mb-5">
+                                            <div class="col-6">
+                                                <div class="d-flex flex-column mb-0 fv-row">
+                                                    <label class="fs-5 fw-bold mb-2">Вакансия по
+                                                        факту</label>
+
+                                                    <select id="real_vacancy_id"
+                                                            class="form-select  form-select-sm form-select-solid"> </select>
                                                 </div>
+                                            </div>
+                                            @if(Auth::user()->group_id == 5 || Auth::user()->group_id == 1)
                                                 <div class="col-6">
                                                     <div class="d-flex flex-column mb-0 fv-row">
                                                         <label class="fs-5 fw-bold mb-2">Статус
@@ -305,8 +311,9 @@
 
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endif
+                                            @endif
+                                        </div>
+
                                     </div>
                                 </div>
 
@@ -597,6 +604,13 @@
     @if($canddaite != null && $canddaite->Vacancy != null)
     $('#real_vacancy_id').append(new Option('{{ $canddaite->Vacancy->title }}', {{ $canddaite->Vacancy->id }}, true, true)).trigger('change');
     @endif
+
+
+    @if($vacancy != null)
+    $('#real_vacancy_id').append(new Option('{{ $vacancy->title }}', {{ $vacancy->id }}, true, true)).trigger('change');
+    @endif
+
+
     @if($canddaite != null && $canddaite->Citizenship != null)
     $('#citizenship_id').append(new Option('{{ $canddaite->Citizenship->name }}', {{ $canddaite->Citizenship->id }}, true, true)).trigger('change');
     @endif

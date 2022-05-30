@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\C_file;
 use App\Models\Candidate;
 use App\Models\User;
+use App\Models\Vacancy;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -122,6 +123,12 @@ class CandidateController extends Controller
                 $Vacancy = $u->Vacancy->title;
             }
 
+            if($u->logist_date_arrive != null){
+                $date_arrive = Carbon::parse($u->logist_date_arrive)->format('d.m.Y H:i');
+            } else {
+                $date_arrive = '';
+            }
+
             $temp_arr = [
                 //  $checkbox,
                 '<a href="candidate/add?id=' . $u->id . '">' . $u->id . '</a>',
@@ -131,7 +138,7 @@ class CandidateController extends Controller
                 $Vacancy,
                 $u->viber,
                 $u->phone_parent,
-                Carbon::parse($u->logist_date_arrive)->format('d.m.Y H:i'),
+                $date_arrive,
                 $file,
                 $select_active
 
@@ -167,9 +174,17 @@ class CandidateController extends Controller
                 ->first();
         } else {
             $canddaite = null;
+
+            if ($r->has('vid')) {
+                $vacancy = Vacancy::find($r->vid);
+            } else {
+                $vacancy = null;
+            }
         }
 
-        return view('candidates.add')->with('canddaite', $canddaite);
+        return view('candidates.add')
+            ->with('vacancy', $vacancy)
+            ->with('canddaite', $canddaite);
     }
 
     public function postAdd(Request $r)
@@ -194,6 +209,7 @@ class CandidateController extends Controller
         $candidate = Candidate::find($r->id);
         if ($candidate == null) {
             $candidate = new Candidate();
+            $candidate->user_id = Auth::user()->id;
             $candidate->active = 1;
         }
 
