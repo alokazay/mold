@@ -309,6 +309,8 @@
         },
     }).on('select2:select', function (e) {
         oTable.draw();
+    });.on('select2:clear', function (e) {
+        oTable.draw();
     });
 
     $('#filter__status').select2().on('select2:select', function (e) {

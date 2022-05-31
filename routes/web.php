@@ -46,7 +46,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('users/add', [UsersController::class, 'addUser'])->name('users.add')->middleware('roles:1');
     Route::post('users/fl/add', [UsersController::class, 'addFlUser'])->name('users.fl.add')->middleware('roles:1');
     Route::post('/files/user/add', [UsersController::class, 'filesUserAdd'])->middleware('roles:1');
-    Route::get('/users/ajax/id/{id}', [UsersController::class, 'getUserAjax'])->name('users.ajax.id')->middleware('roles:1');
+    Route::get('/users/ajax/id/{id}', [UsersController::class, 'getUserAjax'])->name('users.ajax.id')->middleware('roles:1|2|3');
     Route::get('/users/activation', [UsersController::class, 'usersActivation'])->middleware('roles:1');
     Route::get('/users/auth_by/{id}', [UsersController::class, 'authBy'])->middleware('is_admin')->middleware('roles:1');
 

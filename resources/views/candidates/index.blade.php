@@ -291,7 +291,7 @@
     });
     $('#filter__status').select2().on('select2:select', function (e) {
         oTable.draw();
-    });
+    })
     $('#filter__vacancies').select2({
         placeholder: 'Поиск вакансии',
         allowClear: true,
@@ -319,7 +319,9 @@
         },
     }).on('select2:select', function (e) {
         oTable.draw();
-    });
+    }).on('select2:clear', function (e) {
+        oTable.draw();
+    })
 
 
 
