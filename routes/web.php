@@ -50,8 +50,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/users/activation', [UsersController::class, 'usersActivation'])->middleware('roles:1');
     Route::get('/users/auth_by/{id}', [UsersController::class, 'authBy'])->middleware('is_admin')->middleware('roles:1');
 
-    Route::get('user/profile', [UsersController::class, 'getProfile'])->middleware('roles:1');
-    Route::post('user/profile', [UsersController::class, 'postProfile'])->name('users.profile.save')->middleware('roles:1');
+    Route::get('user/profile', [UsersController::class, 'getProfile']);
+    Route::post('user/profile', [UsersController::class, 'postProfile'])->name('users.profile.save');
 
     // freelancers
     Route::get('freelancers', [FreelancersController::class, 'getIndex'])->middleware('roles:1|2');
@@ -83,6 +83,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('candidate/set_status', [CandidateController::class, 'setFlStatus'])->middleware('roles:1|3');
     Route::get('candidate/add', [CandidateController::class, 'getAdd'])->middleware('roles:1|3');
     Route::post('candidate/add', [CandidateController::class, 'postAdd'])->name('candidate.add')->middleware('roles:1|3');
+    Route::post('candidate/files/doc/add', [CandidateController::class, 'filesDocAdd'])->middleware('roles:1|3');
+    Route::post('candidate/files/ticket/add', [CandidateController::class, 'filesTicketAdd'])->middleware('roles:1|3');
 
 
     // handbooks

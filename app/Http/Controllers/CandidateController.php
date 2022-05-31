@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class CandidateController extends Controller
 {
@@ -52,7 +53,7 @@ class CandidateController extends Controller
 
 
         if ($status == '') {
-            $users = Candidate::whereIn('active', [1, 2]);
+            $users = Candidate::whereIn('active', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
         } else {
             $users = Candidate::where('active', $status);
         }
@@ -60,6 +61,7 @@ class CandidateController extends Controller
         // Фрилансеры видят только свои
         if (Auth::user()->group_id == 3) {
             $users = $users->where('user_id', Auth::user()->id);
+            $users = $users->whereIn('active', [1, 2, 3, 4, 5, 10]);
         }
 
 
@@ -104,27 +106,21 @@ class CandidateController extends Controller
                 $file = '';
             }
 
-            if ($u->active == 1 || $u->active == '') {
-                $select_active = '<select onchange="changeActivation(' . $u->id . ')"
+
+            $select_active = '<select onchange="changeActivation(' . $u->id . ')"
                                     class="form-select form-select-sm form-select-solid changeActivation' . $u->id . '">
-                                         <option  selected value="1">Ожидается</option>
-                                            <option value="2">Подтвержден</option>
+                                        <option value="">Статус</option>
+                                             ' . $u->getStatusOptions() . '
                             </select>';
-            } else if ($u->active == 2) {
-                $select_active = '<select onchange="changeActivation(' . $u->id . ')"
-                                    class="form-select form-select-sm form-select-solid changeActivation' . $u->id . '">
-                                         <option value="1">Ожидается</option>
-                                            <option selected value="2">Подтвержден</option>
-                            </select>';
-            }
+
 
             $Vacancy = '';
             if ($u->Vacancy != null) {
                 $Vacancy = $u->Vacancy->title;
             }
 
-            if($u->logist_date_arrive != null){
-                $date_arrive = Carbon::parse($u->logist_date_arrive)->format('d.m.Y H:i');
+            if ($u->date_arrive != null) {
+                $date_arrive = Carbon::parse($u->date_arrive)->format('d.m.Y H:i');
             } else {
                 $date_arrive = '';
             }
@@ -162,6 +158,7 @@ class CandidateController extends Controller
 
     public function getAdd(Request $r)
     {
+        $vacancy = null;
         if ($r->has('id')) {
             $canddaite = Candidate::where('id', $r->id)
                 ->with('Vacancy')
@@ -177,8 +174,6 @@ class CandidateController extends Controller
 
             if ($r->has('vid')) {
                 $vacancy = Vacancy::find($r->vid);
-            } else {
-                $vacancy = null;
             }
         }
 
@@ -265,19 +260,86 @@ class CandidateController extends Controller
         $candidate->save();
         return Response::json(array('success' => "true", 200));
     }
+    public function filesDocAdd (){
 
-    /*
-    1  Новый кандидат
-    2  Лид
-    3  Отказ
-    4  Готов к выезду
-    5  Архив
-    6  Подтвердил Выезд
-    7  Готов к Работе
-    8  Трудоустроен
-    9  Приступил к Работе
-    10  Отработал 7 дней
-    11  Уволен
-    12  Приехал*/
+        $c_id = request()->get('id');
+        if ($c_id == '') {
+            $candidate = new Candidate();
+            $candidate->user_id = Auth::user()->id;
+            $candidate->active = 1;
+            $candidate->save();
+            $c_id = $candidate->id;
+        }
 
+        $file = request()->file('file');
+        if ($file->isValid()) {
+
+            $path = '/uploads/candidate/' . Carbon::now()->format('m.Y') . '/' . $c_id . '/files/';
+            $name = Str::random(12) . '.' . $file->getClientOriginalExtension();
+
+            $file->move(public_path($path), $name);
+            $file_link = $path . $name;
+
+
+            $file = new C_file();
+            $file->autor_id = Auth::user()->id;
+            $file->candidate_id = $c_id;
+            $file->user_id = Auth::user()->id;
+            $file->type = 3;
+            $file->original_name = request()->file('file')->getClientOriginalName();
+            $file->ext = request()->file('file')->getClientOriginalExtension();
+            $file->path = $file_link;
+            $file->save();
+
+            return Response::json(array('success' => "true",
+                'id' => $c_id,
+                'path' => url('/') . '' . $file_link
+            ), 200);
+        } else {
+            return Response::json(array('success' => "false",
+                'error' => 'file not valid!'
+            ), 200);
+        }
+    }
+    public function filesTicketAdd (){
+
+        $c_id = request()->get('id');
+        if ($c_id == '') {
+            $candidate = new Candidate();
+            $candidate->user_id = Auth::user()->id;
+            $candidate->active = 1;
+            $candidate->save();
+            $c_id = $candidate->id;
+        }
+
+        $file = request()->file('file');
+        if ($file->isValid()) {
+
+            $path = '/uploads/candidate/' . Carbon::now()->format('m.Y') . '/' . $c_id . '/files/';
+            $name = Str::random(12) . '.' . $file->getClientOriginalExtension();
+
+            $file->move(public_path($path), $name);
+            $file_link = $path . $name;
+
+
+            $file = new C_file();
+            $file->autor_id = Auth::user()->id;
+            $file->candidate_id = $c_id;
+            $file->user_id = Auth::user()->id;
+            $file->type = 4;
+            $file->original_name = request()->file('file')->getClientOriginalName();
+            $file->ext = request()->file('file')->getClientOriginalExtension();
+            $file->path = $file_link;
+            $file->save();
+
+            return Response::json(array('success' => "true",
+                'id' => $c_id,
+                'path' => url('/') . '' . $file_link
+            ), 200);
+        } else {
+            return Response::json(array('success' => "false",
+                'error' => 'file not valid!'
+            ), 200);
+        }
+    }
 }

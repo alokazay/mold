@@ -249,6 +249,29 @@
                                         <div class="row mb-5">
                                             <div class="col">
                                                 <div class="d-flex flex-column mb-0 fv-row">
+                                                    <!--begin::Dropzone-->
+                                                    <div class="dropzone" id="kt_file_doc">
+                                                        <!--begin::Message-->
+                                                        <div class="dz-message needsclick">
+                                                            <!--begin::Icon-->
+                                                            <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
+                                                            <!--end::Icon-->
+
+                                                            <!--begin::Info-->
+                                                            <div class="ms-4">
+                                                                <h3 class="fs-5 fw-bolder text-gray-900 mb-1">Загрузить документ</h3>
+                                                                <span class="fs-7 fw-bold text-gray-400">Перетащите документ сюда</span>
+                                                            </div>
+                                                            <!--end::Info-->
+                                                        </div>
+                                                    </div>
+                                                    <!--end::Dropzone-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-5">
+                                            <div class="col">
+                                                <div class="d-flex flex-column mb-0 fv-row">
                                                     <label class=" fs-5 fw-bold mb-2">Комментарий</label>
                                                     <textarea id="comment"
                                                               class="form-control form-control-sm form-control-solid"
@@ -276,6 +299,7 @@
                                                     </div>
                                                 </div>
 
+
                                             </div>
                                             <div class="row mb-5">
                                                 <div class="col-6">
@@ -286,7 +310,30 @@
 
                                                     </div>
                                                 </div>
+                                            </div>
 
+                                            <div class="row mb-5">
+                                                <div class="col">
+                                                    <div class="d-flex flex-column mb-0 fv-row">
+                                                        <!--begin::Dropzone-->
+                                                        <div class="dropzone" id="kt_file_ticket">
+                                                            <!--begin::Message-->
+                                                            <div class="dz-message needsclick">
+                                                                <!--begin::Icon-->
+                                                                <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
+                                                                <!--end::Icon-->
+
+                                                                <!--begin::Info-->
+                                                                <div class="ms-4">
+                                                                    <h3 class="fs-5 fw-bolder text-gray-900 mb-1">Загрузить билет</h3>
+                                                                    <span class="fs-7 fw-bold text-gray-400">Перетащите документ сюда</span>
+                                                                </div>
+                                                                <!--end::Info-->
+                                                            </div>
+                                                        </div>
+                                                        <!--end::Dropzone-->
+                                                    </div>
+                                                </div>
                                             </div>
                                         @endif
 
@@ -630,6 +677,41 @@
     $('#transport_id').append(new Option('{{ $canddaite->Transport->name }}', {{ $canddaite->Transport->id }}, true, true)).trigger('change');
     @endif
 
+    var myDropzoneD = new Dropzone("#kt_file_ticket", {
+        url: "{{url('/')}}/candidate/files/ticket/add", // Set the url for your upload script location
+        paramName: "file",
+        maxFiles: 1,
+        maxFilesize: 10, // MB
+        addRemoveLinks: true,
+        sending: function (file, xhr, formData) {
+            formData.append('_token', $('input[name=_token]').val());
+            formData.append('id', $('#id').val());
+        },
+        success: function (file, done) {
+            $('#id').val(done.id);
+        },
+        accept: function (file, done) {
+            done();
+        }
+    });
+
+    var myDropzoneT = new Dropzone("#kt_file_doc", {
+        url: "{{url('/')}}/candidate/files/doc/add", // Set the url for your upload script location
+        paramName: "file",
+        maxFiles: 1,
+        maxFilesize: 10, // MB
+        addRemoveLinks: true,
+        sending: function (file, xhr, formData) {
+            formData.append('_token', $('input[name=_token]').val());
+            formData.append('id', $('#id').val());
+        },
+        success: function (file, done) {
+            $('#id').val(done.id);
+        },
+        accept: function (file, done) {
+            done();
+        }
+    });
 
 </script>
 </body>

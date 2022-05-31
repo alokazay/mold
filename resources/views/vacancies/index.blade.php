@@ -185,8 +185,10 @@
                                         <!--end::Select2-->
                                     </div>
 
-                                    <a href="{{url('/')}}/vacancy/add" class="btn btn-primary">Добавить</a>
-                                    <!--end::Add product-->
+                                    @if(Auth::user()->group_id == 1)
+                                        <a href="{{url('/')}}/vacancy/add" class="btn btn-primary">Добавить</a>
+                                        <!--end::Add product-->
+                                    @endif
                                 </div>
                                 <!--end::Card toolbar-->
                             </div>
@@ -332,6 +334,7 @@
             }
         });
     }
+
     function changeCost(id) {
         var changeCost = $('.changeCost' + id).val();
         $.get('{{url('/')}}/vacancy/changecost?s=' + changeCost + '&id=' + id, function (res) {

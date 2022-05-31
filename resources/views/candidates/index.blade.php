@@ -152,9 +152,29 @@
                                     <div class="w-100 mw-150px">
                                         <!--begin::Select2-->
                                         <select id="filter__status" class="form-select form-select-solid">
-                                            <option value="">Статус</option>
-                                            <option value="2">Подтвержден</option>
-                                            <option value="1">Ожидается</option>
+                                        @if(Auth::user()->group_id == 3)
+                                                <option value="">Статус</option>
+                                                <option value="1">Новый кандидат</option>
+                                                <option value="2">Лид</option>
+                                                <option value="3">Отказ</option>
+                                                <option value="4">Готов к выезду</option>
+                                                <option value="5">Архив</option>
+                                                <option value="10">Отработал 7 дней</option>
+                                            @else
+                                                <option value="">Статус</option>
+                                                <option value="1">Новый кандидат</option>
+                                                <option value="2">Лид</option>
+                                                <option value="3">Отказ</option>
+                                                <option value="4">Готов к выезду</option>
+                                                <option value="5">Архив</option>
+                                                <option value="6">Подтвердил Выезд</option>
+                                                <option value="7">Готов к Работе</option>
+                                                <option value="8">Трудоустроен</option>
+                                                <option value="9">Приступил к Работе</option>
+                                                <option value="10">Отработал 7 дней</option>
+                                                <option value="11">Уволен</option>
+                                                <option value="12">Приехал</option>
+                                            @endif
                                         </select>
                                         <!--end::Select2-->
                                     </div>

@@ -144,8 +144,6 @@ class UsersController extends Controller
 
     public function addUser(Request $r)
     {
-
-
         $user = User::find($r->id);
         if ($user == null) {
             $user = new User();
@@ -163,8 +161,8 @@ class UsersController extends Controller
             }
 
         } else {
-            $validator = Validator::make($r->all(), [
-                'email' => 'required|email:rfc,dns',
+             $validator = Validator::make($r->all(), [
+                'email' => 'required|email:rfc,dns|unique:users,email,'.$user->id,
                 'firstName' => 'required',
                 'lastName' => 'required',
                 'phone' => 'required',
@@ -206,6 +204,8 @@ class UsersController extends Controller
 
         $user = User::find($r->id);
         if ($user == null) {
+
+
             $user = new User();
             $user->group_id = 3;
             $user->activation = 1;
@@ -226,7 +226,7 @@ class UsersController extends Controller
 
         } else {
             $validator = Validator::make($r->all(), [
-                'email' => 'required|email:rfc,dns',
+                'email' => 'required|email:rfc,dns|unique:users,email,'.$user->id,
                 'firstName' => 'required',
                 'lastName' => 'required',
                 'phone' => 'required',
@@ -267,7 +267,7 @@ class UsersController extends Controller
         $user = User::where('id', Auth::user()->id)->first();
 
         $validator = Validator::make($r->all(), [
-            'email' => 'required|email:rfc,dns',
+            'email' => 'required|email:rfc,dns|unique:users,email,'.$user->id,
             'firstName' => 'required',
             'lastName' => 'required',
             'phone' => 'required',
