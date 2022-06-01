@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -64,26 +65,47 @@ class User extends Authenticatable
         }
     }
 
-    public function getActivation(){
+    public function isRecruter()
+    {
+        if (Auth::user()->group_id == 2) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function isFreelancer()
+    {
+        if (Auth::user()->group_id == 3) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function getActivation()
+    {
         if ($this->activation == 1) {
             return 'Активирован';
         } else if ($this->activation == 2) {
             return 'Деактивирован';
         }
     }
-    public function getFl_status(){
+
+    public function getFl_status()
+    {
         if ($this->fl_status == 1) {
             return 'Новый';
         } else if ($this->fl_status == 2) {
             return 'Верифицирован';
-        }else if ($this->fl_status == 2) {
+        } else if ($this->fl_status == 2) {
             return 'Отклонён';
-        }else if ($this->fl_status == 2) {
+        } else if ($this->fl_status == 2) {
             return 'Уволен';
         }
     }
 
-    public function D_file(){
+    public function D_file()
+    {
         return $this->hasOne(C_file::class)->where('type', 1);
     }
 

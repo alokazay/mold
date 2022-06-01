@@ -119,6 +119,7 @@
                             <div class="card-body pt-15">
 
                                 <input type="hidden" id="id">
+                                <input type="hidden" id="r_id">
                                 <div class="row">
                                     <div class="col">
                                         <div class="row mb-5">
@@ -259,7 +260,8 @@
 
                                                             <!--begin::Info-->
                                                             <div class="ms-4">
-                                                                <h3 class="fs-5 fw-bolder text-gray-900 mb-1">Загрузить документ</h3>
+                                                                <h3 class="fs-5 fw-bolder text-gray-900 mb-1">Загрузить
+                                                                    документ</h3>
                                                                 <span class="fs-7 fw-bold text-gray-400">Перетащите документ сюда</span>
                                                             </div>
                                                             <!--end::Info-->
@@ -283,6 +285,16 @@
 
                                     </div>
                                     <div class="col">
+
+                                        <div class="col-6">
+                                            <div class="d-flex flex-column mb-0 fv-row">
+                                                <label class="fs-5 fw-bold mb-2">Рекрутер</label>
+
+                                                <select id="recruiter_id"
+                                                        class="form-select  form-select-sm form-select-solid"> </select>
+                                            </div>
+                                        </div>
+
                                         @if(Auth::user()->group_id == 4 || Auth::user()->group_id == 1)
                                             <h3 class="mb-5">Логист</h3>
                                             <div class="row mb-5">
@@ -325,7 +337,8 @@
 
                                                                 <!--begin::Info-->
                                                                 <div class="ms-4">
-                                                                    <h3 class="fs-5 fw-bolder text-gray-900 mb-1">Загрузить билет</h3>
+                                                                    <h3 class="fs-5 fw-bolder text-gray-900 mb-1">
+                                                                        Загрузить билет</h3>
                                                                     <span class="fs-7 fw-bold text-gray-400">Перетащите документ сюда</span>
                                                                 </div>
                                                                 <!--end::Info-->
@@ -336,6 +349,8 @@
                                                 </div>
                                             </div>
                                         @endif
+
+
 
                                         <h3 class="mb-5">Трудоустройство</h3>
                                         <div class="row mb-5">
@@ -416,6 +431,7 @@
             logist_place_arrive_id: $('#logist_place_arrive_id').val(),
             real_vacancy_id: $('#real_vacancy_id').val(),
             real_status_work_id: $('#real_status_work_id').val(),
+            recruiter_id: $('#recruiter_id').val(),
             _token: $('input[name=_token]').val(),
         };
 
@@ -591,6 +607,32 @@
             }
         },
     });
+    $('#recruiter_id').select2({
+        placeholder: 'Рекрутер',
+        ajax: {
+            url: "{{url('/')}}/search/candidate/recruter",
+            dataType: 'json',
+            // delay: 250,
+            data: function (params) {
+                return {
+                    s: '{{request('s')}}',
+                    f_search: params.term,
+                };
+            },
+            processResults: function (data) {
+                var results = [];
+                $.each(data, function (index, item) {
+                    results.push({
+                        id: item.id,
+                        text: item.value
+                    });
+                });
+                return {
+                    results: results
+                };
+            }
+        },
+    });
     $('#real_status_work_id').select2({
         placeholder: 'трудоустройство',
         ajax: {
@@ -648,6 +690,8 @@
     $('#id').val('{{request('id')}}');
     @endif
 
+
+
     @if($canddaite != null && $canddaite->Vacancy != null)
     $('#real_vacancy_id').append(new Option('{{ $canddaite->Vacancy->title }}', {{ $canddaite->Vacancy->id }}, true, true)).trigger('change');
     @endif
@@ -656,6 +700,12 @@
     @if($vacancy != null)
     $('#real_vacancy_id').append(new Option('{{ $vacancy->title }}', {{ $vacancy->id }}, true, true)).trigger('change');
     @endif
+
+    @if($recruter != null)
+    $('#recruiter_id').append(new Option('{{ $recruter->firstName }} {{ $recruter->lastName }}', {{ $recruter->id }}, true, true)).trigger('change');
+    @endif
+
+
 
 
     @if($canddaite != null && $canddaite->Citizenship != null)

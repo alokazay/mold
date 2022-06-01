@@ -62,6 +62,10 @@ class FreelancersController extends Controller
             $users = $users->where('fl_status', $fl_status);
         }
 
+        if (Auth::user()->isRecruter()) {
+            $users = $users->where('recruter_id', Auth::user()->id);
+        }
+
         if ($search != '') {
             $users = $users->where(function ($query) use ($search) {
                 $query->where('firstName', 'LIKE', '%' . $search . '%')

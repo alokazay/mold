@@ -10,6 +10,7 @@ use App\Http\Controllers\FreelancersController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\HandbookController;
+use App\Http\Controllers\RecruiterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +30,7 @@ Route::get('/dashboard', function () {
         return Redirect::to('users');
     }
     if (Auth::user()->group_id == 2) {
-        return Redirect::to('freelancers');
+        return Redirect::to('/recruiter/dashboard');
     }
     if (Auth::user()->group_id == 3) {
         return Redirect::to('vacancies');
@@ -68,23 +69,23 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     // vacancies
-    Route::get('vacancies', [VacancyController::class, 'getIndex'])->middleware('roles:1|3');
-    Route::get('vacancy/add', [VacancyController::class, 'getAdd'])->middleware('roles:1|3');
-    Route::post('vacancy/add', [VacancyController::class, 'postAdd'])->name('vacancy.add')->middleware('roles:1|3');
-    Route::post('files/add', [VacancyController::class, 'filesAdd'])->middleware('roles:1|3');
-    Route::post('vacancy/getJson', [VacancyController::class, 'getJson'])->name('vacancy.json')->middleware('roles:1|3');
-    Route::get('vacancy/activation', [VacancyController::class, 'vacancyActivation'])->middleware('roles:1|3');
-    Route::get('vacancy/changecost', [VacancyController::class, 'vacancyChangecost'])->middleware('roles:1|3');
+    Route::get('vacancies', [VacancyController::class, 'getIndex'])->middleware('roles:1|2|3');
+    Route::get('vacancy/add', [VacancyController::class, 'getAdd'])->middleware('roles:1|2||3');
+    Route::post('vacancy/add', [VacancyController::class, 'postAdd'])->name('vacancy.add')->middleware('roles:1|2|3');
+    Route::post('files/add', [VacancyController::class, 'filesAdd'])->middleware('roles:1|2|3');
+    Route::post('vacancy/getJson', [VacancyController::class, 'getJson'])->name('vacancy.json')->middleware('roles:1|2|3');
+    Route::get('vacancy/activation', [VacancyController::class, 'vacancyActivation'])->middleware('roles:1|2|3');
+    Route::get('vacancy/changecost', [VacancyController::class, 'vacancyChangecost'])->middleware('roles:1|2|3');
 
 
     // candidates
-    Route::get('candidates', [CandidateController::class, 'getIndex'])->middleware('roles:1|3');
-    Route::post('candidates/getJson', [CandidateController::class, 'getJson'])->name('candidates.json')->middleware('roles:1|3');
-    Route::get('candidate/set_status', [CandidateController::class, 'setFlStatus'])->middleware('roles:1|3');
-    Route::get('candidate/add', [CandidateController::class, 'getAdd'])->middleware('roles:1|3');
-    Route::post('candidate/add', [CandidateController::class, 'postAdd'])->name('candidate.add')->middleware('roles:1|3');
-    Route::post('candidate/files/doc/add', [CandidateController::class, 'filesDocAdd'])->middleware('roles:1|3');
-    Route::post('candidate/files/ticket/add', [CandidateController::class, 'filesTicketAdd'])->middleware('roles:1|3');
+    Route::get('candidates', [CandidateController::class, 'getIndex'])->middleware('roles:1|2|3');
+    Route::post('candidates/getJson', [CandidateController::class, 'getJson'])->name('candidates.json')->middleware('roles:1|2|3');
+    Route::get('candidate/set_status', [CandidateController::class, 'setFlStatus'])->middleware('roles:1|2|3');
+    Route::get('candidate/add', [CandidateController::class, 'getAdd'])->middleware('roles:1|2|3');
+    Route::post('candidate/add', [CandidateController::class, 'postAdd'])->name('candidate.add')->middleware('roles:1|2|3');
+    Route::post('candidate/files/doc/add', [CandidateController::class, 'filesDocAdd'])->middleware('roles:1|2|3');
+    Route::post('candidate/files/ticket/add', [CandidateController::class, 'filesTicketAdd'])->middleware('roles:1|2|3');
 
 
     // handbooks
@@ -92,25 +93,31 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('handbooks/delete', [HandbookController::class, 'deleteHandbook'])->middleware('roles:1');
     Route::get('handbooks/add', [HandbookController::class, 'addHandbook'])->middleware('roles:1');
 
+    //recruiter
+    Route::get('/recruiter/dashboard', [RecruiterController::class, 'getIndex'])->middleware('roles:2');
+    Route::get('/recruiter/invite/{id}', [RecruiterController::class, 'getInvite'])->middleware('roles:2');
+
+
     // ajax search
-    Route::get('search/vacancy/client', [SearchController::class, 'getAjaxVacancyClients'])->middleware('roles:1|3');
-    Route::get('search/vacancy/industry', [SearchController::class, 'getAjaxVacancyIndustry'])->middleware('roles:1|3');
-    Route::get('search/vacancy/nationality', [SearchController::class, 'getAjaxVacancyNationality'])->middleware('roles:1|3');
-    Route::get('search/vacancy/workplace', [SearchController::class, 'getAjaxVacancyWorkplace'])->middleware('roles:1|3');
-    Route::get('search/vacancy/docs', [SearchController::class, 'getAjaxVacancyDocs'])->middleware('roles:1|3');
+    Route::get('search/vacancy/client', [SearchController::class, 'getAjaxVacancyClients'])->middleware('roles:1|2|3');
+    Route::get('search/vacancy/industry', [SearchController::class, 'getAjaxVacancyIndustry'])->middleware('roles:1|2|3');
+    Route::get('search/vacancy/nationality', [SearchController::class, 'getAjaxVacancyNationality'])->middleware('roles:1|2|3');
+    Route::get('search/vacancy/workplace', [SearchController::class, 'getAjaxVacancyWorkplace'])->middleware('roles:1|2|3');
+    Route::get('search/vacancy/docs', [SearchController::class, 'getAjaxVacancyDocs'])->middleware('roles:1|2|3');
 
     Route::get('search/client/industry', [SearchController::class, 'getAjaxClientIndustry'])->middleware('roles:1');
     Route::get('search/client/workplace', [SearchController::class, 'getAjaxClientWorkplace'])->middleware('roles:1');
     Route::get('search/client/coordinator', [SearchController::class, 'getAjaxClientCoordinator'])->middleware('roles:1');
     Route::get('search/client/nationality', [SearchController::class, 'getAjaxClientNationality'])->middleware('roles:1');
 
-    Route::get('search/candidate/transport', [SearchController::class, 'getAjaxClientTransport'])->middleware('roles:1|3');
-    Route::get('search/candidate/realstatuswork', [SearchController::class, 'getAjaxClientRealstatuswork'])->middleware('roles:1|3');
-    Route::get('search/candidate/placearrive', [SearchController::class, 'getAjaxClientPlacearrive'])->middleware('roles:1|3');
-    Route::get('search/candidate/typedocs', [SearchController::class, 'getAjaxClientTypedocs'])->middleware('roles:1|3');
-    Route::get('search/candidate/country', [SearchController::class, 'getAjaxClientCountry'])->middleware('roles:1|3');
-    Route::get('search/candidate/citizenship', [SearchController::class, 'getAjaxClientCitizenship'])->middleware('roles:1|3');
-    Route::get('search/candidate/vacancy', [SearchController::class, 'getAjaxCandidateVacancy'])->middleware('roles:1|3');
+    Route::get('search/candidate/transport', [SearchController::class, 'getAjaxClientTransport'])->middleware('roles:1|2|3');
+    Route::get('search/candidate/realstatuswork', [SearchController::class, 'getAjaxClientRealstatuswork'])->middleware('roles:1|2|3');
+    Route::get('search/candidate/placearrive', [SearchController::class, 'getAjaxClientPlacearrive'])->middleware('roles:1|2|3');
+    Route::get('search/candidate/typedocs', [SearchController::class, 'getAjaxClientTypedocs'])->middleware('roles:1|2|3');
+    Route::get('search/candidate/country', [SearchController::class, 'getAjaxClientCountry'])->middleware('roles:1|2|3');
+    Route::get('search/candidate/citizenship', [SearchController::class, 'getAjaxClientCitizenship'])->middleware('roles:1|2|3');
+    Route::get('search/candidate/vacancy', [SearchController::class, 'getAjaxCandidateVacancy'])->middleware('roles:1|2|3');
+    Route::get('search/candidate/recruter', [SearchController::class, 'getAjaxCandidateRecruter'])->middleware('roles:1|2|3');
 });
 
 

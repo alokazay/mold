@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
 
             $table->string('user_id')->nullable();
+            $table->string('recruiter_id')->nullable();
             $table->string('firstName')->nullable();
             $table->string('lastName')->nullable();
             $table->timestamp('dateOfBirth')->nullable();

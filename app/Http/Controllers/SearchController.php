@@ -479,5 +479,36 @@ class SearchController extends Controller
         }
     }
 
+    public function getAjaxCandidateRecruter()
+    {
+        $search = request('f_search');
+
+        $Course = User::where(function ($query) use ($search) {
+            $query->where('firstName', 'LIKE', '%' . $search . '%')
+                ->orWhere('email', 'LIKE', '%' . $search . '%')
+                ->orWhere('lastName', 'LIKE', '%' . $search . '%')
+                ->orWhere('phone', 'LIKE', '%' . $search . '%');
+        })->where('group_id', 2)
+            ->take(10)
+            ->get();
+
+        $p_temp = [];
+
+        if (count($Course)) {
+            foreach ($Course as $c) {
+                $p_temp_arr = [];
+                $p_temp_arr['value'] = $c->firstName.' '.$c->lastName;
+                $p_temp_arr['id'] = $c->id;
+                $p_temp[] = $p_temp_arr;
+            }
+        }
+
+        if (count($Course)) {
+            return response($p_temp, 200);
+        } else {
+            return response(array('success' => "false"), 200);
+        }
+    }
+
 
 }

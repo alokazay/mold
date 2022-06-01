@@ -152,7 +152,7 @@
                                     <div class="w-100 mw-150px">
                                         <!--begin::Select2-->
                                         <select id="filter__status" class="form-select form-select-solid">
-                                        @if(Auth::user()->group_id == 3)
+                                            @if(Auth::user()->isFreelancer())
                                                 <option value="">Статус</option>
                                                 <option value="1">Новый кандидат</option>
                                                 <option value="2">Лид</option>
@@ -160,6 +160,13 @@
                                                 <option value="4">Готов к выезду</option>
                                                 <option value="5">Архив</option>
                                                 <option value="10">Отработал 7 дней</option>
+                                            @elseif(Auth::user()->isRecruter())
+                                                <option value="">Статус</option>
+                                                <option value="1">Новый кандидат</option>
+                                                <option value="2">Лид</option>
+                                                <option value="3">Отказ</option>
+                                                <option value="4">Готов к выезду</option>
+                                                <option value="5">Архив</option>
                                             @else
                                                 <option value="">Статус</option>
                                                 <option value="1">Новый кандидат</option>
@@ -193,17 +200,17 @@
                                         <thead>
                                         <!--begin::Table row-->
                                         <tr class="text-start text-muted fw-bolder fs-7 gs-0">
-                                          {{--  <th class="w-10px pe-2 sorting_disabled" style="width: 29.25px;">
-                                                <div
-                                                    class="form-check form-check-sm form-check-custom form-check-solid me-3">
-                                                    <input class="form-check-input" type="checkbox"
-                                                           value="1">
-                                                </div>
-                                            </th>--}}
+                                            {{--  <th class="w-10px pe-2 sorting_disabled" style="width: 29.25px;">
+                                                  <div
+                                                      class="form-check form-check-sm form-check-custom form-check-solid me-3">
+                                                      <input class="form-check-input" type="checkbox"
+                                                             value="1">
+                                                  </div>
+                                              </th>--}}
                                             <th class="max-w-55px sorting_disabled">Id</th>
                                             <th class="max-w-85px sorting_disabled">Имя</th>
                                             <th class="max-w-85px sorting_disabled">Фамилия</th>
-                                             <th class="max-w-45px sorting_disabled">Телефон</th>
+                                            <th class="max-w-45px sorting_disabled">Телефон</th>
                                             <th class="max-w-65px sorting_disabled">Вакансия</th>
                                             <th class="max-w-65px sorting_disabled">Viber</th>
                                             <th class="max-w-65px sorting_disabled">Контактное</th>
@@ -324,8 +331,7 @@
     })
 
 
-
-    function changeActivation (id) {
+    function changeActivation(id) {
         var changeActivation = $('.changeActivation' + id).val();
         $.get('{{url('/')}}/candidate/set_status?s=' + changeActivation + '&id=' + id, function (res) {
             if (res.error) {

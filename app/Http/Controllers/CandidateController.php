@@ -59,9 +59,14 @@ class CandidateController extends Controller
         }
 
         // Фрилансеры видят только свои
-        if (Auth::user()->group_id == 3) {
+        if (Auth::user()->isFreelancer()) {
             $users = $users->where('user_id', Auth::user()->id);
             $users = $users->whereIn('active', [1, 2, 3, 4, 5, 10]);
+        }
+
+        if (Auth::user()->isRecruter()) {
+            $users = $users->where('recruiter_id', Auth::user()->id);
+            $users = $users->whereIn('active', [1, 2, 3, 4, 5]);
         }
 
 
@@ -159,6 +164,8 @@ class CandidateController extends Controller
     public function getAdd(Request $r)
     {
         $vacancy = null;
+
+
         if ($r->has('id')) {
             $canddaite = Candidate::where('id', $r->id)
                 ->with('Vacancy')
@@ -177,7 +184,16 @@ class CandidateController extends Controller
             }
         }
 
+        $recruter = null;
+        if ($r->has('r_id')) {
+            $recruter = User::find($r->r_id);
+        } else {
+            if ($canddaite != null) {
+                $recruter = User::find($canddaite->recruiter_id);
+            }
+        }
         return view('candidates.add')
+            ->with('recruter', $recruter)
             ->with('vacancy', $vacancy)
             ->with('canddaite', $canddaite);
     }
@@ -208,6 +224,7 @@ class CandidateController extends Controller
             $candidate->active = 1;
         }
 
+        $candidate->recruiter_id = $r->recruiter_id;
         $candidate->lastName = $r->lastName;
         $candidate->firstName = $r->firstName;
         $candidate->phone = $r->phone;
@@ -260,7 +277,9 @@ class CandidateController extends Controller
         $candidate->save();
         return Response::json(array('success' => "true", 200));
     }
-    public function filesDocAdd (){
+
+    public function filesDocAdd()
+    {
 
         $c_id = request()->get('id');
         if ($c_id == '') {
@@ -301,7 +320,9 @@ class CandidateController extends Controller
             ), 200);
         }
     }
-    public function filesTicketAdd (){
+
+    public function filesTicketAdd()
+    {
 
         $c_id = request()->get('id');
         if ($c_id == '') {

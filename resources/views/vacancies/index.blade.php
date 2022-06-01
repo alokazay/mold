@@ -201,7 +201,7 @@
                                         <thead>
                                         <!--begin::Table row-->
                                         <tr class="text-start text-muted fw-bolder fs-7 gs-0">
-                                            @if(Auth::user()->group_id == 3)
+                                            @if(Auth::user()->group_id == 3 || Auth::user()->group_id == 2)
                                                 <th class="max-w-55px sorting_disabled">Id</th>
                                                 <th class="max-w-55px sorting_disabled">Название</th>
                                                 <th class="max-w-85px sorting_disabled">Отрасль</th>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Candidate extends Model
 {
@@ -52,7 +53,7 @@ class Candidate extends Model
     public function getStatusOptions()
     {
         $arr = [
-            ['', 'Новый кандидат'],
+            ['1', 'Новый кандидат'],
             ['2', 'Лид'],
             ['3', 'Отказ'],
             ['4', 'Готов к выезду'],
@@ -65,6 +66,27 @@ class Candidate extends Model
             ['11', 'Уволен'],
             ['12', 'Приехал'],
         ];
+
+        if(Auth::user()->isRecruter()){
+            $arr = [
+                ['1', 'Новый кандидат'],
+                ['2', 'Лид'],
+                ['3', 'Отказ'],
+                ['4', 'Готов к выезду'],
+                ['5', 'Архив']
+            ];
+        }
+
+        if(Auth::user()->isFreelancer()){
+            $arr = [
+                ['1', 'Новый кандидат'],
+                ['2', 'Лид'],
+                ['3', 'Отказ'],
+                ['4', 'Готов к выезду'],
+                ['5', 'Архив'],
+                ['10', 'Отработал 7 дней']
+            ];
+        }
 
         $html = '';
         foreach ($arr as $a) {

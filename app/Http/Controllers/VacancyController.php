@@ -367,10 +367,21 @@ class VacancyController extends Controller
             }
 
             $recruting_cost = '<input  onchange="changeCost(' . $u->id . ')" class="changeCost' . $u->id . '" value="' . $u->recruting_cost . '" style="border: none;" type="text">';
-            if (Auth::user()->group_id == 3) {
+            if (Auth::user()->isRecruter() || Auth::user()->isFreelancer()) {
+
+
+                if (Auth::user()->isRecruter()) {
+                    $add_link = '<a href="' . url('/') . '/candidate/add?r_id='.Auth::user()->id.'&vid=' . $u->id . '"><i class="fas fa-user-plus"></i></a>';
+                }
+
+                if (Auth::user()->isFreelancer()) {
+                    $add_link = '<a href="' . url('/') . '/candidate/add?r_id='.Auth::user()->recruter_id.'&vid=' . $u->id . '"><i class="fas fa-user-plus"></i></a>';
+                }
+
+
                 // Только фрилансер
                 $temp_arr = [
-                    '<a href="vacancy/add?id=' . $u->id . '">' . $u->id . '</a>',
+                    $u->id,
                     $u->title,
                     $h_v_industry,
                     Carbon::parse($u->deadline_to)->format('d.m.Y'),
@@ -381,7 +392,7 @@ class VacancyController extends Controller
                     $u->salary_description,
                     $u->housing_cost,
                     $recruting_cost,
-                    '<a href="' . url('/') . '/candidate/add?vid='.$u->id.'"><i class="fas fa-user-plus"></i></a>'
+                    $add_link
                 ];
             } else {
                 $temp_arr = [
