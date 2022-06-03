@@ -201,6 +201,14 @@
                                             </div>
                                             <div class="col-6">
                                                 <div class="d-flex flex-column mb-0 fv-row">
+                                                    <label class=" fs-5 fw-bold mb-2">Национальность</label>
+                                                    <select
+                                                        id="nacionality_id"
+                                                        class="form-select  form-select-sm form-select-solid"> </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="d-flex flex-column mb-0 fv-row">
                                                     <label class=" fs-5 fw-bold mb-2">Страна прибывания</label>
                                                     <select id="country_id"
                                                             class="form-select  form-select-sm form-select-solid"> </select>
@@ -421,6 +429,7 @@
             viber: $('#viber').val(),
             phone_parent: $('#phone_parent').val(),
             citizenship_id: $('#citizenship_id').val(),
+            nacionality_id: $('#nacionality_id').val(),
             country_id: $('#country_id').val(),
             date_arrive: $('#date_arrive').val(),
             type_doc_id: $('#type_doc_id').val(),
@@ -481,6 +490,32 @@
         placeholder: 'Поиск гражданства',
         ajax: {
             url: "{{url('/')}}/search/candidate/citizenship",
+            dataType: 'json',
+            // delay: 250,
+            data: function (params) {
+                return {
+                    s: '{{request('s')}}',
+                    f_search: params.term,
+                };
+            },
+            processResults: function (data) {
+                var results = [];
+                $.each(data, function (index, item) {
+                    results.push({
+                        id: item.id,
+                        text: item.value
+                    });
+                });
+                return {
+                    results: results
+                };
+            }
+        },
+    });
+    $('#nacionality_id').select2({
+        placeholder: 'Поиск национальности',
+        ajax: {
+            url: "{{url('/')}}/search/candidate/nacionality",
             dataType: 'json',
             // delay: 250,
             data: function (params) {
@@ -710,6 +745,9 @@
 
     @if($canddaite != null && $canddaite->Citizenship != null)
     $('#citizenship_id').append(new Option('{{ $canddaite->Citizenship->name }}', {{ $canddaite->Citizenship->id }}, true, true)).trigger('change');
+    @endif
+    @if($canddaite != null && $canddaite->Nacionality != null)
+    $('#nacionality_id').append(new Option('{{ $canddaite->Nacionality->name }}', {{ $canddaite->Nacionality->id }}, true, true)).trigger('change');
     @endif
     @if($canddaite != null && $canddaite->Country != null)
     $('#country_id').append(new Option('{{ $canddaite->Country->name }}', {{ $canddaite->Country->id }}, true, true)).trigger('change');

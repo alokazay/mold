@@ -293,6 +293,7 @@
                             </select>
                         </div>
                     </div>
+
                     <div class="col-6 mb-5">
                         <div class="d-flex flex-column mb-0 fv-row">
                             <label class="fs-5 fw-bold mb-2">Статус</label>

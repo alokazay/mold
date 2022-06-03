@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('viber')->nullable();
             $table->string('phone_parent')->nullable();
             $table->integer('citizenship_id')->nullable();
+            $table->integer('nacionality_id')->nullable();
             $table->integer('country_id')->nullable();
             $table->timestamp('date_arrive')->nullable();
             $table->integer('type_doc_id')->nullable();

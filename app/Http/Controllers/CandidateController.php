@@ -170,6 +170,7 @@ class CandidateController extends Controller
             $canddaite = Candidate::where('id', $r->id)
                 ->with('Vacancy')
                 ->with('Citizenship')
+                ->with('Nacionality')
                 ->with('Country')
                 ->with('Type_doc')
                 ->with('Logist_place_arrive')
@@ -238,6 +239,9 @@ class CandidateController extends Controller
         }
         if ($r->citizenship_id != '' && $r->citizenship_id != 'undefined') {
             $candidate->citizenship_id = $r->citizenship_id;
+        }
+        if ($r->nacionality_id != '' && $r->nacionality_id != 'undefined') {
+            $candidate->nacionality_id = $r->nacionality_id;
         }
         if ($r->country_id != '' && $r->country_id != 'undefined') {
             $candidate->country_id = $r->country_id;

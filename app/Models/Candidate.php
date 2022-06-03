@@ -25,6 +25,11 @@ class Candidate extends Model
         return $this->belongsTo(Handbook::class)->where('handbook_category_id', 10);
     }
 
+    public function Nacionality()
+    {
+        return $this->belongsTo(Handbook::class)->where('handbook_category_id', 2);
+    }
+
     public function Country()
     {
         return $this->belongsTo(Handbook::class)->where('handbook_category_id', 5);

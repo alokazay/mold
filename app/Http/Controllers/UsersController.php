@@ -249,6 +249,7 @@ class UsersController extends Controller
         $user->account_iban = $r->account_iban;
         $user->account_card = $r->account_card;
         $user->account_swift = $r->account_swift;
+        $user->recruter_id = $r->recruter_id;
 
 
         if ($r->has('password') && $r->password != '') {

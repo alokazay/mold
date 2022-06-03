@@ -18,7 +18,8 @@ class FreelancersController extends Controller
 {
     public function getIndex()
     {
-        return view('freelansers.index');
+        $recruters = User::where('group_id',2)->where('activation',1)->get();
+        return view('freelansers.index')->with('recruters',$recruters);
     }
 
     public function getJson()

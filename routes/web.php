@@ -40,6 +40,8 @@ Route::get('/dashboard', function () {
 Route::get('login', [AuthController::class, 'getLogin'])->name("login");
 Route::post('login', [AuthController::class, 'postLogin']);
 Route::get('logout', [AuthController::class, 'getLogout']);
+Route::get('/recruiter/invite/{id}', [RecruiterController::class, 'getInvite']);
+Route::post('/recruiter/portal/add', [RecruiterController::class, 'getInviteAdd']);
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('users', [UsersController::class, 'getIndex'])->middleware('roles:1');
@@ -95,7 +97,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     //recruiter
     Route::get('/recruiter/dashboard', [RecruiterController::class, 'getIndex'])->middleware('roles:2');
-    Route::get('/recruiter/invite/{id}', [RecruiterController::class, 'getInvite'])->middleware('roles:2');
 
 
     // ajax search
@@ -116,6 +117,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('search/candidate/typedocs', [SearchController::class, 'getAjaxClientTypedocs'])->middleware('roles:1|2|3');
     Route::get('search/candidate/country', [SearchController::class, 'getAjaxClientCountry'])->middleware('roles:1|2|3');
     Route::get('search/candidate/citizenship', [SearchController::class, 'getAjaxClientCitizenship'])->middleware('roles:1|2|3');
+    Route::get('search/candidate/nacionality', [SearchController::class, 'getAjaxClientNacionality'])->middleware('roles:1|2|3');
     Route::get('search/candidate/vacancy', [SearchController::class, 'getAjaxCandidateVacancy'])->middleware('roles:1|2|3');
     Route::get('search/candidate/recruter', [SearchController::class, 'getAjaxCandidateRecruter'])->middleware('roles:1|2|3');
 });

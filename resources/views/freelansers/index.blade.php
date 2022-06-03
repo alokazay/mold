@@ -300,6 +300,18 @@
                         </div>
                     </div>
 
+                    <div class="col-6">
+                        <div class="d-flex flex-column mb-0 fv-row">
+                            <label class="fs-5 fw-bold mb-2">Рекрутер</label>
+                            <select id="modal_users_add__recruter_id"
+                                    class="form-select form-select-sm form-select-solid">
+                                @foreach($recruters as $recruter)
+                                    <option value="{{$recruter->id}}">{{$recruter->firstName}} {{$recruter->lastName}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="row mb-5">
                     <div class="col-6">
@@ -494,6 +506,7 @@
         $('#modal_users_add__viber').val('');
         $('#modal_users_add__facebook').val('');
         $('#modal_users_add__account_type').val('');
+        $('#modal_users_add__recruter_id').val('');
         $('#modal_users_add__account_poland').val('');
         $('#modal_users_add__account_paypal').val('');
         $('#modal_users_add__account_bank_name').val('');
@@ -517,6 +530,7 @@
             $('#modal_users_add__viber').val(res.user.viber);
             $('#modal_users_add__facebook').val(res.user.facebook);
             $('#modal_users_add__account_type').val(res.user.account_type);
+            $('#modal_users_add__recruter_id').val(res.user.recruter_id);
             $('#modal_users_add__account_poland').val(res.user.account_poland);
             $('#modal_users_add__account_paypal').val(res.user.account_paypal);
             $('#modal_users_add__account_bank_name').val(res.user.account_bank_name);
@@ -543,6 +557,7 @@
             viber: $('#modal_users_add__viber').val(),
             facebook: $('#modal_users_add__facebook').val(),
             account_type: $('#modal_users_add__account_type').val(),
+            recruter_id: $('#modal_users_add__recruter_id').val(),
             account_poland: $('#modal_users_add__account_poland').val(),
             account_paypal: $('#modal_users_add__account_paypal').val(),
             account_bank_name: $('#modal_users_add__account_bank_name').val(),
