@@ -65,6 +65,14 @@ class User extends Authenticatable
         }
     }
 
+    public function isAdmin()
+    {
+        if (Auth::user()->group_id == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     public function isRecruter()
     {
         if (Auth::user()->group_id == 2) {
@@ -76,6 +84,14 @@ class User extends Authenticatable
     public function isFreelancer()
     {
         if (Auth::user()->group_id == 3) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function isLogist()
+    {
+        if (Auth::user()->group_id == 4) {
             return true;
         } else {
             return false;

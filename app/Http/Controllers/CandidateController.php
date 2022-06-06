@@ -69,6 +69,11 @@ class CandidateController extends Controller
             $users = $users->whereIn('active', [1, 2, 3, 4, 5]);
         }
 
+        if (Auth::user()->isLogist()) {
+            $users = $users->where('recruiter_id', Auth::user()->id);
+            $users = $users->whereIn('active', [3, 4, 6]);
+        }
+
 
         if ($vacancies != '') {
             $users = $users->where('real_vacancy_id', $vacancies);

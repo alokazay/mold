@@ -300,17 +300,20 @@
                         </div>
                     </div>
 
-                    <div class="col-6">
-                        <div class="d-flex flex-column mb-0 fv-row">
-                            <label class="fs-5 fw-bold mb-2">Рекрутер</label>
-                            <select id="modal_users_add__recruter_id"
-                                    class="form-select form-select-sm form-select-solid">
-                                @foreach($recruters as $recruter)
-                                    <option value="{{$recruter->id}}">{{$recruter->firstName}} {{$recruter->lastName}}</option>
-                                @endforeach
-                            </select>
+                    @if(Auth::user()->isAdmin())
+                        <div class="col-6">
+                            <div class="d-flex flex-column mb-0 fv-row">
+                                <label class="fs-5 fw-bold mb-2">Рекрутер</label>
+                                <select id="modal_users_add__recruter_id"
+                                        class="form-select form-select-sm form-select-solid">
+                                    @foreach($recruters as $recruter)
+                                        <option
+                                            value="{{$recruter->id}}">{{$recruter->firstName}} {{$recruter->lastName}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                    </div>
+                    @endif
 
                 </div>
                 <div class="row mb-5">

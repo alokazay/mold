@@ -167,6 +167,11 @@
                                                 <option value="3">Отказ</option>
                                                 <option value="4">Готов к выезду</option>
                                                 <option value="5">Архив</option>
+                                            @elseif(Auth::user()->isLogist())
+                                                <option value="">Статус</option>
+                                                <option value="4">Готов к выезду</option>
+                                                <option value="6">Подтвердил Выезд</option>
+                                                <option value="3">Отказ</option>
                                             @else
                                                 <option value="">Статус</option>
                                                 <option value="1">Новый кандидат</option>
@@ -185,9 +190,9 @@
                                         </select>
                                         <!--end::Select2-->
                                     </div>
-                                    <!--begin::Add product-->
-                                    <a href="{{url('/')}}/candidate/add" class="btn btn-primary">Добавить</a>
-                                    <!--end::Add product-->
+                                    @if(Auth::user()->isAdmin() || Auth::user()->isFreelancer() || Auth::user()->isRecruter())
+                                        <a href="{{url('/')}}/candidate/add" class="btn btn-primary">Добавить</a>
+                                    @endif
                                 </div>
                                 <!--end::Card toolbar-->
                             </div>

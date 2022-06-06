@@ -235,6 +235,10 @@ class UsersController extends Controller
                 $error = $validator->errors()->first();
                 return response(array('success' => "false", 'error' => $error), 200);
             }
+
+            if(Auth::user()->isAdmin()){
+                $user->recruter_id = $r->recruter_id;
+            }
         }
         $user->email = $r->email;
         $user->firstName = $r->firstName;
@@ -249,7 +253,7 @@ class UsersController extends Controller
         $user->account_iban = $r->account_iban;
         $user->account_card = $r->account_card;
         $user->account_swift = $r->account_swift;
-        $user->recruter_id = $r->recruter_id;
+
 
 
         if ($r->has('password') && $r->password != '') {
