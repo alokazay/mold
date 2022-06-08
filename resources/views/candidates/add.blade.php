@@ -235,14 +235,18 @@
                                                 </div>
                                             </div>
                                         </div>
+
+
+                                    </div>
+                                    <div class="col">
+
                                         <div class="row mb-5">
                                             <div class="col-6">
                                                 <div class="d-flex flex-column mb-0 fv-row">
-                                                    <label class=" fs-5 fw-bold mb-2">Транспортные
-                                                        расходы</label>
-                                                    <select id="transport_id"
-                                                            class="form-select  form-select-sm form-select-solid"> </select>
+                                                    <label class="fs-5 fw-bold mb-2">Рекрутер</label>
 
+                                                    <select id="recruiter_id"
+                                                            class="form-select  form-select-sm form-select-solid"> </select>
                                                 </div>
                                             </div>
                                             <div class="col-6">
@@ -255,6 +259,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                         <div class="row mb-5">
                                             <div class="col">
                                                 <div class="d-flex flex-column mb-0 fv-row">
@@ -285,26 +290,35 @@
                                                     <label class=" fs-5 fw-bold mb-2">Комментарий</label>
                                                     <textarea id="comment"
                                                               class="form-control form-control-sm form-control-solid"
-                                                              cols="30"
-                                                              rows="10"> @if($canddaite != null){{$canddaite->comment}}@endif</textarea>
+                                                              cols="20"
+                                                              rows="6"> @if($canddaite != null){{$canddaite->comment}}@endif</textarea>
                                                 </div>
                                             </div>
                                         </div>
 
+
                                     </div>
-                                    <div class="col">
+                                </div>
 
-                                        <div class="col-6">
-                                            <div class="d-flex flex-column mb-0 fv-row">
-                                                <label class="fs-5 fw-bold mb-2">Рекрутер</label>
 
-                                                <select id="recruiter_id"
-                                                        class="form-select  form-select-sm form-select-solid"> </select>
-                                            </div>
-                                        </div>
+                                @if(Auth::user()->group_id == 4 || Auth::user()->group_id == 1)
+                                    <hr>
+                                    <h3 class="mb-5 mt-10">Логист</h3>
 
-                                        @if(Auth::user()->group_id == 4 || Auth::user()->group_id == 1)
-                                            <h3 class="mb-5">Логист</h3>
+
+                                    <ul class="nav nav-tabs nav-line-tabs mb-5 fs-6">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab"
+                                               href="#kt_tab_pane_1">Инфо</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#kt_tab_pane_2">Приезды</a>
+                                        </li>
+
+                                    </ul>
+
+                                    <div class="tab-content" id="myTabContent">
+                                        <div class="tab-pane fade show active" id="kt_tab_pane_1" role="tabpanel">
                                             <div class="row mb-5">
                                                 <div class="col-6">
                                                     <div class="d-flex flex-column mb-0 fv-row">
@@ -313,19 +327,25 @@
                                                         <input
                                                             @if($canddaite != null) value="{{\Carbon\Carbon::parse($canddaite->logist_date_arrive)->format('d.m.Y H:i')}}"
                                                             @endif
-                                                            id="logist_date_arrive"
+                                                            id="logist_date_arrive" disabled
                                                             class="form-control form-control-sm form-control-solid"
                                                             type="text"/>
                                                     </div>
                                                 </div>
-
-
                                             </div>
                                             <div class="row mb-5">
                                                 <div class="col-6">
                                                     <div class="d-flex flex-column mb-0 fv-row">
                                                         <label class="fs-5 fw-bold mb-2">Место приезда</label>
-                                                        <select id="logist_place_arrive_id"
+                                                        <select disabled id="logist_place_arrive_id"
+                                                                class="form-select  form-select-sm form-select-solid"> </select>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="d-flex flex-column mb-0 fv-row">
+                                                        <label class=" fs-5 fw-bold mb-2">Транспорт</label>
+                                                        <select disabled id="transport_id"
                                                                 class="form-select  form-select-sm form-select-solid"> </select>
 
                                                     </div>
@@ -333,7 +353,7 @@
                                             </div>
 
                                             <div class="row mb-5">
-                                                <div class="col">
+                                                <div class="col-6">
                                                     <div class="d-flex flex-column mb-0 fv-row">
                                                         <!--begin::Dropzone-->
                                                         <div class="dropzone" id="kt_file_ticket">
@@ -356,36 +376,69 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endif
+                                        </div>
+                                        <div class="tab-pane fade" id="kt_tab_pane_2" role="tabpanel">
 
+                                            <div class="table-responsive">
+                                                <table class="table align-middle table-row-dashed fs-6 gy-3" id="users">
+                                                    <!--begin::Table head-->
+                                                    <thead>
+                                                    <!--begin::Table row-->
+                                                    <tr class="text-start text-muted fw-bolder fs-7 gs-0">
 
+                                                        <th class="max-w-55px sorting_disabled">Id</th>
+                                                        <th class="max-w-85px sorting_disabled">Место приезда</th>
+                                                        <th class="max-w-85px sorting_disabled">Планируемая дата
+                                                            приезда
+                                                        </th>
+                                                        <th class="max-w-85px sorting_disabled">Время приезда</th>
+                                                        <th class="max-w-85px sorting_disabled">Вид транспорта</th>
+                                                        <th class="min-w-100px sorting_disabled">Статус</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody class="text-gray-600 fw-bold">
 
-                                        <h3 class="mb-5">Трудоустройство</h3>
-                                        <div class="row mb-5">
-                                            <div class="col-6">
-                                                <div class="d-flex flex-column mb-0 fv-row">
-                                                    <label class="fs-5 fw-bold mb-2">Вакансия по
-                                                        факту</label>
-
-                                                    <select id="real_vacancy_id"
-                                                            class="form-select  form-select-sm form-select-solid"> </select>
-                                                </div>
+                                                    </tbody>
+                                                    <!--end::Table body-->
+                                                </table>
                                             </div>
-                                            @if(Auth::user()->group_id == 5 || Auth::user()->group_id == 1)
-                                                <div class="col-6">
-                                                    <div class="d-flex flex-column mb-0 fv-row">
-                                                        <label class="fs-5 fw-bold mb-2">Статус
-                                                            трудоустройства</label>
-                                                        <select id="real_status_work_id"
-                                                                class="form-select  form-select-sm form-select-solid"> </select>
 
-                                                    </div>
-                                                </div>
-                                            @endif
+
+                                            <button id="add_arrivals" type="button" class="btn btn-primary btn-sm">
+                                                Добавить
+                                            </button>
                                         </div>
 
                                     </div>
+
+
+                                @endif
+
+                                <hr>
+                                <h3 class="mb-5">Трудоустройство</h3>
+                                <div class="row mb-5">
+                                    <div class="col-6">
+                                        <div class="d-flex flex-column mb-0 fv-row">
+                                            <label class="fs-5 fw-bold mb-2">Вакансия по
+                                                факту</label>
+
+                                            <select id="real_vacancy_id"
+                                                    class="form-select  form-select-sm form-select-solid"> </select>
+                                        </div>
+                                    </div>
+                                    @if(Auth::user()->group_id == 5 || Auth::user()->group_id == 1)
+                                        <div class="col-6">
+                                            <div class="d-flex flex-column mb-0 fv-row">
+                                                <label class="fs-5 fw-bold mb-2">Статус
+                                                    трудоустройства</label>
+                                                <select id="real_status_work_id"
+                                                        class="form-select  form-select-sm form-select-solid"> </select>
+
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
+
 
                                 <button id="modal_users_add__save" type="button" class="btn btn-primary btn-sm">
                                     Сохранить
@@ -410,9 +463,172 @@
 </div>
 <!--end::Root-->
 
+<div class="modal fade" tabindex="-1" id="modal_add_arrivals">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Добавления фрилансера</h3>
+
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal"
+                     aria-label="Close">
+                    <span class="svg-icon svg-icon-2x"></span>
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal body-->
+            <div class="modal-body">
+
+                <input type="hidden" id="modal_add_arrivals_id">
+
+                <div class="row mb-5">
+                    <div class="col-6">
+                        <div class="d-flex flex-column mb-0 fv-row">
+                            <label class="required fs-5 fw-bold mb-2">Место</label>
+                            <select id="modal_place_arrive_id"
+                                    class="form-select  form-select-sm form-select-solid"> </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex flex-column mb-0 fv-row">
+                            <label class="required fs-5 fw-bold mb-2">Вид транспорта</label>
+                            <select id="modal_transport_id"
+                                    class="form-select  form-select-sm form-select-solid"> </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <div class="col-6">
+                        <label class="required fs-5 fw-bold mb-2">Дата и время</label>
+                        <input id="modal__date_arrive"
+                               class="form-control form-control-sm form-control-solid" type="text"/>
+                    </div>
+                </div>
+
+
+            </div>
+            <!--end::Modal body-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Отмена</button>
+                <button id="modal_add_arrivals__save" type="button" class="btn btn-primary btn-sm">Сохранить
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @include('includes.global_scripts')
+<!--begin::Page Vendors Javascript(used by this page)-->
+<script src="{{url('/')}}/assets/plugins/custom/datatables/datatables.bundle.js"></script>
+<!--end::Page Vendors Javascript-->
 <script>
+    @if(Auth::user()->isAdmin() || Auth::user()->isLogist() )
+
+    function changeActivation(id) {
+        var changeActivation = $('.changeActivation' + id).val();
+        $.get('{{url('/')}}/candidates/arrivals/activation?s=' + changeActivation + '&id=' + id, function (res) {
+            if (res.error) {
+                toastr.error(res.error);
+            } else {
+                toastr.success('Успешно');
+            }
+        });
+    }
+
+    $(document).on('click', '.edit_arrival', function () {
+        $('#modal_add_arrivals_id').val($(this).data('id'))
+
+        $('#modal_place_arrive_id').append(new Option($(this).data('place_arrive_name'), $(this).data('place_arrive_id'), true, true)).trigger('change');
+        $('#modal_transport_id').append(new Option($(this).data('transport_name'), $(this).data('transport_id'), true, true)).trigger('change');
+
+
+        $('#modal__date_arrive').val($(this).data('date_arrive'))
+        $('#modal_add_arrivals').modal('show');
+    });
+
+    oTable = $('#users').DataTable({
+        "dom": 'rt<"bottom"p>',
+        paginate: true,
+        "sor": false,
+        "searching": false,
+        "pagingType": "numbers",
+        "serverSide": true,
+        pageLength: 20,
+        "language": {
+            "emptyTable": "нет данных",
+            "zeroRecords": "нет данных",
+            'sSearch': "Поиск"
+        },
+        'aoColumnDefs': [{
+            'bSortable': false,
+            'aTargets': ['sorting_disabled']
+        }],
+        ajax: function (data, callback, settings) {
+            data._token = $('input[name=_token]').val();
+
+            $.ajax({
+                url: '{{ route('candidates.arrivals.json') }}',
+                type: 'POST',
+                data: data,
+                success: function (data) {
+                    if (data.error) {
+                        toastr.error(data.error);
+                    } else {
+                        callback(data);
+                    }
+                }
+            });
+        },
+
+    });
+
+    $('#add_arrivals').click(function () {
+        $('#modal_add_arrivals').modal('show');
+    });
+
+    $('#modal_add_arrivals__save').click(function (e) {
+        e.preventDefault();
+        let self = $(this);
+
+        self.prop('disabled', true);
+
+        var data = {
+            candidate_id: $('#id').val(),
+            place_arrive_id: $('#modal_place_arrive_id').val(),
+            transport_id: $('#modal_transport_id').val(),
+            date_arrive: $('#modal__date_arrive').val(),
+            _token: $('input[name=_token]').val(),
+        };
+
+        if (data.candidate_id === '') {
+            toastr.error('Создайте кандидата');
+            return '';
+        }
+
+
+        let id = $('#modal_add_arrivals_id').val();
+        if (id !== '') {
+            data.id = id;
+        }
+
+        $.ajax({
+            url: "{{url('/')}}/candidates/arrivals/add",
+            method: 'post',
+            data: data,
+            success: function (response, status, xhr, $form) {
+                if (response.error) {
+                    toastr.error(response.error);
+                } else {
+                    $('#modal_add_arrivals').modal('hide');
+                    oTable.draw();
+                }
+                self.prop('disabled', false);
+            }
+        });
+    })
+
+    @endif
 
     $('#modal_users_add__save').click(function (e) {
         e.preventDefault();
@@ -477,14 +693,24 @@
             firstDayOfWeek: 1
         },
     });
+
     $('#logist_date_arrive').flatpickr({
         dateFormat: 'd.m.Y H:i',
         enableTime: true,
+        time_24hr: true,
         locale: {
             firstDayOfWeek: 2
         },
     });
 
+    $('#modal__date_arrive').flatpickr({
+        dateFormat: 'd.m.Y H:i',
+        enableTime: true,
+        time_24hr: true,
+        locale: {
+            firstDayOfWeek: 2
+        },
+    });
 
     $('#citizenship_id').select2({
         placeholder: 'Поиск гражданства',
@@ -695,7 +921,7 @@
         },
     });
     $('#transport_id').select2({
-        placeholder: 'Транспортные расходы',
+        placeholder: 'Тип транспорта',
         ajax: {
             url: "{{url('/')}}/search/candidate/transport",
             dataType: 'json',
@@ -720,6 +946,61 @@
             }
         },
     });
+
+
+    $('#modal_place_arrive_id').select2({
+        placeholder: 'Поиск места прибытия',
+        ajax: {
+            url: "{{url('/')}}/search/candidate/placearrive",
+            dataType: 'json',
+            // delay: 250,
+            data: function (params) {
+                return {
+                    s: '{{request('s')}}',
+                    f_search: params.term,
+                };
+            },
+            processResults: function (data) {
+                var results = [];
+                $.each(data, function (index, item) {
+                    results.push({
+                        id: item.id,
+                        text: item.value
+                    });
+                });
+                return {
+                    results: results
+                };
+            }
+        },
+    });
+    $('#modal_transport_id').select2({
+        placeholder: 'Тип транспорта',
+        ajax: {
+            url: "{{url('/')}}/search/candidate/transport",
+            dataType: 'json',
+            // delay: 250,
+            data: function (params) {
+                return {
+                    s: '{{request('s')}}',
+                    f_search: params.term,
+                };
+            },
+            processResults: function (data) {
+                var results = [];
+                $.each(data, function (index, item) {
+                    results.push({
+                        id: item.id,
+                        text: item.value
+                    });
+                });
+                return {
+                    results: results
+                };
+            }
+        },
+    });
+
 
     @if(request()->has('id'))
     $('#id').val('{{request('id')}}');

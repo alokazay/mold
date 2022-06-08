@@ -50,6 +50,11 @@ class Candidate extends Model
         return $this->belongsTo(Handbook::class)->where('handbook_category_id', 9);
     }
 
+    public function Candidate_arrival()
+    {
+        return $this->hasMany(Candidate_arrival::class);
+    }
+
     public function Transport()
     {
         return $this->belongsTo(Handbook::class)->where('handbook_category_id', 7);
@@ -72,7 +77,7 @@ class Candidate extends Model
             ['12', 'Приехал'],
         ];
 
-        if(Auth::user()->isRecruter()){
+        if (Auth::user()->isRecruter()) {
             $arr = [
                 ['1', 'Новый кандидат'],
                 ['2', 'Лид'],
@@ -82,7 +87,7 @@ class Candidate extends Model
             ];
         }
 
-        if(Auth::user()->isFreelancer()){
+        if (Auth::user()->isFreelancer()) {
             $arr = [
                 ['1', 'Новый кандидат'],
                 ['2', 'Лид'],
@@ -90,6 +95,14 @@ class Candidate extends Model
                 ['4', 'Готов к выезду'],
                 ['5', 'Архив'],
                 ['10', 'Отработал 7 дней']
+            ];
+        }
+
+        if (Auth::user()->isLogist()) {
+            $arr = [
+                ['3', 'Отказ'],
+                ['4', 'Готов к выезду'],
+                ['6', 'Подтвердил Выезд'],
             ];
         }
 

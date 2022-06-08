@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\C_file;
 use App\Models\Candidate;
+use App\Models\Candidate_arrival;
 use App\Models\User;
 use App\Models\Vacancy;
 use Carbon\Carbon;
@@ -18,6 +19,11 @@ class CandidateController extends Controller
     public function getIndex()
     {
         return view('candidates.index');
+    }
+
+    public function getArrivals()
+    {
+        return view('candidates.arrivals.index');
     }
 
     public function getJson()
@@ -70,7 +76,6 @@ class CandidateController extends Controller
         }
 
         if (Auth::user()->isLogist()) {
-            $users = $users->where('recruiter_id', Auth::user()->id);
             $users = $users->whereIn('active', [3, 4, 6]);
         }
 
@@ -371,5 +376,305 @@ class CandidateController extends Controller
                 'error' => 'file not valid!'
             ), 200);
         }
+    }
+
+    public function getArrivalsJson()
+    {
+        $draw = request()->get('draw');
+        $start = request()->get("start");
+        $rowperpage = request()->get("length"); // Rows display per page
+
+        //ordering
+        $order_col = 'id';
+        $order_direction = 'desc';
+        $cols = request('columns');
+        $order = request('order');
+
+        if (isset($order[0]['dir'])) {
+            $order_direction = $order[0]['dir'];
+        }
+        if (isset($order[0]['column']) && isset($cols)) {
+            $col_number = $order[0]['column'];
+            if (isset($cols[$col_number]) && isset($cols[$col_number]['data'])) {
+                $data = $cols[$col_number]['data'];
+                if ($data == 0) {
+                    $order_col = 'id';
+                    $order_direction = 'desc';
+                }
+            }
+        }
+        // search
+        $status = request('status');
+        $search = request('search');
+
+
+        if ($status == '') {
+            $users = Candidate_arrival::whereIn('status', [3, 4, 6]);
+        } else {
+            $users = Candidate_arrival::where('status', $status);
+        }
+
+        if ($search != '') {
+
+        }
+
+        $users = $users->orderBy($order_col, $order_direction);
+
+
+        $users = $users
+            ->with('Place_arrive')
+            ->with('Transport')
+            ->skip($start)
+            ->take($rowperpage)
+            ->get();
+
+        $data = [];
+
+
+        foreach ($users as $u) {
+
+            $select_active = '<select onchange="changeActivation(' . $u->id . ')"
+                                    class="form-select form-select-sm form-select-solid changeActivation' . $u->id . '">
+                                        <option value="">Статус</option>
+                                             ' . $u->getStatusOptions() . '
+                            </select>';
+
+
+            if ($u->Vacancy != null) {
+                $Vacancy = $u->Vacancy->title;
+            }
+
+            if ($u->date_arrive != null) {
+                $date_arrive = Carbon::parse($u->date_arrive)->format('d.m.Y');
+                $date_arrive_time = Carbon::parse($u->date_arrive)->format('H:i');
+            } else {
+                $date_arrive = '';
+                $date_arrive_time = '';
+            }
+            if ($u->Place_arrive != null) {
+                $Place_arrive = $u->Place_arrive->name;
+            } else {
+                $Place_arrive = '';
+            }
+            if ($u->Transport != null) {
+                $Transport = $u->Transport->name;
+            } else {
+                $Transport = '';
+            }
+
+            $temp_arr = [
+                //  $checkbox,
+                '<a data-place_arrive_name="' . $Place_arrive . '" data-transport_name="' . $Transport . '" data-id="' . $u->id . '" data-date_arrive="' . Carbon::parse($u->date_arrive)->format('d.m.Y H:i') . '" data-transport_id="' . $u->transport_id . '" data-place_arrive_id="' . $u->place_arrive_id . '" class="edit_arrival" href="javascript:;"><i class="fa fa-pen"></i></a>',
+                $Place_arrive,
+                $date_arrive,
+                $date_arrive_time,
+                $Transport,
+                $select_active
+
+            ];
+            $data[] = $temp_arr;
+        }
+
+
+        return Response::json(array('data' => $data,
+            "draw" => $draw,
+            "recordsTotal" => User::count(),
+            "recordsFiltered" => count($users),
+        ), 200);
+    }
+
+    public function getArrivalsallJson()
+    {
+        $draw = request()->get('draw');
+        $start = request()->get("start");
+        $rowperpage = request()->get("length"); // Rows display per page
+
+        //ordering
+        $order_col = 'id';
+        $order_direction = 'desc';
+        $cols = request('columns');
+        $order = request('order');
+
+        if (isset($order[0]['dir'])) {
+            $order_direction = $order[0]['dir'];
+        }
+        if (isset($order[0]['column']) && isset($cols)) {
+            $col_number = $order[0]['column'];
+            if (isset($cols[$col_number]) && isset($cols[$col_number]['data'])) {
+                $data = $cols[$col_number]['data'];
+                if ($data == 0) {
+                    $order_col = 'id';
+                    $order_direction = 'desc';
+                }
+            }
+        }
+        // search
+        $status = request('status');
+        $search = request('search');
+        $date_start = request('date_start');
+        $date_to = request('date_to');
+
+
+        if ($status == '') {
+            $users = Candidate_arrival::whereIn('status', [3, 4, 6]);
+        } else {
+            $users = Candidate_arrival::where('status', $status);
+        }
+
+        if ($search != '') {
+            $cand_ids = Candidate::where(function ($query) use ($search) {
+                $query->where('firstName', 'LIKE', '%' . $search . '%')
+                    ->orWhere('lastName', 'LIKE', '%' . $search . '%')
+                    ->orWhere('phone', 'LIKE', '%' . $search . '%')
+                    ->orWhere('viber', 'LIKE', '%' . $search . '%')
+                    ->orWhere('phone_parent', 'LIKE', '%' . $search . '%');
+            })->limit(10)->pluck('id');
+
+            $users = $users->whereIn('candidate_id', $cand_ids);
+
+        }
+        if ($date_start != '') {
+            $users = $users->where('date_arrive', '>=', Carbon::createFromFormat('d.m.Y H:i', $date_start));
+        }
+
+        if ($date_to != '') {
+            $users = $users->where('date_arrive', '<=', Carbon::createFromFormat('d.m.Y H:i', $date_to));
+        }
+
+        $users = $users->orderBy($order_col, $order_direction);
+
+
+        $users = $users
+            ->with('Place_arrive')
+            ->with('Transport')
+            ->with('Candidate')
+            ->with('Candidate.Nacionality')
+            ->skip($start)
+            ->take($rowperpage)
+            ->get();
+
+        $data = [];
+
+
+        foreach ($users as $u) {
+
+            $select_active = '<select onchange="changeActivation(' . $u->id . ')"
+                                    class="form-select form-select-sm form-select-solid changeActivation' . $u->id . '">
+                                        <option value="">Статус</option>
+                                             ' . $u->getStatusOptions() . '
+                            </select>';
+
+
+            if ($u->date_arrive != null) {
+                $date_arrive = Carbon::parse($u->date_arrive)->format('d.m.Y');
+                $date_arrive_time = Carbon::parse($u->date_arrive)->format('H:i');
+            } else {
+                $date_arrive = '';
+                $date_arrive_time = '';
+            }
+            if ($u->Place_arrive != null) {
+                $Place_arrive = $u->Place_arrive->name;
+            } else {
+                $Place_arrive = '';
+            }
+            if ($u->Transport != null) {
+                $Transport = $u->Transport->name;
+            } else {
+                $Transport = '';
+            }
+            if ($u->Candidate->Nacionality != null) {
+                $Nacionality = $u->Candidate->Nacionality->name;
+            } else {
+                $Nacionality = '';
+            }
+
+            if ($u->Candidate->Vacancy != null) {
+                $Vacancy = $u->Candidate->Vacancy->name;
+            } else {
+                $Vacancy = '';
+            }
+
+
+            $temp_arr = [
+                //  $checkbox,
+                '<a href="' . url('/') . '/candidate/add?id=' . $u->candidate_id . '">' . $u->candidate_id . '</a>',
+                $u->Candidate->firstName,
+                $u->Candidate->lastName,
+                $u->Candidate->phone,
+                $u->Candidate->viber,
+                $Place_arrive,
+                $date_arrive,
+                $date_arrive_time,
+                $Transport,
+                $Nacionality,
+                $Vacancy,
+                $select_active
+
+            ];
+            $data[] = $temp_arr;
+        }
+
+
+        return Response::json(array('data' => $data,
+            "draw" => $draw,
+            "recordsTotal" => User::count(),
+            "recordsFiltered" => count($users),
+        ), 200);
+    }
+
+    public function postArrivalAdd(Request $r)
+    {
+        $niceNames = [
+            'place_arrive_id' => '«Место»',
+            'transport_id' => '«Транспорт»',
+            'date_arrive' => '«Дата»',
+            'candidate_id' => '«ID»',
+        ];
+        $validator = Validator::make($r->all(), [
+            'place_arrive_id' => 'required',
+            'transport_id' => 'required',
+            'date_arrive' => 'required',
+            'candidate_id' => 'required',
+        ], [], $niceNames);
+        if ($validator->fails()) {
+            $error = $validator->errors()->first();
+            return response(array('success' => "false", 'error' => $error), 200);
+        }
+
+        $candidate = Candidate::find($r->candidate_id);
+        if ($candidate == null) {
+            return response(array('success' => "false", 'error' => 'Кандидат не найден'), 200);
+        }
+
+        $arrival = Candidate_arrival::find($r->id);
+        if ($arrival == null) {
+            $arrival = new  Candidate_arrival();
+            $arrival->status = 4;
+        }
+
+        $arrival->place_arrive_id = $r->place_arrive_id;
+        $arrival->transport_id = $r->transport_id;
+        $arrival->date_arrive = Carbon::createFromFormat('d.m.Y H:i', $r->date_arrive);
+        $arrival->candidate_id = $candidate->id;
+        $arrival->save();
+
+        $candidate->transport_id = $r->transport_id;
+        $candidate->logist_place_arrive_id = $r->place_arrive_id;
+        $candidate->logist_date_arrive = Carbon::createFromFormat('d.m.Y H:i', $r->date_arrive);
+        $candidate->save();
+        return response(array('success' => "true"), 200);
+
+    }
+
+    public function postArrivalsActivation(Request $r)
+    {
+
+        $arrivals = Candidate_arrival::find($r->id);
+        if ($arrivals != null) {
+            Candidate_arrival::where('id', $r->id)->update(['status' => $r->s]);
+            Candidate::where('id', $arrivals->candidate_id)->update(['active' => $r->s]);
+        }
+
+        return response(array('success' => "true"), 200);
     }
 }
