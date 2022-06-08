@@ -97,6 +97,14 @@ class User extends Authenticatable
             return false;
         }
     }
+    public function isTrud()
+    {
+        if (Auth::user()->group_id == 5) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public function getActivation()
     {

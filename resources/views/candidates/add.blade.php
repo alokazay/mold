@@ -1046,6 +1046,7 @@
     $('#transport_id').append(new Option('{{ $canddaite->Transport->name }}', {{ $canddaite->Transport->id }}, true, true)).trigger('change');
     @endif
 
+    @if(Auth::user()->isAdmin() || Auth::user()->isLogist() )
     var myDropzoneD = new Dropzone("#kt_file_ticket", {
         url: "{{url('/')}}/candidate/files/ticket/add", // Set the url for your upload script location
         paramName: "file",
@@ -1063,6 +1064,7 @@
             done();
         }
     });
+    @endif
 
     var myDropzoneT = new Dropzone("#kt_file_doc", {
         url: "{{url('/')}}/candidate/files/doc/add", // Set the url for your upload script location
