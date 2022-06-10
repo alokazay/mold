@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\C_file;
 use App\Models\Candidate;
 use App\Models\Candidate_arrival;
+use App\Models\History_candidate;
 use App\Models\User;
 use App\Models\Vacancy;
 use Carbon\Carbon;
@@ -77,6 +78,10 @@ class CandidateController extends Controller
 
         if (Auth::user()->isLogist()) {
             $users = $users->whereIn('active', [3, 4, 6]);
+        }
+
+        if (Auth::user()->isKoordinator()) {
+            $users = $users->whereIn('active', [3, 7, 8, 9, 10, 11]);
         }
 
 
@@ -167,7 +172,20 @@ class CandidateController extends Controller
 
     function setFlStatus(Request $r)
     {
-        Candidate::where('id', $r->id)->update(['active' => $r->s]);
+        $candidate = Candidate::find($r->id);
+        if ($candidate != null) {
+
+            $history = new History_candidate();
+            $history->preview_value = $candidate->active;
+            $history->new_value = $r->s;
+            $history->user_id = Auth::user()->id;
+            $history->table_id = 'candidates_active';
+            $history->save();
+
+            $candidate->active = $r->s;
+            $candidate->save();
+        }
+
         return response(array('success' => "true"), 200);
     }
 

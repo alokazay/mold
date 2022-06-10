@@ -172,6 +172,14 @@
                                                 <option value="4">Готов к выезду</option>
                                                 <option value="6">Подтвердил Выезд</option>
                                                 <option value="3">Отказ</option>
+                                            @elseif(Auth::user()->isKoordinator())
+                                                <option value="">Статус</option>
+                                                <option value="3">Готов к выезду</option>
+                                                <option value="7">Готов к Работе</option>
+                                                <option value="8">Трудоустроен</option>
+                                                <option value="9">Приступил к Работе</option>
+                                                <option value="10">Отработал 7 дней</option>
+                                                <option value="11">Уволен</option>
                                             @else
                                                 <option value="">Статус</option>
                                                 <option value="1">Новый кандидат</option>

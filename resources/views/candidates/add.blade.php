@@ -414,6 +414,7 @@
 
                                 @endif
 
+                                @if(Auth::user()->group_id == 5 || Auth::user()->group_id == 1)
                                 <hr>
                                 <h3 class="mb-5">Трудоустройство</h3>
                                 <div class="row mb-5">
@@ -438,7 +439,7 @@
                                         </div>
                                     @endif
                                 </div>
-
+                                @endif
 
                                 <button id="modal_users_add__save" type="button" class="btn btn-primary btn-sm">
                                     Сохранить

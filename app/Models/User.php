@@ -105,6 +105,14 @@ class User extends Authenticatable
             return false;
         }
     }
+    public function isKoordinator()
+    {
+        if (Auth::user()->group_id == 6) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public function getActivation()
     {

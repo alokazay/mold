@@ -106,6 +106,17 @@ class Candidate extends Model
             ];
         }
 
+        if (Auth::user()->isKoordinator()) {
+            $arr = [
+                ['3', 'Отказ'],
+                ['7', 'Готов к Работе'],
+                ['8', 'Трудоустроен'],
+                ['9', 'Приступил к Работе'],
+                ['10', 'Отработал 7 дней'],
+                ['11', 'Уволен']
+            ];
+        }
+
         $html = '';
         foreach ($arr as $a) {
             if ($a[0] == $this->active) {

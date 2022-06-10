@@ -25,6 +25,7 @@ return new class extends Migration
             $table->integer('activation')->nullable();
             $table->integer('fl_status')->nullable();
             $table->integer('recruter_id')->nullable();
+            $table->integer('balance')->nullable();
 
             $table->string('viber')->nullable();
             $table->string('facebook')->nullable();

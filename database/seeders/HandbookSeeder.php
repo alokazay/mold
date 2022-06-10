@@ -131,6 +131,17 @@ class HandbookSeeder extends Seeder
                 ],
             ]);
         }
+        if(Handbook_category::find(11) == null){
+            Handbook_category::insert([
+                [
+                    'id'=> 11,
+                    'name' => 'Вариант вывода',
+                    'active'=>1,
+                    'created_at'=>$NOW,
+                    'updated_at'=>$NOW,
+                ],
+            ]);
+        }
 
     }
 }
