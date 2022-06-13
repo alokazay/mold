@@ -113,22 +113,6 @@ class User extends Authenticatable
             return false;
         }
     }
-    public function isAccountant()
-    {
-        if (Auth::user()->group_id == 7) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    public function isSupportManager()
-    {
-        if (Auth::user()->group_id == 8) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     public function getActivation()
     {
