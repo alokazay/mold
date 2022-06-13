@@ -32,6 +32,7 @@ return new class extends Migration
             $table->integer('transport_id')->nullable();
             $table->text('comment')->nullable();
             $table->string('inn')->nullable();
+            $table->integer('is_payed')->nullable()->default(0);
 
             $table->timestamp('logist_date_arrive')->nullable();
             $table->integer('logist_place_arrive_id')->nullable();

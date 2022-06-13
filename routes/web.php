@@ -12,6 +12,7 @@ use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\HandbookController;
 use App\Http\Controllers\RecruiterController;
 use App\Http\Controllers\FinanceController;
+use App\Http\Controllers\AccountSettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +45,9 @@ Route::get('/dashboard', function () {
     }
     if (Auth::user()->group_id == 6) {
         return Redirect::to('candidates');
+    }
+    if (Auth::user()->group_id == 7) {
+        return Redirect::to('/accountant/profile');
     }
 })->middleware('auth');
 
@@ -117,6 +121,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     //recruiter
     Route::get('/recruiter/dashboard', [RecruiterController::class, 'getIndex'])->middleware('roles:2');
+    Route::get('/accountant/profile', [AccountSettingController::class, 'getProfile'])->middleware('roles:1|7');
+    Route::post('/accountant/profile/save', [AccountSettingController::class, 'postProfileSave'])->name('accountant.profile.save')->middleware('roles:1|7');
 
 
     // ajax search

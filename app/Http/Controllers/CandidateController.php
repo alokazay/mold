@@ -175,6 +175,15 @@ class CandidateController extends Controller
         $candidate = Candidate::find($r->id);
         if ($candidate != null) {
 
+            if ($r->s == 10 && $candidate->is_payed != 1) {
+                $user = User::find($candidate->user_id);
+                $user->balance = $user->balance + 100;
+                $user->save();
+
+                $candidate->is_payed = 1;
+                $candidate->save();
+            }
+
             $history = new History_candidate();
             $history->preview_value = $candidate->active;
             $history->new_value = $r->s;
