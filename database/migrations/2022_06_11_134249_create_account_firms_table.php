@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('account_settings', function (Blueprint $table) {
+        Schema::create('account_firms', function (Blueprint $table) {
             $table->id();
             $table->string('nip')->nullable();
-            $table->string('name1')->nullable();
-            $table->string('name2')->nullable();
+            $table->string('name')->nullable();
+            $table->integer('active')->default(1);
             $table->timestamps();
         });
     }

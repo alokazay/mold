@@ -113,6 +113,22 @@ class User extends Authenticatable
             return false;
         }
     }
+    public function isAccountant()
+    {
+        if (Auth::user()->group_id == 7) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function isSupportManager()
+    {
+        if (Auth::user()->group_id == 8) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public function getActivation()
     {
@@ -135,6 +151,17 @@ class User extends Authenticatable
             return 'Уволен';
         }
     }
+    public function getPaymentFl()
+    {
+        if ($this->account_type == 1) {
+            return 'Польский';
+        } else if ($this->account_type == 2) {
+            return 'Заграничный';
+        } else if ($this->account_type == 3) {
+            return 'PayPal';
+        }
+    }
+
 
     public function D_file()
     {

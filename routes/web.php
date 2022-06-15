@@ -12,6 +12,7 @@ use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\HandbookController;
 use App\Http\Controllers\RecruiterController;
 use App\Http\Controllers\FinanceController;
+use App\Http\Controllers\AccountSettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +46,12 @@ Route::get('/dashboard', function () {
     if (Auth::user()->group_id == 6) {
         return Redirect::to('candidates');
     }
+    if (Auth::user()->group_id == 7) {
+        return Redirect::to('/accountant/profile');
+    }
+    if (Auth::user()->group_id == 8) {
+        return Redirect::to('/freelancers');
+    }
 })->middleware('auth');
 
 Route::get('login', [AuthController::class, 'getLogin'])->name("login");
@@ -57,9 +64,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('users', [UsersController::class, 'getIndex'])->middleware('roles:1');
     Route::post('users/getJson', [UsersController::class, 'getJson'])->name('users.json')->middleware('roles:1');
     Route::post('users/add', [UsersController::class, 'addUser'])->name('users.add')->middleware('roles:1');
-    Route::post('users/fl/add', [UsersController::class, 'addFlUser'])->name('users.fl.add')->middleware('roles:1');
+    Route::post('users/fl/add', [UsersController::class, 'addFlUser'])->name('users.fl.add')->middleware('roles:1|8');
     Route::post('/files/user/add', [UsersController::class, 'filesUserAdd'])->middleware('roles:1');
-    Route::get('/users/ajax/id/{id}', [UsersController::class, 'getUserAjax'])->name('users.ajax.id')->middleware('roles:1|2|3');
+     Route::get('/users/ajax/id/{id}', [UsersController::class, 'getUserAjax'])->name('users.ajax.id')->middleware('roles:1|2|3|8');
     Route::get('/users/activation', [UsersController::class, 'usersActivation'])->middleware('roles:1');
     Route::get('/users/auth_by/{id}', [UsersController::class, 'authBy'])->middleware('is_admin')->middleware('roles:1');
 
@@ -67,9 +74,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('user/profile', [UsersController::class, 'postProfile'])->name('users.profile.save');
 
     // freelancers
-    Route::get('freelancers', [FreelancersController::class, 'getIndex'])->middleware('roles:1|2');
-    Route::post('freelancers/getJson', [FreelancersController::class, 'getJson'])->name('freelancers.json')->middleware('roles:1|2');
-    Route::get('freelancers/set_fl_status', [FreelancersController::class, 'setFlStatus'])->middleware('roles:1|2');
+    Route::get('freelancers', [FreelancersController::class, 'getIndex'])->middleware('roles:1|2|8');
+    Route::post('freelancers/getJson', [FreelancersController::class, 'getJson'])->name('freelancers.json')->middleware('roles:1|2|8');
+    Route::get('freelancers/set_fl_status', [FreelancersController::class, 'setFlStatus'])->middleware('roles:1|2|8');
 
     // clients
     Route::get('clients', [ClientController::class, 'getIndex'])->middleware('roles:1');
@@ -105,9 +112,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('candidates/arrivals', [CandidateController::class, 'getArrivals'])->middleware('roles:1|4|5');
 
     // request transaction
-    Route::get('requests', [FinanceController::class, 'getIndex'])->middleware('roles:1|3');
-    Route::post('requests/getJson', [FinanceController::class, 'getJson'])->name('finance.json')->middleware('roles:1|3');
-    Route::post('requests/add', [FinanceController::class, 'postAdd'])->name('finance.add')->middleware('roles:1|3');
+    Route::get('requests', [FinanceController::class, 'getIndex'])->middleware('roles:1|3|7');
+    Route::post('requests/getJson', [FinanceController::class, 'getJson'])->name('finance.json')->middleware('roles:1|3|7');
+    Route::post('requests/add', [FinanceController::class, 'postAdd'])->name('finance.add')->middleware('roles:1|3|7');
+    Route::get('requests/change/status', [FinanceController::class, 'postRequestsChangeStatus'])->middleware('roles:1|7');
+    Route::get('requests/change/firm', [FinanceController::class, 'postRequestsChangeFirm'])->middleware('roles:1|7');
+    Route::post('requests/file/add', [FinanceController::class, 'addSuccessPaymentDoc'])->middleware('roles:1|7');
 
 
     // handbooks
@@ -117,6 +127,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     //recruiter
     Route::get('/recruiter/dashboard', [RecruiterController::class, 'getIndex'])->middleware('roles:2');
+    Route::get('/accountant/profile', [AccountSettingController::class, 'getProfile'])->middleware('roles:1|7');
+    Route::post('/accountant/profile/save', [AccountSettingController::class, 'postProfileSave'])->name('accountant.profile.save')->middleware('roles:1|7');
+    Route::get('/accountant/firm/delete', [AccountSettingController::class, 'deleteFirm'])->middleware('roles:1|7');
 
 
     // ajax search
@@ -140,6 +153,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('search/candidate/nacionality', [SearchController::class, 'getAjaxClientNacionality'])->middleware('roles:1|2|3|4|5|6');
     Route::get('search/candidate/vacancy', [SearchController::class, 'getAjaxCandidateVacancy'])->middleware('roles:1|2|3|4|5|6');
     Route::get('search/candidate/recruter', [SearchController::class, 'getAjaxCandidateRecruter'])->middleware('roles:1|2|3|4|5|6');
+
+    Route::get('search/requests/freelacnsers', [SearchController::class, 'getAjaxCandidateFreelacnsers'])->middleware('roles:1|7');
 });
 
 

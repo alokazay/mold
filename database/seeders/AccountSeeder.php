@@ -19,18 +19,7 @@ class AccountSeeder  extends Seeder
     public function run()
     {
 
-        if(Account_setting::find(1) == null){
-            Account_setting::insert([
-                [
-                    'id'=> 1,
-                    'nip' => '',
-                    'name1' => '',
-                    'name2' => '',
-                    'created_at'=>Carbon::now(),
-                    'updated_at'=>Carbon::now(),
-                ],
-            ]);
-        }
+
 
     }
 }

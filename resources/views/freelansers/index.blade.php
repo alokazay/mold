@@ -145,7 +145,7 @@
                                 <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
 
                                     <div class="w-100 mw-150px">
-                                        <!--begin::Select2-->
+
                                         <select id="filter__fl_status" class="form-select form-select-solid">
                                             <option value="">Статус</option>
                                             <option value="1">Новый</option>
@@ -153,7 +153,6 @@
                                             <option value="3">Отклонён</option>
                                             <option value="4">Уволен</option>
                                         </select>
-                                        <!--end::Select2-->
                                     </div>
                                     <!--begin::Add product-->
                                     <a id="users__add_btn" href="javascript:;" class="btn btn-primary">Добавить</a>

@@ -115,41 +115,46 @@
                     <div id="kt_content_container" class="container-fluid">
                         <!--begin::Card-->
                         <div class="card">
+                            <div class="card-header align-items-center py-5 gap-2 gap-md-5">
 
+                                <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
+                                    <a onclick="addFirm();" href="javascript:;" class="btn btn-primary">Добавить</a>
+                                </div>
+
+                            </div>
                             <div class="card-body pt-15">
 
-                                    <input type="hidden" id="modal_users_add__id">
+                                <div class="table-responsive">
+                                    <table class="table align-middle table-row-dashed fs-6 gy-3" id="users">
 
-                                    <div class="row mb-5">
-                                        <div class="col-6">
-                                            <div class="d-flex flex-column mb-0 fv-row">
-                                                <label class="required fs-5 fw-bold mb-2">НИп</label>
-                                                <input value="{{$acc->nip}}" id="nip"
-                                                       class="form-control form-control-sm form-control-solid" type="text"/>
-                                            </div>
-                                        </div>
+                                        <thead>
+                                        <!--begin::Table row-->
+                                        <tr class="text-start text-muted fw-bolder fs-7 gs-0">
+                                            <th class="max-w-55px sorting_disabled">Id</th>
+                                            <th class="max-w-155px sorting_disabled">Nip</th>
+                                            <th class="max-w-155px sorting_disabled">Name</th>
+                                            <th class="min-w-100px sorting_disabled">
 
-                                    </div>
+                                            </th>
+                                        </tr>
 
-                                    <div class="row mb-5">
-                                        <div class="col-6">
-                                            <div class="d-flex flex-column mb-0 fv-row">
-                                                <label class="required fs-5 fw-bold mb-2">Название</label>
-                                                <input value="{{$acc->name1}}" id="name1" class="form-control form-control-sm form-control-solid"
-                                                       type="text"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="d-flex flex-column mb-0 fv-row">
-                                                <label class="required fs-5 fw-bold mb-2"> </label>
-                                                <input  value="{{$acc->name2}}" id="name2" class="form-control form-control-sm form-control-solid"
-                                                       type="email"/>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                     <button id="modal_users_add__save" type="button" class="btn btn-primary btn-sm">Сохранить
-                                    </button>
+                                        </thead>
+                                        <tbody class="text-gray-600 fw-bold">
+                                        @foreach($firms as $firm)
+                                            <tr class="delete{{$firm->id}}">
+                                                <td>
+                                                    <a onclick="editFirm({{$firm->id}},'{{$firm->nip}}','{{$firm->name}}')"
+                                                       href="javascript:;">{{$firm->id}}</a>
+                                                </td>
+                                                <td>{{$firm->nip}}</td>
+                                                <td>{{$firm->name}}</td>
+                                                <td><a onclick="deleteFirm({{$firm->id}})"
+                                                       href="javascript:;">удалить</a></td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
 
                             </div>
                             <!--end::Card body-->
@@ -171,6 +176,54 @@
 <!--end::Root-->
 
 
+<div class="modal fade" tabindex="-1" id="modal_firm_add">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Добавления фирмы</h3>
+
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal"
+                     aria-label="Close">
+                    <span class="svg-icon svg-icon-2x"></span>
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal body-->
+            <div class="modal-body">
+                <input type="hidden" id="modal_firm_add__id">
+
+                <div class="row mb-5">
+                    <div class="col-6">
+                        <div class="d-flex flex-column mb-0 fv-row">
+                            <label class="required fs-5 fw-bold mb-2">НИп</label>
+                            <input value="" id="nip"
+                                   class="form-control form-control-sm form-control-solid" type="text"/>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row mb-5">
+                    <div class="col-6">
+                        <div class="d-flex flex-column mb-0 fv-row">
+                            <label class="required fs-5 fw-bold mb-2">Название</label>
+                            <input value="" id="name1" class="form-control form-control-sm form-control-solid"
+                                   type="text"/>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="modal_users_add__save" type="button" class="btn btn-primary btn-sm">Сохранить
+                </button>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
 @include('includes.global_scripts')
 <script>
@@ -182,11 +235,14 @@
 
         var data = {
             nip: $('#nip').val(),
-            name1: $('#name1').val(),
-            name2: $('#name2').val(),
+            name: $('#name1').val(),
             _token: $('input[name=_token]').val(),
         };
 
+        let id = $('#modal_firm_add__id').val();
+        if (id !== '') {
+            data.id = id;
+        }
 
         $.ajax({
             url: "{{route('accountant.profile.save')}}",
@@ -199,9 +255,47 @@
                     toastr.success('Сохранено');
                 }
                 self.prop('disabled', false);
+                $('#modal_firm_add').modal('hide');
+                location.reload();
             }
         });
     });
+
+    function addFirm() {
+        $('#nip').val('');
+        $('#name1').val('');
+        $('#modal_firm_add__id').val('');
+        $('#modal_firm_add').modal('show');
+    }
+
+    function editFirm(id, nip, name) {
+        $('#nip').val(nip);
+        $('#name1').val(name);
+        $('#modal_firm_add__id').val(id);
+        $('#modal_firm_add').modal('show');
+    }
+
+    function deleteFirm(id) {
+        Swal.fire({
+            html: `Вы уверены что хотите удалить?`,
+            icon: "info",
+            buttonsStyling: false,
+            showCancelButton: true,
+            confirmButtonText: "да!",
+            cancelButtonText: 'Нет, отмена',
+            customClass: {
+                confirmButton: "btn btn-success",
+                cancelButton: 'btn btn-danger'
+            }
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                $.get('{{url('/')}}/accountant/firm/delete?id=' + id);
+                $('.delete' + id).remove();
+                Swal.fire('Deleted!', '', 'success');
+            }
+        });
+    }
 
 </script>
 </body>

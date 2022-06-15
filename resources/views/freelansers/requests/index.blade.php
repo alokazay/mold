@@ -117,18 +117,17 @@
                         <div class="card">
                             <div class="card-header align-items-center py-5 gap-2 gap-md-5">
 
-                              <h3>Доступно  <span id="current_balance">{{Auth::user()->balance}}</span></h3>
-                                <!--begin::Card toolbar-->
+                                @if(Auth::user()->isFreelancer())
+                                    <h3>Доступно <span id="current_balance">{{Auth::user()->balance}}</span></h3>
+                                @endif
                                 <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
 
                                     <div class="w-100 mw-150px">
-                                        <!--begin::Select2-->
                                         <select id="filter__status" class="form-select form-select-solid">
                                             <option value="">Все</option>
                                             <option value="1">В ожидании</option>
                                             <option value="2">Оплачен</option>
                                         </select>
-                                        <!--end::Select2-->
                                     </div>
                                     <!--begin::Add product-->
                                     <a id="users__add_btn" href="javascript:;" class="btn btn-primary">Добавить</a>
@@ -145,13 +144,25 @@
                                         <thead>
                                         <!--begin::Table row-->
                                         <tr class="text-start text-muted fw-bolder fs-7 gs-0">
-
-                                            <th class="max-w-55px sorting_disabled">Id</th>
-                                            <th class="max-w-85px sorting_disabled">Дата запроса</th>
-                                            <th class="max-w-85px sorting_disabled">Сумма</th>
-                                            <th class="max-w-85px sorting_disabled">Дата оплаты</th>
-                                            <th class="max-w-45px sorting_disabled">Статус</th>
-                                            <th class=" sorting_disabled">Подтверждение</th>
+                                            @if(Auth::user()->isFreelancer())
+                                                <th class="max-w-55px sorting_disabled">Id</th>
+                                                <th class="max-w-85px sorting_disabled">Дата запроса</th>
+                                                <th class="max-w-85px sorting_disabled">Сумма</th>
+                                                <th class="max-w-85px sorting_disabled">Дата оплаты</th>
+                                                <th class="max-w-45px sorting_disabled">Статус</th>
+                                                <th class=" sorting_disabled">Подтверждение</th>
+                                            @else
+                                                <th class="max-w-55px sorting_disabled">Id</th>
+                                                <th class="max-w-85px sorting_disabled">Имя</th>
+                                                <th class="max-w-85px sorting_disabled">Фамилия</th>
+                                                <th class="max-w-85px sorting_disabled">Телефон</th>
+                                                <th class="max-w-85px sorting_disabled">Счет-фактура</th>
+                                                <th class="max-w-85px sorting_disabled">Дата запроса</th>
+                                                <th class="max-w-85px sorting_disabled">Сумма</th>
+                                                <th class="max-w-85px sorting_disabled">Фирма</th>
+                                                <th class="max-w-45px sorting_disabled">Статус</th>
+                                                <th class=" sorting_disabled">Документ</th>
+                                            @endif
                                         </tr>
                                         <!--end::Table row-->
                                         </thead>
@@ -209,19 +220,26 @@
                             <label class="required fs-5 fw-bold mb-2">Вариант вывода</label>
                             <select class="form-control form-control-sm form-control-solid"
                                     id="modal_users_add__type_request_id">
-                                @foreach($types as $type)
-                                    <option value="{{$type->id}}">{{$type->name}}</option>
-                                @endforeach
+                                <option value="{{Auth::user()->account_type}}">{{Auth::user()->getPaymentFl()}}</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="d-flex flex-column mb-0 fv-row">
+                        <div class="d-flex flex-column   fv-row">
                             <label class="required fs-5 fw-bold mb-2">Сумма</label>
                             <input id="modal_users_add__amount"
                                    class="form-control form-control-sm form-control-solid" type="text"/>
                         </div>
                     </div>
+                    @if(Auth::user()->isAccountant())
+                        <div class="col-6 mt-5">
+                            <div class="d-flex flex-column mb-0 fv-row">
+                                <label class="required fs-5 fw-bold mb-2">Фрилансер</label>
+                                <input id="modal_users_add__user_id"
+                                       class="form-control form-control-sm form-control-solid" type="text"/>
+                            </div>
+                        </div>
+                    @endif
                 </div>
 
 
@@ -237,7 +255,56 @@
 </div>
 
 <script>
+    @if(Auth::user()->isAccountant())
+    $('#modal_users_add__user_id').select2({
+        placeholder: 'Поиск фрилансера',
+        dropdownParent: $('#modal_users_add'),
+        ajax: {
+             url: "{{url('/')}}/search/requests/freelacnsers",
+            dataType: 'json',
+            // delay: 250,
+            data: function (params) {
+                return {
+                    s: '{{request('s')}}',
+                    f_search: params.term,
+                };
+            },
+            processResults: function (data) {
+                var results = [];
+                $.each(data, function (index, item) {
+                    results.push({
+                        id: item.id,
+                        text: item.value
+                    });
+                });
+                return {
+                    results: results
+                };
+            }
+        },
+    });
+    @endif
+    function changeStatus(id) {
+        var changeActivation = $('.changeStatus' + id).val();
+        $.get('{{url('/')}}/requests/change/status?s=' + changeActivation + '&id=' + id, function (res) {
+            if (res.error) {
+                toastr.error(res.error);
+            } else {
+                toastr.success('Успешно');
+            }
+        });
+    }
 
+    function changeFirm(id) {
+        var changeActivation = $('.changeFirm' + id).val();
+        $.get('{{url('/')}}/requests/change/firm?s=' + changeActivation + '&id=' + id, function (res) {
+            if (res.error) {
+                toastr.error(res.error);
+            } else {
+                toastr.success('Успешно');
+            }
+        });
+    }
 
     var groupColumn = 0;
     oTable = $('#users').DataTable({
@@ -260,8 +327,6 @@
         ajax: function (data, callback, settings) {
             data._token = $('input[name=_token]').val();
             data.status = $('#filter__status').val().trim();
-
-
             $.ajax({
                 url: '{{ route('finance.json') }}',
                 type: 'POST',
@@ -275,7 +340,9 @@
                 }
             });
         },
-
+        drawCallback: function () {
+            reInitDropzone();
+        }
     });
 
     $('#f__search').keyup(function () {
@@ -300,6 +367,7 @@
         var data = {
             amount: $('#modal_users_add__amount').val(),
             type_request_id: $('#modal_users_add__type_request_id').val(),
+            user_id: $('#modal_users_add__user_id').val(), // only buh
             _token: $('input[name=_token]').val(),
         };
 
@@ -320,6 +388,32 @@
             }
         });
     });
+
+
+    function reInitDropzone() {
+        $('.add_file').each(function () {
+
+            let id = $(this).data('id');
+            new Dropzone('#' + $(this).attr('id'), {
+                url: "{{url('/')}}/requests/file/add", // Set the url for your upload script location
+                paramName: "file",
+                maxFiles: 1,
+                maxFilesize: 10, // MB
+                addRemoveLinks: true,
+                sending: function (file, xhr, formData) {
+                    formData.append('_token', $('input[name=_token]').val());
+                    formData.append('id', id);
+                },
+                success: function (file, done) {
+                    oTable.draw();
+                },
+                accept: function (file, done) {
+                    done();
+                }
+            });
+        });
+    }
+
 
 </script>
 

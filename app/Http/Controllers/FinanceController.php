@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account_firm;
+use App\Models\C_file;
 use App\Models\Finance;
 use App\Models\Handbook;
 use App\Models\User;
@@ -9,17 +11,20 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Str;
 
 class FinanceController extends Controller
 {
     public function getIndex()
     {
-        $types = Handbook::where('handbook_category_id', 11)->get();
-        return view('freelansers.requests.index')->with('types', $types);
+
+        return view('freelansers.requests.index');
     }
 
     public function getJson()
     {
+
+        $firms = Account_firm::where('active', 1)->get();
 
         $draw = request()->get('draw');
         $start = request()->get("start");
@@ -53,10 +58,15 @@ class FinanceController extends Controller
             $users = Finance::where('status', $status);
         }
 
+        if (Auth::user()->isFreelancer()) {
+            $users = $users->where('user_id', Auth::user()->id);
+        }
+
         $users = $users->orderBy($order_col, $order_direction);
 
 
         $users = $users
+            ->with('User')
             ->with('D_file')
             ->skip($start)
             ->take($rowperpage)
@@ -81,19 +91,55 @@ class FinanceController extends Controller
 																</svg>
 															</a>';
             } else {
-                $file = '';
+                if (Auth::user()->isAccountant()) {
+                    $file = '<a data-id="' . $u->id . '" id="file_' . $u->id . '" class="add_file" href="javascript:;">загрузить</a>';
+                } else {
+                    $file = '';
+                }
+
             }
 
+            if (Auth::user()->isFreelancer()) {
+                $temp_arr = [
+                    $u->id,
+                    Carbon::parse($u->date_request)->format('d.m.Y'),
+                    $u->amount,
+                    $date_payed,
+                    $u->getStatus(),
+                    $file
+                ];
+            } else {
 
-            $temp_arr = [
-                $u->id,
-                Carbon::parse($u->date_request)->format('d.m.Y'),
-                $u->amount,
-                $date_payed,
-                $u->getStatus(),
-                $file
+                $select_active = '<select onchange="changeStatus(' . $u->id . ')"
+                                    class="form-select form-select-sm form-select-solid changeStatus' . $u->id . '">
+                                             ' . $u->getStatusOptions() . '
+                            </select>';
 
-            ];
+
+                $firms_select = '<select onchange="changeFirm(' . $u->id . ')"
+                                    class="form-select form-select-sm form-select-solid changeFirm' . $u->id . '">';
+                foreach ($firms as $firm) {
+                    $selected = '';
+                    if ($firm->id == $u->firm_id) $selected = 'selected';
+                    $firms_select .= '<option ' . $selected . ' value="' . $firm->id . '">' . $firm->name . '</option>';
+                }
+                $firms_select .= '</select>';
+
+
+                $temp_arr = [
+                    $u->id,
+                    $u->user->firstName,
+                    $u->user->lastName,
+                    $u->user->phone,
+                    'счет',
+                    Carbon::parse($u->date_request)->format('d.m.Y'),
+                    $u->amount,
+                    $firms_select,
+                    $select_active,
+                    $file
+                ];
+            }
+
             $data[] = $temp_arr;
         }
 
@@ -108,25 +154,89 @@ class FinanceController extends Controller
     public function postAdd(Request $r)
     {
 
-        if ((Auth::user()->balance) < $r->amount) {
+        if (Auth::user()->isAccountant()) {
+            $user = User::find($r->user_id);
+        } else {
+            $user = User::find(Auth::user()->id);
+        }
+
+
+
+        if (($user->balance) < $r->amount) {
             return response(array('success' => "false", 'error' => 'Сумма для вывода не доступна'), 200);
         }
 
         $f = new Finance();
         $f->amount = $r->amount;
-        $f->user_id = Auth::user()->id;
+        if (Auth::user()->isAccountant()) {
+            $f->user_id = $r->user_id;
+        } else {
+            $f->user_id = Auth::user()->id;
+        }
+
         $f->status = 1;
         $f->date_request = Carbon::now();
         $f->type_request_id = $r->type_request_id;
         $f->save();
 
-        $user = User::find(Auth::user()->id);
+        if (Auth::user()->isAccountant()) {
+            $user = User::find($r->user_id);
+        } else {
+            $user = User::find(Auth::user()->id);
+        }
+
         $user->balance = Auth::user()->balance - $f->amount;
         $user->save();
 
         return response(array('success' => "true", 'amount' => $user->balance), 200);
+    }
+
+    public function postRequestsChangeStatus(Request $r)
+    {
+        Finance::where('id', $r->id)->update(['status' => $r->s]);
+        return response(array('success' => "true"), 200);
+    }
+
+    public function postRequestsChangeFirm(Request $r)
+    {
+        Finance::where('id', $r->id)->update(['firm_id' => $r->s]);
+        return response(array('success' => "true"), 200);
+    }
+
+    public function addSuccessPaymentDoc()
+    {
+        $r_id = request()->get('id');
+        $file = request()->file('file');
+        if ($file->isValid()) {
+
+            $path = '/uploads/request/' . Carbon::now()->format('m.Y') . '/' . $r_id . '/files/';
+            $name = Str::random(12) . '.' . $file->getClientOriginalExtension();
+
+            $file->move(public_path($path), $name);
+            $file_link = $path . $name;
 
 
+            $file = new C_file();
+            $file->autor_id = Auth::user()->id;
+            $file->user_id = Auth::user()->id;
+            $file->type = 5;
+            $file->original_name = request()->file('file')->getClientOriginalName();
+            $file->ext = request()->file('file')->getClientOriginalExtension();
+            $file->path = $file_link;
+            $file->save();
+
+            $finance = Finance::find($r_id);
+            $finance->file_id = $file->id;
+            $finance->save();
+
+            return Response::json(array('success' => "true",
+                'path' => url('/') . '' . $file_link
+            ), 200);
+        } else {
+            return Response::json(array('success' => "false",
+                'error' => 'file not valid!'
+            ), 200);
+        }
     }
 
 }
