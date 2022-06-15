@@ -83,20 +83,36 @@ class FinanceController extends Controller
                 $date_payed = '';
             }
 
-            if ($u->D_file != null) {
-                $file = '<a target="_blank" href="' . url('/') . $u->D_file->path . '" style="cursor: pointer;" class="svg-icon svg-icon-2x svg-icon-primary me-4">
+
+
+            if (Auth::user()->isAccountant()) {
+
+
+
+                if ($u->D_file != null) {
+                    $file = '<a   href="javascript:;"><i data-id="' . $u->id . '" id="file_' . $u->id . '"  class="fa fa-pen add_file"></i></a>';
+                    $file .= '<a target="_blank" href="' . url('/') . $u->D_file->path . '" style="cursor: pointer;" class="svg-icon svg-icon-2x svg-icon-primary me-4">
 																<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
 																	<path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22Z" fill="currentColor"></path>
 																	<path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor"></path>
 																</svg>
 															</a>';
-            } else {
-                if (Auth::user()->isAccountant()) {
+                } else {
                     $file = '<a data-id="' . $u->id . '" id="file_' . $u->id . '" class="add_file" href="javascript:;">загрузить</a>';
+                }
+
+             } else {
+
+                if ($u->D_file != null) {
+                    $file = '<a target="_blank" href="' . url('/') . $u->D_file->path . '" style="cursor: pointer;" class="svg-icon svg-icon-2x svg-icon-primary me-4">
+																<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																	<path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22Z" fill="currentColor"></path>
+																	<path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor"></path>
+																</svg>
+															</a>';
                 } else {
                     $file = '';
                 }
-
             }
 
             if (Auth::user()->isFreelancer()) {
@@ -227,6 +243,7 @@ class FinanceController extends Controller
 
             $finance = Finance::find($r_id);
             $finance->file_id = $file->id;
+            $finance->date_payed  = Carbon::now();
             $finance->save();
 
             return Response::json(array('success' => "true",

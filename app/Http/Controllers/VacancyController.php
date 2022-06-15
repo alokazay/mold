@@ -371,11 +371,26 @@ class VacancyController extends Controller
 
 
                 if (Auth::user()->isRecruter()) {
-                    $add_link = '<a href="' . url('/') . '/candidate/add?r_id='.Auth::user()->id.'&vid=' . $u->id . '"><i class="fas fa-user-plus"></i></a>';
+                    $add_link = '<a href="' . url('/') . '/candidate/add?r_id=' . Auth::user()->id . '&vid=' . $u->id . '"><i class="fas fa-user-plus"></i></a>';
                 }
 
                 if (Auth::user()->isFreelancer()) {
-                    $add_link = '<a href="' . url('/') . '/candidate/add?r_id='.Auth::user()->recruter_id.'&vid=' . $u->id . '"><i class="fas fa-user-plus"></i></a>';
+                    $add_link = '<a href="' . url('/') . '/candidate/add?r_id=' . Auth::user()->recruter_id . '&vid=' . $u->id . '"><i class="fas fa-user-plus"></i></a>';
+                }
+
+
+                $count_men = '';
+                $count_women = '';
+                $count_people = '';
+
+                if (Auth::user()->isFreelancer()) {
+                    if ($u->count_men > 0) $count_men = 'М';
+                    if ($u->count_women > 0) $count_women = 'Ж';
+                    if ($u->count_people > 0) $count_people = 'Н';
+                } else {
+                    $count_men = $u->count_men;
+                    $count_women = $u->count_women;
+                    $count_people = $u->count_people;
                 }
 
 
@@ -385,9 +400,9 @@ class VacancyController extends Controller
                     $u->title,
                     $h_v_industry,
                     Carbon::parse($u->deadline_to)->format('d.m.Y'),
-                    $u->count_men,
-                    $u->count_women,
-                    $u->count_people,
+                    $count_men,
+                    $count_women,
+                    $count_people,
                     $u->salary,
                     $u->salary_description,
                     $u->housing_cost,

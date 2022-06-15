@@ -56,7 +56,7 @@ class UsersController extends Controller
 
 
         if ($filter__status == '') {
-            $users = User::whereIn('activation', [1, 2]);
+            $users = User::whereIn('activation', [1]);
         } else {
             $users = User::where('activation', $filter__status);
         }

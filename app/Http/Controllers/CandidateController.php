@@ -261,8 +261,13 @@ class CandidateController extends Controller
             $candidate->user_id = Auth::user()->id;
             $candidate->active = 1;
         }
+        if(Auth::user()->isFreelancer()){
+            $candidate->recruiter_id = Auth::user()->recruter_id;
+        } else {
+            $candidate->recruiter_id = $r->recruiter_id;
+        }
 
-        $candidate->recruiter_id = $r->recruiter_id;
+
         $candidate->lastName = $r->lastName;
         $candidate->firstName = $r->firstName;
         $candidate->phone = $r->phone;
@@ -685,10 +690,10 @@ class CandidateController extends Controller
         $arrival->candidate_id = $candidate->id;
         $arrival->save();
 
-        $candidate->transport_id = $r->transport_id;
+ /*       $candidate->transport_id = $r->transport_id;
         $candidate->logist_place_arrive_id = $r->place_arrive_id;
         $candidate->logist_date_arrive = Carbon::createFromFormat('d.m.Y H:i', $r->date_arrive);
-        $candidate->save();
+        $candidate->save();*/
         return response(array('success' => "true"), 200);
 
     }

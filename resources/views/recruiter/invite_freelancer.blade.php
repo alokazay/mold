@@ -2,11 +2,11 @@
 <html lang="en">
 <!--begin::Head-->
 <head>
-    <title>Invite</title>
+    <title>Регистрация</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-    <link rel="shortcut icon" href="{{url('/')}}/assets/media/logos/favicon.ico"/>
+    <link rel="shortcut icon" href="{{url('/')}}/favicon.ico"/>
     <!--begin::Fonts-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700"/>
     <!--end::Fonts-->
@@ -62,7 +62,7 @@
                         <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
                              data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                              class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
-                            <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Invite</h1>
+                            <h1 class="d-flex text-dark fw-bolder fs-3 align-items-center my-1">Регистрация</h1>
                         </div>
                         <!--end::Page title-->
 

@@ -14,6 +14,10 @@
         .sorting_disabled.sorting_desc:after {
             display: none !important;
         }
+        #add_arrivals {
+            float: right;
+            margin-bottom: 10px;
+        }
     </style>
 
 </head>
@@ -241,7 +245,7 @@
                                     <div class="col">
 
                                         <div class="row mb-5">
-                                            <div class="col-6">
+                                            <div @if(Auth::user()->isFreelancer()) style="display:none;" @endif class="col-6">
                                                 <div class="d-flex flex-column mb-0 fv-row">
                                                     <label class="fs-5 fw-bold mb-2">Рекрутер</label>
 
@@ -314,8 +318,8 @@
                                         <li class="nav-item">
                                             <a class="nav-link" data-bs-toggle="tab" href="#kt_tab_pane_2">Приезды</a>
                                         </li>
-
                                     </ul>
+
 
                                     <div class="tab-content" id="myTabContent">
                                         <div class="tab-pane fade show active" id="kt_tab_pane_1" role="tabpanel">
@@ -327,7 +331,7 @@
                                                         <input
                                                             @if($canddaite != null) value="{{\Carbon\Carbon::parse($canddaite->logist_date_arrive)->format('d.m.Y H:i')}}"
                                                             @endif
-                                                            id="logist_date_arrive" disabled
+                                                            id="logist_date_arrive"
                                                             class="form-control form-control-sm form-control-solid"
                                                             type="text"/>
                                                     </div>
@@ -337,7 +341,7 @@
                                                 <div class="col-6">
                                                     <div class="d-flex flex-column mb-0 fv-row">
                                                         <label class="fs-5 fw-bold mb-2">Место приезда</label>
-                                                        <select disabled id="logist_place_arrive_id"
+                                                        <select   id="logist_place_arrive_id"
                                                                 class="form-select  form-select-sm form-select-solid"> </select>
 
                                                     </div>
@@ -345,7 +349,7 @@
                                                 <div class="col-6">
                                                     <div class="d-flex flex-column mb-0 fv-row">
                                                         <label class=" fs-5 fw-bold mb-2">Транспорт</label>
-                                                        <select disabled id="transport_id"
+                                                        <select   id="transport_id"
                                                                 class="form-select  form-select-sm form-select-solid"> </select>
 
                                                     </div>
@@ -379,7 +383,11 @@
                                         </div>
                                         <div class="tab-pane fade" id="kt_tab_pane_2" role="tabpanel">
 
+
                                             <div class="table-responsive">
+                                                <button id="add_arrivals" type="button" class="btn btn-primary btn-sm">
+                                                    Добавить
+                                                </button>
                                                 <table class="table align-middle table-row-dashed fs-6 gy-3" id="users">
                                                     <!--begin::Table head-->
                                                     <thead>
@@ -404,9 +412,6 @@
                                             </div>
 
 
-                                            <button id="add_arrivals" type="button" class="btn btn-primary btn-sm">
-                                                Добавить
-                                            </button>
                                         </div>
 
                                     </div>

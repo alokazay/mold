@@ -131,7 +131,7 @@
                                         <!--begin::Table row-->
                                         <tr class="text-start text-muted fw-bolder fs-7 gs-0">
                                             <th class="max-w-55px sorting_disabled">Id</th>
-                                            <th class="max-w-155px sorting_disabled">Nip</th>
+                                            <th class="max-w-155px sorting_disabled">NIP</th>
                                             <th class="max-w-155px sorting_disabled">Name</th>
                                             <th class="min-w-100px sorting_disabled">
 
@@ -196,7 +196,7 @@
                 <div class="row mb-5">
                     <div class="col-6">
                         <div class="d-flex flex-column mb-0 fv-row">
-                            <label class="required fs-5 fw-bold mb-2">НИп</label>
+                            <label class="required fs-5 fw-bold mb-2">NIP</label>
                             <input value="" id="nip"
                                    class="form-control form-control-sm form-control-solid" type="text"/>
                         </div>

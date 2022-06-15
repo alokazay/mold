@@ -47,7 +47,7 @@ Route::get('/dashboard', function () {
         return Redirect::to('candidates');
     }
     if (Auth::user()->group_id == 7) {
-        return Redirect::to('/accountant/profile');
+        return Redirect::to('/requests');
     }
     if (Auth::user()->group_id == 8) {
         return Redirect::to('/freelancers');

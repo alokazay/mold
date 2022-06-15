@@ -309,7 +309,7 @@
         },
     }).on('select2:select', function (e) {
         oTable.draw();
-    });.on('select2:clear', function (e) {
+    }).on('select2:clear', function (e) {
         oTable.draw();
     });
 
