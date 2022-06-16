@@ -14,6 +14,7 @@
         .sorting_disabled.sorting_desc:after {
             display: none !important;
         }
+
         #add_arrivals {
             float: right;
             margin-bottom: 10px;
@@ -245,7 +246,8 @@
                                     <div class="col">
 
                                         <div class="row mb-5">
-                                            <div @if(Auth::user()->isFreelancer()) style="display:none;" @endif class="col-6">
+                                            <div @if(Auth::user()->isFreelancer()) style="display:none;"
+                                                 @endif class="col-6">
                                                 <div class="d-flex flex-column mb-0 fv-row">
                                                     <label class="fs-5 fw-bold mb-2">Рекрутер</label>
 
@@ -260,6 +262,13 @@
                                                            @if($canddaite != null) value="{{$canddaite->inn}}" @endif
                                                            class="form-control form-control-sm form-control-solid"
                                                            type="text"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="d-flex flex-column mb-0 fv-row">
+                                                    <label class="fs-5 fw-bold mb-2">Вакансия</label>
+                                                    <select id="real_vacancy_id"
+                                                            class="form-select  form-select-sm form-select-solid"> </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -310,140 +319,118 @@
                                     <h3 class="mb-5 mt-10">Логист</h3>
 
 
-                                    <ul class="nav nav-tabs nav-line-tabs mb-5 fs-6">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" data-bs-toggle="tab"
-                                               href="#kt_tab_pane_1">Инфо</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" data-bs-toggle="tab" href="#kt_tab_pane_2">Приезды</a>
-                                        </li>
-                                    </ul>
 
 
-                                    <div class="tab-content" id="myTabContent">
-                                        <div class="tab-pane fade show active" id="kt_tab_pane_1" role="tabpanel">
-                                            <div class="row mb-5">
-                                                <div class="col-6">
-                                                    <div class="d-flex flex-column mb-0 fv-row">
-                                                        <label class="fs-5 fw-bold mb-2">Дата и время
-                                                            приезда</label>
-                                                        <input
-                                                            @if($canddaite != null) value="{{\Carbon\Carbon::parse($canddaite->logist_date_arrive)->format('d.m.Y H:i')}}"
-                                                            @endif
-                                                            id="logist_date_arrive"
-                                                            class="form-control form-control-sm form-control-solid"
-                                                            type="text"/>
-                                                    </div>
+
+                                    <div style="display: none;" class="tab-pane fade show active" id="kt_tab_pane_1"
+                                         role="tabpanel">
+                                        <div class="row mb-5">
+                                            <div class="col-6">
+                                                <div class="d-flex flex-column mb-0 fv-row">
+                                                    <label class="fs-5 fw-bold mb-2">Дата и время
+                                                        приезда</label>
+                                                    <input
+                                                        @if($canddaite != null) value="{{\Carbon\Carbon::parse($canddaite->logist_date_arrive)->format('d.m.Y H:i')}}"
+                                                        @endif
+                                                        id="logist_date_arrive"
+                                                        class="form-control form-control-sm form-control-solid"
+                                                        type="text"/>
                                                 </div>
                                             </div>
-                                            <div class="row mb-5">
-                                                <div class="col-6">
-                                                    <div class="d-flex flex-column mb-0 fv-row">
-                                                        <label class="fs-5 fw-bold mb-2">Место приезда</label>
-                                                        <select   id="logist_place_arrive_id"
-                                                                class="form-select  form-select-sm form-select-solid"> </select>
+                                        </div>
+                                        <div class="row mb-5">
+                                            <div class="col-6">
+                                                <div class="d-flex flex-column mb-0 fv-row">
+                                                    <label class="fs-5 fw-bold mb-2">Место приезда</label>
+                                                    <select id="logist_place_arrive_id"
+                                                            class="form-select  form-select-sm form-select-solid"> </select>
 
-                                                    </div>
-                                                </div>
-                                                <div class="col-6">
-                                                    <div class="d-flex flex-column mb-0 fv-row">
-                                                        <label class=" fs-5 fw-bold mb-2">Транспорт</label>
-                                                        <select   id="transport_id"
-                                                                class="form-select  form-select-sm form-select-solid"> </select>
-
-                                                    </div>
                                                 </div>
                                             </div>
+                                            <div class="col-6">
+                                                <div class="d-flex flex-column mb-0 fv-row">
+                                                    <label class=" fs-5 fw-bold mb-2">Транспорт</label>
+                                                    <select id="transport_id"
+                                                            class="form-select  form-select-sm form-select-solid"> </select>
 
-                                            <div class="row mb-5">
-                                                <div class="col-6">
-                                                    <div class="d-flex flex-column mb-0 fv-row">
-                                                        <!--begin::Dropzone-->
-                                                        <div class="dropzone" id="kt_file_ticket">
-                                                            <!--begin::Message-->
-                                                            <div class="dz-message needsclick">
-                                                                <!--begin::Icon-->
-                                                                <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
-                                                                <!--end::Icon-->
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                                                <!--begin::Info-->
-                                                                <div class="ms-4">
-                                                                    <h3 class="fs-5 fw-bolder text-gray-900 mb-1">
-                                                                        Загрузить билет</h3>
-                                                                    <span class="fs-7 fw-bold text-gray-400">Перетащите документ сюда</span>
-                                                                </div>
-                                                                <!--end::Info-->
+                                        <div class="row mb-5">
+                                            <div class="col-6">
+                                                <div class="d-flex flex-column mb-0 fv-row">
+                                                    <!--begin::Dropzone-->
+                                                    <div class="dropzone" id="kt_file_ticket">
+                                                        <!--begin::Message-->
+                                                        <div class="dz-message needsclick">
+                                                            <!--begin::Icon-->
+                                                            <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
+                                                            <!--end::Icon-->
+
+                                                            <!--begin::Info-->
+                                                            <div class="ms-4">
+                                                                <h3 class="fs-5 fw-bolder text-gray-900 mb-1">
+                                                                    Загрузить билет</h3>
+                                                                <span class="fs-7 fw-bold text-gray-400">Перетащите документ сюда</span>
                                                             </div>
+                                                            <!--end::Info-->
                                                         </div>
-                                                        <!--end::Dropzone-->
                                                     </div>
+                                                    <!--end::Dropzone-->
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="tab-pane fade" id="kt_tab_pane_2" role="tabpanel">
+                                    </div>
 
+                                    <div class="table-responsive">
+                                        <button id="add_arrivals" type="button" class="btn btn-primary btn-sm">
+                                            Добавить
+                                        </button>
+                                        <table class="table align-middle table-row-dashed fs-6 gy-3" id="users">
+                                            <!--begin::Table head-->
+                                            <thead>
+                                            <!--begin::Table row-->
+                                            <tr class="text-start text-muted fw-bolder fs-7 gs-0">
 
-                                            <div class="table-responsive">
-                                                <button id="add_arrivals" type="button" class="btn btn-primary btn-sm">
-                                                    Добавить
-                                                </button>
-                                                <table class="table align-middle table-row-dashed fs-6 gy-3" id="users">
-                                                    <!--begin::Table head-->
-                                                    <thead>
-                                                    <!--begin::Table row-->
-                                                    <tr class="text-start text-muted fw-bolder fs-7 gs-0">
+                                                <th class="max-w-55px sorting_disabled">Id</th>
+                                                <th class="max-w-85px sorting_disabled">Место приезда</th>
+                                                <th class="max-w-85px sorting_disabled">Планируемая дата
+                                                    приезда
+                                                </th>
+                                                <th class="max-w-85px sorting_disabled">Время приезда</th>
+                                                <th class="max-w-85px sorting_disabled">Вид транспорта</th>
+                                                <th class="min-w-100px sorting_disabled">Билет</th>
+                                                <th class="min-w-100px sorting_disabled">Статус</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="text-gray-600 fw-bold">
 
-                                                        <th class="max-w-55px sorting_disabled">Id</th>
-                                                        <th class="max-w-85px sorting_disabled">Место приезда</th>
-                                                        <th class="max-w-85px sorting_disabled">Планируемая дата
-                                                            приезда
-                                                        </th>
-                                                        <th class="max-w-85px sorting_disabled">Время приезда</th>
-                                                        <th class="max-w-85px sorting_disabled">Вид транспорта</th>
-                                                        <th class="min-w-100px sorting_disabled">Статус</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody class="text-gray-600 fw-bold">
-
-                                                    </tbody>
-                                                    <!--end::Table body-->
-                                                </table>
-                                            </div>
-
-
-                                        </div>
-
+                                            </tbody>
+                                            <!--end::Table body-->
+                                        </table>
                                     </div>
 
 
                                 @endif
 
                                 @if(Auth::user()->group_id == 5 || Auth::user()->group_id == 1)
-                                <hr>
-                                <h3 class="mb-5">Трудоустройство</h3>
-                                <div class="row mb-5">
-                                    <div class="col-6">
-                                        <div class="d-flex flex-column mb-0 fv-row">
-                                            <label class="fs-5 fw-bold mb-2">Вакансия по
-                                                факту</label>
+                                    <hr>
+                                    <h3 class="mb-5">Трудоустройство</h3>
+                                    <div class="row mb-5">
 
-                                            <select id="real_vacancy_id"
-                                                    class="form-select  form-select-sm form-select-solid"> </select>
-                                        </div>
-                                    </div>
-                                    @if(Auth::user()->group_id == 5 || Auth::user()->group_id == 1)
-                                        <div class="col-6">
-                                            <div class="d-flex flex-column mb-0 fv-row">
-                                                <label class="fs-5 fw-bold mb-2">Статус
-                                                    трудоустройства</label>
-                                                <select id="real_status_work_id"
-                                                        class="form-select  form-select-sm form-select-solid"> </select>
+                                        @if(Auth::user()->group_id == 5 || Auth::user()->group_id == 1)
+                                            <div class="col-6">
+                                                <div class="d-flex flex-column mb-0 fv-row">
+                                                    <label class="fs-5 fw-bold mb-2">Статус
+                                                        трудоустройства</label>
+                                                    <select id="real_status_work_id"
+                                                            class="form-select  form-select-sm form-select-solid"> </select>
 
+                                                </div>
                                             </div>
-                                        </div>
-                                    @endif
-                                </div>
+                                        @endif
+                                    </div>
                                 @endif
 
                                 <button id="modal_users_add__save" type="button" class="btn btn-primary btn-sm">
@@ -473,7 +460,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Добавления фрилансера</h3>
+                <h3 class="modal-title">Добавить приезд</h3>
 
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal"
@@ -531,6 +518,32 @@
 <script>
     @if(Auth::user()->isAdmin() || Auth::user()->isLogist() )
 
+
+    function reInitDropzone() {
+        $('.add_file').each(function () {
+
+            let id = $(this).data('id');
+            new Dropzone('#' + $(this).attr('id'), {
+                url: "{{url('/')}}/candidates/arrivals/add_ticket", // Set the url for your upload script location
+                paramName: "file",
+                maxFiles: 1,
+                maxFilesize: 10, // MB
+                addRemoveLinks: true,
+                sending: function (file, xhr, formData) {
+                    formData.append('_token', $('input[name=_token]').val());
+                    formData.append('id', id);
+                },
+                success: function (file, done) {
+                    oTable.draw();
+                },
+                accept: function (file, done) {
+                    done();
+                }
+            });
+        });
+    }
+
+
     function changeActivation(id) {
         var changeActivation = $('.changeActivation' + id).val();
         $.get('{{url('/')}}/candidates/arrivals/activation?s=' + changeActivation + '&id=' + id, function (res) {
@@ -573,6 +586,10 @@
         ajax: function (data, callback, settings) {
             data._token = $('input[name=_token]').val();
 
+            @if($canddaite != null)
+                data.canddaite_id = '{{$canddaite->id}}';
+            @endif
+
             $.ajax({
                 url: '{{ route('candidates.arrivals.json') }}',
                 type: 'POST',
@@ -586,6 +603,9 @@
                 }
             });
         },
+        drawCallback: function () {
+            reInitDropzone();
+        }
 
     });
 

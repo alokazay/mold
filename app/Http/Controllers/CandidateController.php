@@ -261,7 +261,7 @@ class CandidateController extends Controller
             $candidate->user_id = Auth::user()->id;
             $candidate->active = 1;
         }
-        if(Auth::user()->isFreelancer()){
+        if (Auth::user()->isFreelancer()) {
             $candidate->recruiter_id = Auth::user()->recruter_id;
         } else {
             $candidate->recruiter_id = $r->recruiter_id;
@@ -445,6 +445,8 @@ class CandidateController extends Controller
         } else {
             $users = Candidate_arrival::where('status', $status);
         }
+        $users = $users->where('candidate_id', request('canddaite_id'));
+
 
         if ($search != '') {
 
@@ -456,6 +458,7 @@ class CandidateController extends Controller
         $users = $users
             ->with('Place_arrive')
             ->with('Transport')
+            ->with('D_file')
             ->skip($start)
             ->take($rowperpage)
             ->get();
@@ -464,6 +467,19 @@ class CandidateController extends Controller
 
 
         foreach ($users as $u) {
+
+
+            if ($u->D_file != null) {
+                $file = '<a   href="javascript:;"><i data-id="' . $u->id . '" id="file_' . $u->id . '"  class="fa fa-pen add_file"></i></a>';
+                $file .= '<a target="_blank" href="' . url('/') . $u->D_file->path . '" style="cursor: pointer;" class="svg-icon svg-icon-2x svg-icon-primary me-4">
+																<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																	<path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22Z" fill="currentColor"></path>
+																	<path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor"></path>
+																</svg>
+															</a>';
+            } else {
+                $file = '<a data-id="' . $u->id . '" id="file_' . $u->id . '" class="add_file" href="javascript:;">загрузить</a>';
+            }
 
             $select_active = '<select onchange="changeActivation(' . $u->id . ')"
                                     class="form-select form-select-sm form-select-solid changeActivation' . $u->id . '">
@@ -501,6 +517,7 @@ class CandidateController extends Controller
                 $date_arrive,
                 $date_arrive_time,
                 $Transport,
+                $file,
                 $select_active
 
             ];
@@ -590,6 +607,17 @@ class CandidateController extends Controller
 
         foreach ($users as $u) {
 
+            if ($u->D_file != null) {
+                $file = '<a target="_blank" href="' . url('/') . $u->D_file->path . '" style="cursor: pointer;" class="svg-icon svg-icon-2x svg-icon-primary me-4">
+																<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																	<path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22Z" fill="currentColor"></path>
+																	<path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor"></path>
+																</svg>
+															</a>';
+            } else {
+                $file = '';
+            }
+
             $select_active = '<select onchange="changeActivation(' . $u->id . ')"
                                     class="form-select form-select-sm form-select-solid changeActivation' . $u->id . '">
                                         <option value="">Статус</option>
@@ -621,15 +649,15 @@ class CandidateController extends Controller
             }
 
             if ($u->Candidate->Vacancy != null) {
-                $Vacancy = $u->Candidate->Vacancy->name;
+                $Vacancy = $u->Candidate->Vacancy->title;
             } else {
                 $Vacancy = '';
             }
 
-
             $temp_arr = [
                 //  $checkbox,
-                '<a href="' . url('/') . '/candidate/add?id=' . $u->candidate_id . '">' . $u->candidate_id . '</a>',
+                $u->id,
+                '<a href="' . url('/') . '/candidate/add?id=' . $u->candidate_id . '">' . $u->Candidate->firstName . '</a>',
                 $u->Candidate->firstName,
                 $u->Candidate->lastName,
                 $u->Candidate->phone,
@@ -637,6 +665,7 @@ class CandidateController extends Controller
                 $Place_arrive,
                 $date_arrive,
                 $date_arrive_time,
+                $file,
                 $Transport,
                 $Nacionality,
                 $Vacancy,
@@ -690,10 +719,10 @@ class CandidateController extends Controller
         $arrival->candidate_id = $candidate->id;
         $arrival->save();
 
- /*       $candidate->transport_id = $r->transport_id;
-        $candidate->logist_place_arrive_id = $r->place_arrive_id;
-        $candidate->logist_date_arrive = Carbon::createFromFormat('d.m.Y H:i', $r->date_arrive);
-        $candidate->save();*/
+        /*       $candidate->transport_id = $r->transport_id;
+               $candidate->logist_place_arrive_id = $r->place_arrive_id;
+               $candidate->logist_date_arrive = Carbon::createFromFormat('d.m.Y H:i', $r->date_arrive);
+               $candidate->save();*/
         return response(array('success' => "true"), 200);
 
     }
@@ -708,5 +737,41 @@ class CandidateController extends Controller
         }
 
         return response(array('success' => "true"), 200);
+    }
+
+    public function addTicketDoc()
+    {
+        $r_id = request()->get('id');
+        $file = request()->file('file');
+        if ($file->isValid()) {
+
+            $path = '/uploads/tickets/' . Carbon::now()->format('m.Y') . '/' . $r_id . '/files/';
+            $name = Str::random(12) . '.' . $file->getClientOriginalExtension();
+
+            $file->move(public_path($path), $name);
+            $file_link = $path . $name;
+
+
+            $file = new C_file();
+            $file->autor_id = Auth::user()->id;
+            $file->user_id = Auth::user()->id;
+            $file->type = 6;
+            $file->original_name = request()->file('file')->getClientOriginalName();
+            $file->ext = request()->file('file')->getClientOriginalExtension();
+            $file->path = $file_link;
+            $file->save();
+
+            $finance = Candidate_arrival::find($r_id);
+            $finance->file_id = $file->id;
+            $finance->save();
+
+            return Response::json(array('success' => "true",
+                'path' => url('/') . '' . $file_link
+            ), 200);
+        } else {
+            return Response::json(array('success' => "false",
+                'error' => 'file not valid!'
+            ), 200);
+        }
     }
 }

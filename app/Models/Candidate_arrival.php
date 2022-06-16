@@ -24,6 +24,11 @@ class Candidate_arrival extends Model
         return $this->belongsTo(Candidate::class);
     }
 
+    public function D_file()
+    {
+        return $this->belongsTo(C_file::class, 'file_id')->where('type', 6);
+    }
+
     public function getStatusOptions()
     {
         $arr = [

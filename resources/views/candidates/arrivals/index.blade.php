@@ -184,6 +184,7 @@
                                                 приезда
                                             </th>
                                             <th class="max-w-85px sorting_disabled">Время приезда</th>
+                                            <th class="max-w-85px sorting_disabled">Билет</th>
                                             <th class="max-w-85px sorting_disabled">Вид транспорта</th>
                                             <th class="max-w-85px sorting_disabled">Гражданство</th>
                                             <th class="max-w-85px sorting_disabled">Вакансия</th>

@@ -110,6 +110,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // arrivals
     Route::get('candidates/arrivals', [CandidateController::class, 'getArrivals'])->middleware('roles:1|4|5');
+    Route::post('candidates/arrivals/add_ticket', [CandidateController::class, 'addTicketDoc'])->middleware('roles:1|4|5');
 
     // request transaction
     Route::get('requests', [FinanceController::class, 'getIndex'])->middleware('roles:1|3|7');
