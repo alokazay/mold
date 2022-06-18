@@ -199,7 +199,17 @@
                                         <!--end::Select2-->
                                     </div>
                                     @if(Auth::user()->isAdmin() || Auth::user()->isFreelancer() || Auth::user()->isRecruter())
-                                        <a href="{{url('/')}}/candidate/add" class="btn btn-primary">Добавить</a>
+
+
+
+                                        @if(Auth::user()->isFreelancer())
+                                            @if(Auth::user()->fl_status == 2)
+                                                <a href="{{url('/')}}/candidate/add" class="btn btn-primary">Добавить</a>
+                                            @endif
+                                        @else
+                                            <a href="{{url('/')}}/candidate/add" class="btn btn-primary">Добавить</a>
+                                        @endif
+
                                     @endif
                                 </div>
                                 <!--end::Card toolbar-->

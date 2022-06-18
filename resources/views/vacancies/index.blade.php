@@ -153,7 +153,9 @@
                                         </select>
                                         <!--end::Select2-->
                                     </div>
-                                    <div class="w-100 mw-150px">
+                                    <div
+                                        @if(Auth::user()->isFreelancer() || Auth::user()->isRecruter()) style="display:none;"
+                                        @endif class="w-100 mw-150px">
                                         <!--begin::Select2-->
                                         <select id="filter__group__status" class="form-select form-select-solid">
                                             <option value="">Статус</option>

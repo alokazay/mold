@@ -106,38 +106,27 @@ class FreelancersController extends Controller
                 $file = '';
             }
 
-            if (Auth::user()->group_id == 1 || Auth::user()->group_id == 2) {
+            if (Auth::user()->group_id == 1 || Auth::user()->group_id == 8) {
                 if ($u->fl_status == 1 || $u->fl_status == '') {
                     $select_active = '<select onchange="changeFl_status(' . $u->id . ')"
                                     class="form-select form-select-sm form-select-solid changeActivation' . $u->id . '">
                                     <option selected value="1">Новый</option>
                                             <option value="2">Верифицирован</option>
-                                            <option value="3">Отклонён</option>
-                                            <option value="4">Уволен</option>
+                                            <option value="3">Уволен</option>
                             </select>';
                 } else if ($u->fl_status == 2) {
                     $select_active = '<select onchange="changeFl_status(' . $u->id . ')"
                                     class="form-select form-select-sm form-select-solid changeActivation' . $u->id . '">
                                     <option  value="1">Новый</option>
                                             <option selected value="2">Верифицирован</option>
-                                            <option  value="3">Отклонён</option>
-                                            <option value="4">Уволен</option>
+                                            <option value="3">Уволен</option>
                             </select>';
-                } else if ($u->fl_status == 3) {
+                }  else if ($u->fl_status == 3) {
                     $select_active = '<select onchange="changeFl_status(' . $u->id . ')"
                                     class="form-select form-select-sm form-select-solid changeActivation' . $u->id . '">
                                     <option   value="1">Новый</option>
                                             <option value="2">Верифицирован</option>
-                                            <option selected value="3">Отклонён</option>
-                                            <option value="4">Уволен</option>
-                            </select>';
-                } else if ($u->fl_status == 4) {
-                    $select_active = '<select onchange="changeFl_status(' . $u->id . ')"
-                                    class="form-select form-select-sm form-select-solid changeActivation' . $u->id . '">
-                                    <option   value="1">Новый</option>
-                                            <option value="2">Верифицирован</option>
-                                            <option value="3">Отклонён</option>
-                                            <option selected value="4">Уволен</option>
+                                            <option selected value="3">Уволен</option>
                             </select>';
                 }
             } else {

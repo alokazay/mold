@@ -150,8 +150,7 @@
                                             <option value="">Статус</option>
                                             <option value="1">Новый</option>
                                             <option value="2">Верифицирован</option>
-                                            <option value="3">Отклонён</option>
-                                            <option value="4">Уволен</option>
+                                            <option value="3">Уволен</option>
                                         </select>
                                     </div>
                                     <!--begin::Add product-->

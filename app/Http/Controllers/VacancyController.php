@@ -274,6 +274,11 @@ class VacancyController extends Controller
             $users = Vacancy::where('activation', $filter__status);
         }
 
+        if (Auth::user()->isFreelancer() || Auth::user()->isRecruter()) {
+            $users = Vacancy::whereIn('activation', [1]);
+        }
+
+
         // Фрилансеры видят только свои
 
         if ($filter__industry != '') {
@@ -375,7 +380,11 @@ class VacancyController extends Controller
                 }
 
                 if (Auth::user()->isFreelancer()) {
-                    $add_link = '<a href="' . url('/') . '/candidate/add?r_id=' . Auth::user()->recruter_id . '&vid=' . $u->id . '"><i class="fas fa-user-plus"></i></a>';
+                    if (Auth::user()->fl_status == 2) {
+                        $add_link = '<a href="' . url('/') . '/candidate/add?r_id=' . Auth::user()->recruter_id . '&vid=' . $u->id . '"><i class="fas fa-user-plus"></i></a>';
+                    } else {
+                        $add_link = '';
+                    }
                 }
 
 

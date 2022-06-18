@@ -96,9 +96,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('vacancy/changecost', [VacancyController::class, 'vacancyChangecost'])->middleware('roles:1|2|3');
 
     // candidates
-    Route::get('candidates', [CandidateController::class, 'getIndex'])->middleware('roles:1|2|3|4|6');
-    Route::post('candidates/getJson', [CandidateController::class, 'getJson'])->name('candidates.json')->middleware('roles:1|2|3|4|6');
-    Route::post('candidates/arrivals/getJson', [CandidateController::class, 'getArrivalsJson'])->name('candidates.arrivals.json')->middleware('roles:1|4|6');
+    Route::get('candidates', [CandidateController::class, 'getIndex'])->middleware('roles:1|2|3|4|5|6');
+    Route::post('candidates/getJson', [CandidateController::class, 'getJson'])->name('candidates.json')->middleware('roles:1|2|3|4|5|6');
+    Route::post('candidates/arrivals/getJson', [CandidateController::class, 'getArrivalsJson'])->name('candidates.arrivals.json')->middleware('roles:1|4|5|6');
     Route::post('candidates/arrivals/all/getJson', [CandidateController::class, 'getArrivalsallJson'])->name('candidates.arrivals.all.json')->middleware('roles:1|4|5');
     Route::get('candidate/set_status', [CandidateController::class, 'setFlStatus'])->middleware('roles:1|2|3|4|6');
     Route::get('candidate/add', [CandidateController::class, 'getAdd'])->middleware('roles:1|2|3|4|5|6');
@@ -106,7 +106,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('candidate/files/doc/add', [CandidateController::class, 'filesDocAdd'])->middleware('roles:1|2|3');
     Route::post('candidate/files/ticket/add', [CandidateController::class, 'filesTicketAdd'])->middleware('roles:1|2|3|4');
     Route::post('candidates/arrivals/add', [CandidateController::class, 'postArrivalAdd'])->middleware('roles:1|4');
-    Route::get('candidates/arrivals/activation', [CandidateController::class, 'postArrivalsActivation'])->middleware('roles:1|4');
+    Route::get('candidates/arrivals/activation', [CandidateController::class, 'postArrivalsActivation'])->middleware('roles:1|4|5');
 
     // arrivals
     Route::get('candidates/arrivals', [CandidateController::class, 'getArrivals'])->middleware('roles:1|4|5');

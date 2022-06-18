@@ -81,7 +81,7 @@ class CandidateController extends Controller
         }
 
         if (Auth::user()->isKoordinator()) {
-            $users = $users->whereIn('active', [3, 7, 8, 9, 10, 11]);
+            $users = $users->whereIn('active', [8]);
         }
 
 
@@ -200,6 +200,13 @@ class CandidateController extends Controller
 
     public function getAdd(Request $r)
     {
+
+        if(Auth::user()->isFreelancer()){
+            if (Auth::user()->fl_status != 2){
+                return response(array('success' => "false"), 200);
+            }
+        }
+
         $vacancy = null;
 
 
@@ -238,6 +245,12 @@ class CandidateController extends Controller
 
     public function postAdd(Request $r)
     {
+        if(Auth::user()->isFreelancer()){
+            if (Auth::user()->fl_status != 2){
+                return response(array('success' => "false"), 200);
+            }
+        }
+
         $niceNames = [
             'lastName' => '«Фамилия»',
             'firstName' => '«Имя»',
@@ -441,7 +454,7 @@ class CandidateController extends Controller
 
 
         if ($status == '') {
-            $users = Candidate_arrival::whereIn('status', [3, 4, 6]);
+            $users = Candidate_arrival::whereIn('status', [0,1,2,3]);
         } else {
             $users = Candidate_arrival::where('status', $status);
         }
@@ -565,7 +578,7 @@ class CandidateController extends Controller
 
 
         if ($status == '') {
-            $users = Candidate_arrival::whereIn('status', [3, 4, 6]);
+            $users = Candidate_arrival::whereIn('status', [0, 1, 2, 3]);
         } else {
             $users = Candidate_arrival::where('status', $status);
         }
@@ -656,8 +669,7 @@ class CandidateController extends Controller
 
             $temp_arr = [
                 //  $checkbox,
-                $u->id,
-                '<a href="' . url('/') . '/candidate/add?id=' . $u->candidate_id . '">' . $u->Candidate->firstName . '</a>',
+                '<a href="' . url('/') . '/candidate/add?id=' . $u->candidate_id . '">' . $u->id . '</a>',
                 $u->Candidate->firstName,
                 $u->Candidate->lastName,
                 $u->Candidate->phone,
@@ -710,7 +722,7 @@ class CandidateController extends Controller
         $arrival = Candidate_arrival::find($r->id);
         if ($arrival == null) {
             $arrival = new  Candidate_arrival();
-            $arrival->status = 4;
+            $arrival->status = 0;
         }
 
         $arrival->place_arrive_id = $r->place_arrive_id;
@@ -729,6 +741,12 @@ class CandidateController extends Controller
 
     public function postArrivalsActivation(Request $r)
     {
+
+        if(Auth::user()->isTrud()){
+            if($r->s == 1){
+                return response(array('success' => "false", 'error' => 'У вас нет прав ставить статус в пути'), 200);
+            }
+        }
 
         $arrivals = Candidate_arrival::find($r->id);
         if ($arrivals != null) {

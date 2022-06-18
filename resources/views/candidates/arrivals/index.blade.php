@@ -97,7 +97,7 @@
                                     <span class="bullet bg-gray-300 w-5px h-2px"></span>
                                 </li>
 
-                                <li class="breadcrumb-item text-dark">Кандидаты</li>
+                                <li class="breadcrumb-item text-dark">Приезды</li>
                                 <!--end::Item-->
                             </ul>
                             <!--end::Title-->
@@ -152,14 +152,16 @@
                                     </div>
 
                                     <div class="w-100 mw-150px">
-                                        <!--begin::Select2-->
-                                        <select id="filter__status" class="form-select form-select-solid">
-                                            <option value="">Статус</option>
-                                            <option value="4">Готов к выезду</option>
-                                            <option value="6">Подтвердил Выезд</option>
-                                            <option value="3">Отказ</option>
-                                        </select>
-                                        <!--end::Select2-->
+
+                                             <select id="filter__status" class="form-select form-select-solid">
+                                                <option value="">Статус</option>
+                                                <option value="0">Нет статуса</option>
+                                                <option value="1">В пути</option>
+                                                <option value="2">Приехал</option>
+                                                <option value="3">Не доехал</option>
+                                            </select>
+
+
                                     </div>
 
                                 </div>
@@ -178,7 +180,7 @@
                                             <th class="sorting_disabled">Фамилия</th>
                                             <th class="sorting_disabled">Имя</th>
                                             <th class="sorting_disabled">Телефон</th>
-                                             <th class="sorting_disabled">Viber</th>
+                                            <th class="sorting_disabled">Viber</th>
                                             <th class="max-w-85px sorting_disabled">Место приезда</th>
                                             <th class="max-w-85px sorting_disabled">Планируемая дата
                                                 приезда
@@ -272,7 +274,7 @@
         locale: {
             firstDayOfWeek: 2
         },
-        onClose: function(selectedDates, dateStr, instance){
+        onClose: function (selectedDates, dateStr, instance) {
             oTable.draw();
         }
     })
@@ -282,7 +284,7 @@
         locale: {
             firstDayOfWeek: 2
         },
-        onClose: function(selectedDates, dateStr, instance){
+        onClose: function (selectedDates, dateStr, instance) {
             oTable.draw();
         }
     });
@@ -296,7 +298,6 @@
     })
 
 
-
     function changeActivation(id) {
         var changeActivation = $('.changeActivation' + id).val();
         $.get('{{url('/')}}/candidates/arrivals/activation?s=' + changeActivation + '&id=' + id, function (res) {
@@ -305,6 +306,8 @@
             } else {
                 toastr.success('Успешно');
             }
+
+            oTable.draw();
         });
     }
 </script>

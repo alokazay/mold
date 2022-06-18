@@ -384,9 +384,12 @@
                                     </div>
 
                                     <div class="table-responsive">
-                                        <button id="add_arrivals" type="button" class="btn btn-primary btn-sm">
-                                            Добавить
-                                        </button>
+
+                                            <button id="add_arrivals" type="button" class="btn btn-primary btn-sm">
+                                                Добавить
+                                            </button>
+
+
                                         <table class="table align-middle table-row-dashed fs-6 gy-3" id="users">
                                             <!--begin::Table head-->
                                             <thead>
