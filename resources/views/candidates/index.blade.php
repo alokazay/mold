@@ -113,6 +113,36 @@
                 <div class="post d-flex flex-column-fluid" id="kt_post">
                     <!--begin::Container-->
                     <div id="kt_content_container" class="container-fluid">
+                        <div class="row">
+                            <div class="col">
+                                <div class="card mb-10">
+                                    <div class="card-body pt-5 pb-5">
+                                        Приглашено: <span><b>{{$invited}}</b></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card mb-10">
+                                    <div class="card-body pt-5 pb-5">
+                                        Верифицировано: <span><b>{{$verif}}</b></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card mb-10">
+                                    <div class="card-body pt-5 pb-5">
+                                        Трудоустроено: <span><b>{{$work}}</b></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card mb-10">
+                                    <div class="card-body pt-5 pb-5">
+                                        Сумма: <span><b>{{$cost_pay}}</b></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <!--begin::Card-->
                         <div class="card">
                             <div class="card-header align-items-center py-5 gap-2 gap-md-5">
@@ -180,6 +210,11 @@
                                                 <option value="9">Приступил к Работе</option>
                                                 <option value="10">Отработал 7 дней</option>
                                                 <option value="11">Уволен</option>
+                                            @elseif(Auth::user()->isTrud())
+                                                <option value="">Статус</option>
+                                                <option value="3">Готов к выезду</option>
+                                                <option value="6">Подтвердил Выезд</option>
+                                                <option value="8">Трудоустроен</option>
                                             @else
                                                 <option value="">Статус</option>
                                                 <option value="1">Новый кандидат</option>
@@ -204,7 +239,8 @@
 
                                         @if(Auth::user()->isFreelancer())
                                             @if(Auth::user()->fl_status == 2)
-                                                <a href="{{url('/')}}/candidate/add" class="btn btn-primary">Добавить</a>
+                                                <a href="{{url('/')}}/candidate/add"
+                                                   class="btn btn-primary">Добавить</a>
                                             @endif
                                         @else
                                             <a href="{{url('/')}}/candidate/add" class="btn btn-primary">Добавить</a>
@@ -216,6 +252,8 @@
                             </div>
                             <!--begin::Card body-->
                             <div class="card-body pt-0">
+
+
                                 <!--begin::Table-->
                                 <div class="table-responsive">
                                     <table class="table align-middle table-row-dashed fs-6 gy-3" id="users">
@@ -355,14 +393,54 @@
 
 
     function changeActivation(id) {
+        let reason_reject = '';
+
         var changeActivation = $('.changeActivation' + id).val();
-        $.get('{{url('/')}}/candidate/set_status?s=' + changeActivation + '&id=' + id, function (res) {
-            if (res.error) {
-                toastr.error(res.error);
-            } else {
-                toastr.success('Успешно');
+        if (changeActivation == 2 || changeActivation == 4 || changeActivation == 6 || changeActivation == 8) {
+            Swal.fire({
+                html: `Сменить статус?`,
+                icon: "info",
+                buttonsStyling: false,
+                showCancelButton: true,
+                confirmButtonText: "Да!",
+                cancelButtonText: 'Нет, отмена!',
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: 'btn btn-danger'
+                }
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+
+
+                    $.get('{{url('/')}}/candidate/set_status?r=&s=' + changeActivation + '&id=' + id, function (res) {
+                        if (res.error) {
+                            toastr.error(res.error);
+                        } else {
+                            toastr.success('Успешно');
+                        }
+                        oTable.draw();
+                    });
+                }
+            });
+        } else {
+
+
+            if (changeActivation == 3) {
+                reason_reject = prompt('Причина отказа?');
             }
-        });
+
+            $.get('{{url('/')}}/candidate/set_status?r=' + reason_reject + '&s=' + changeActivation + '&id=' + id, function (res) {
+                if (res.error) {
+                    toastr.error(res.error);
+                } else {
+                    toastr.success('Успешно');
+                }
+                oTable.draw();
+            });
+        }
+
+
     }
 
 </script>

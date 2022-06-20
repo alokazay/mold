@@ -18,8 +18,11 @@ class FreelancersController extends Controller
 {
     public function getIndex()
     {
-        $recruters = User::where('group_id',2)->where('activation',1)->get();
-        return view('freelansers.index')->with('recruters',$recruters);
+        $recruters = User::where('group_id', 2)->where('activation', 1)->get();
+        $managers = User::where('group_id', 8)->where('activation', 1)->get();
+        return view('freelansers.index')
+            ->with('managers', $managers)
+            ->with('recruters', $recruters);
     }
 
     public function getJson()
@@ -121,7 +124,7 @@ class FreelancersController extends Controller
                                             <option selected value="2">Верифицирован</option>
                                             <option value="3">Уволен</option>
                             </select>';
-                }  else if ($u->fl_status == 3) {
+                } else if ($u->fl_status == 3) {
                     $select_active = '<select onchange="changeFl_status(' . $u->id . ')"
                                     class="form-select form-select-sm form-select-solid changeActivation' . $u->id . '">
                                     <option   value="1">Новый</option>

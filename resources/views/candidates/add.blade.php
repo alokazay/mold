@@ -212,11 +212,23 @@
                                                         class="form-select  form-select-sm form-select-solid"> </select>
                                                 </div>
                                             </div>
+                                        </div>
+
+                                        <div class="row mb-5">
                                             <div class="col-6">
                                                 <div class="d-flex flex-column mb-0 fv-row">
                                                     <label class=" fs-5 fw-bold mb-2">Страна прибывания</label>
                                                     <select id="country_id"
                                                             class="form-select  form-select-sm form-select-solid"> </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="d-flex flex-column mb-0 fv-row">
+                                                    <label class=" fs-5 fw-bold mb-2">Вознаграждение</label>
+                                                    <input
+                                                        @if($canddaite != null) value="{{$canddaite->cost_pay}}" @endif
+                                                        id="cost_pay"
+                                                            class="form-control form-control-sm form-control-solid" />
                                                 </div>
                                             </div>
                                         </div>
@@ -676,6 +688,7 @@
             citizenship_id: $('#citizenship_id').val(),
             nacionality_id: $('#nacionality_id').val(),
             country_id: $('#country_id').val(),
+            cost_pay: $('#cost_pay').val(),
             date_arrive: $('#date_arrive').val(),
             type_doc_id: $('#type_doc_id').val(),
             transport_id: $('#transport_id').val(),

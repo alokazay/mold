@@ -32,9 +32,12 @@ return new class extends Migration
             $table->integer('transport_id')->nullable();
             $table->text('comment')->nullable();
             $table->string('inn')->nullable();
+            $table->string('reason_reject')->nullable();
             $table->integer('is_payed')->nullable()->default(0);
+            $table->integer('cost_pay')->nullable()->default(0);
 
             $table->timestamp('logist_date_arrive')->nullable();
+            $table->timestamp('date_start_work')->nullable();
             $table->integer('logist_place_arrive_id')->nullable();
 
             $table->integer('real_vacancy_id')->nullable();

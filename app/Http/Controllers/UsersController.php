@@ -210,7 +210,19 @@ class UsersController extends Controller
             $user->group_id = 3;
             $user->activation = 1;
             $user->fl_status = 1;
-            $user->recruter_id = Auth::user()->id;
+
+            if(Auth::user()->isRecruter()){
+                $user->recruter_id = Auth::user()->id;
+            }
+            if(Auth::user()->isSupportManager()){
+                $user->manager_id = Auth::user()->id;
+            }
+
+            if(Auth::user()->isAdmin()){
+                $user->recruter_id = $r->recruter_id;
+                $user->manager_id = $r->manager_id;
+            }
+
 
             $validator = Validator::make($r->all(), [
                 'password' => ['required', Password::min(10)],
@@ -238,6 +250,7 @@ class UsersController extends Controller
 
             if(Auth::user()->isAdmin()){
                 $user->recruter_id = $r->recruter_id;
+                $user->manager_id = $r->manager_id;
             }
         }
         $user->email = $r->email;

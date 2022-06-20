@@ -312,8 +312,25 @@
                             </div>
                         </div>
                     @endif
-
                 </div>
+
+                <div class="row mb-5">
+                    @if(Auth::user()->isAdmin())
+                        <div class="col-6">
+                            <div class="d-flex flex-column mb-0 fv-row">
+                                <label class="fs-5 fw-bold mb-2">Манджер</label>
+                                <select id="modal_users_add__manager_id"
+                                        class="form-select form-select-sm form-select-solid">
+                                    @foreach($managers as $manager)
+                                        <option
+                                            value="{{$manager->id}}">{{$manager->firstName}} {{$manager->lastName}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+
                 <div class="row mb-5">
                     <div class="col-6">
                         <div class="d-flex flex-column mb-0 fv-row">
@@ -508,6 +525,7 @@
         $('#modal_users_add__facebook').val('');
         $('#modal_users_add__account_type').val('');
         $('#modal_users_add__recruter_id').val('');
+        $('#modal_users_add__manager_id').val('');
         $('#modal_users_add__account_poland').val('');
         $('#modal_users_add__account_paypal').val('');
         $('#modal_users_add__account_bank_name').val('');
@@ -532,6 +550,7 @@
             $('#modal_users_add__facebook').val(res.user.facebook);
             $('#modal_users_add__account_type').val(res.user.account_type);
             $('#modal_users_add__recruter_id').val(res.user.recruter_id);
+            $('#modal_users_add__manager_id').val(res.user.manager_id);
             $('#modal_users_add__account_poland').val(res.user.account_poland);
             $('#modal_users_add__account_paypal').val(res.user.account_paypal);
             $('#modal_users_add__account_bank_name').val(res.user.account_bank_name);
@@ -559,6 +578,7 @@
             facebook: $('#modal_users_add__facebook').val(),
             account_type: $('#modal_users_add__account_type').val(),
             recruter_id: $('#modal_users_add__recruter_id').val(),
+            manager_id: $('#modal_users_add__manager_id').val(),
             account_poland: $('#modal_users_add__account_poland').val(),
             account_paypal: $('#modal_users_add__account_paypal').val(),
             account_bank_name: $('#modal_users_add__account_bank_name').val(),

@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -13,6 +15,7 @@ use App\Http\Controllers\HandbookController;
 use App\Http\Controllers\RecruiterController;
 use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\AccountSettingController;
+use App\Http\Controllers\ManagerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +31,9 @@ use App\Http\Controllers\AccountSettingController;
 Route::get('/', [AuthController::class, 'getMain'])->middleware('auth');
 
 Route::get('/dashboard', function () {
+
+
+
     if (Auth::user()->group_id == 1) {
         return Redirect::to('users');
     }
@@ -60,13 +66,16 @@ Route::get('logout', [AuthController::class, 'getLogout']);
 Route::get('/recruiter/invite/{id}', [RecruiterController::class, 'getInvite']);
 Route::post('/recruiter/portal/add', [RecruiterController::class, 'getInviteAdd']);
 
+Route::get('/manager/invite/{id}', [ManagerController::class, 'getInvite']);
+Route::post('/manager/portal/add', [ManagerController::class, 'getInviteAdd']);
+
 Route::group(['middleware' => 'auth'], function () {
     Route::get('users', [UsersController::class, 'getIndex'])->middleware('roles:1');
     Route::post('users/getJson', [UsersController::class, 'getJson'])->name('users.json')->middleware('roles:1');
     Route::post('users/add', [UsersController::class, 'addUser'])->name('users.add')->middleware('roles:1');
     Route::post('users/fl/add', [UsersController::class, 'addFlUser'])->name('users.fl.add')->middleware('roles:1|8');
     Route::post('/files/user/add', [UsersController::class, 'filesUserAdd'])->middleware('roles:1');
-     Route::get('/users/ajax/id/{id}', [UsersController::class, 'getUserAjax'])->name('users.ajax.id')->middleware('roles:1|2|3|8');
+    Route::get('/users/ajax/id/{id}', [UsersController::class, 'getUserAjax'])->name('users.ajax.id')->middleware('roles:1|2|3|8');
     Route::get('/users/activation', [UsersController::class, 'usersActivation'])->middleware('roles:1');
     Route::get('/users/auth_by/{id}', [UsersController::class, 'authBy'])->middleware('is_admin')->middleware('roles:1');
 
@@ -100,7 +109,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('candidates/getJson', [CandidateController::class, 'getJson'])->name('candidates.json')->middleware('roles:1|2|3|4|5|6');
     Route::post('candidates/arrivals/getJson', [CandidateController::class, 'getArrivalsJson'])->name('candidates.arrivals.json')->middleware('roles:1|4|5|6');
     Route::post('candidates/arrivals/all/getJson', [CandidateController::class, 'getArrivalsallJson'])->name('candidates.arrivals.all.json')->middleware('roles:1|4|5');
-    Route::get('candidate/set_status', [CandidateController::class, 'setFlStatus'])->middleware('roles:1|2|3|4|6');
+    Route::get('candidate/set_status', [CandidateController::class, 'setStatus'])->middleware('roles:1|2|3|4|5|6');
     Route::get('candidate/add', [CandidateController::class, 'getAdd'])->middleware('roles:1|2|3|4|5|6');
     Route::post('candidate/add', [CandidateController::class, 'postAdd'])->name('candidate.add')->middleware('roles:1|2|3|4');
     Route::post('candidate/files/doc/add', [CandidateController::class, 'filesDocAdd'])->middleware('roles:1|2|3');
@@ -131,6 +140,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/accountant/profile', [AccountSettingController::class, 'getProfile'])->middleware('roles:1|7');
     Route::post('/accountant/profile/save', [AccountSettingController::class, 'postProfileSave'])->name('accountant.profile.save')->middleware('roles:1|7');
     Route::get('/accountant/firm/delete', [AccountSettingController::class, 'deleteFirm'])->middleware('roles:1|7');
+
+    Route::get('/manager/dashboard', [ManagerController::class, 'getIndex'])->middleware('roles:8');
 
 
     // ajax search

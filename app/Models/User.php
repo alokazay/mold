@@ -173,6 +173,11 @@ class User extends Authenticatable
         return $this->belongsTo(User::class, 'recruter_id');
     }
 
+    public function Candidates()
+    {
+        return $this->hasMany(Candidate::class, 'user_id');
+    }
+
 }
 
 

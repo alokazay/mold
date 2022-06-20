@@ -19,7 +19,15 @@ class CandidateController extends Controller
 {
     public function getIndex()
     {
-        return view('candidates.index');
+        $invited = Candidate::where('user_id', Auth::user()->id)->count();
+        $verif = Candidate::where('user_id', Auth::user()->id)->whereNotIn('active',[1,2])->count();
+        $work = Candidate::where('user_id', Auth::user()->id)->whereNotIn('active',[8,9,10])->count();
+        $cost_pay = Candidate::where('user_id', Auth::user()->id)->whereNotIn('active',[8,9,10])->sum('cost_pay');
+        return view('candidates.index')
+            ->with('cost_pay',$cost_pay)
+            ->with('work',$work)
+            ->with('verif',$verif)
+            ->with('invited',$invited);
     }
 
     public function getArrivals()
@@ -127,11 +135,15 @@ class CandidateController extends Controller
             }
 
 
+            $reason_reject = $u->reason_reject;
+            if($reason_reject != ''){
+                $reason_reject = '<br> '.$u->reason_reject;
+            }
             $select_active = '<select onchange="changeActivation(' . $u->id . ')"
                                     class="form-select form-select-sm form-select-solid changeActivation' . $u->id . '">
                                         <option value="">Статус</option>
                                              ' . $u->getStatusOptions() . '
-                            </select>';
+                            </select>'. $reason_reject;
 
 
             $Vacancy = '';
@@ -170,14 +182,21 @@ class CandidateController extends Controller
         ), 200);
     }
 
-    function setFlStatus(Request $r)
+    function setStatus(Request $r)
     {
+
+
         $candidate = Candidate::find($r->id);
+        if($candidate->active == 10){
+            if(!Auth::user()->isAdmin()){
+                return response(array('success' => "true", 'error' => 'Статус менять больше нельщя'), 200);
+            }
+        }
         if ($candidate != null) {
 
             if ($r->s == 10 && $candidate->is_payed != 1) {
                 $user = User::find($candidate->user_id);
-                $user->balance = $user->balance + 100;
+                $user->balance = $user->balance + $candidate->cost_pay;
                 $user->save();
 
                 $candidate->is_payed = 1;
@@ -192,6 +211,7 @@ class CandidateController extends Controller
             $history->save();
 
             $candidate->active = $r->s;
+            $candidate->reason_reject = $r->r;
             $candidate->save();
         }
 
@@ -315,6 +335,9 @@ class CandidateController extends Controller
         }
         if ($r->comment != '' && $r->comment != 'undefined') {
             $candidate->comment = $r->comment;
+        }
+        if ($r->cost_pay != '' && $r->cost_pay != 'undefined') {
+            $candidate->cost_pay = $r->cost_pay;
         }
         // logist
         if ($r->logist_date_arrive != '' && $r->logist_date_arrive != 'undefined') {
@@ -581,6 +604,10 @@ class CandidateController extends Controller
             $users = Candidate_arrival::whereIn('status', [0, 1, 2, 3]);
         } else {
             $users = Candidate_arrival::where('status', $status);
+        }
+
+        if(Auth::user()->isLogist()){
+            $users = $users->whereIn('status', [0, 1, 3]);
         }
 
         if ($search != '') {

@@ -116,6 +116,13 @@ class Candidate extends Model
                 ['11', 'Уволен']
             ];
         }
+        if (Auth::user()->isTrud()) {
+            $arr = [
+                ['3', 'Отказ'],
+                ['6', 'Подтвердил Выезд'],
+                ['8', 'Трудоустроен']
+            ];
+        }
 
         $html = '';
         foreach ($arr as $a) {

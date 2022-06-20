@@ -292,6 +292,7 @@
             } else {
                 toastr.success('Успешно');
             }
+            oTable.draw();
         });
     }
 
@@ -303,6 +304,7 @@
             } else {
                 toastr.success('Успешно');
             }
+            oTable.draw();
         });
     }
 

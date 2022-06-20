@@ -84,9 +84,7 @@ class FinanceController extends Controller
             }
 
 
-
             if (Auth::user()->isAccountant()) {
-
 
 
                 if ($u->D_file != null) {
@@ -101,7 +99,7 @@ class FinanceController extends Controller
                     $file = '<a data-id="' . $u->id . '" id="file_' . $u->id . '" class="add_file" href="javascript:;">загрузить</a>';
                 }
 
-             } else {
+            } else {
 
                 if ($u->D_file != null) {
                     $file = '<a target="_blank" href="' . url('/') . $u->D_file->path . '" style="cursor: pointer;" class="svg-icon svg-icon-2x svg-icon-primary me-4">
@@ -177,7 +175,6 @@ class FinanceController extends Controller
         }
 
 
-
         if (($user->balance) < $r->amount) {
             return response(array('success' => "false", 'error' => 'Сумма для вывода не доступна'), 200);
         }
@@ -209,7 +206,17 @@ class FinanceController extends Controller
 
     public function postRequestsChangeStatus(Request $r)
     {
-        Finance::where('id', $r->id)->update(['status' => $r->s]);
+        $finance = Finance::find($r->id);
+        if ($finance != null) {
+
+            if ($finance->status == 2) {
+                return response(array('success' => "false" , 'error' => 'Понизить статус нельзя'), 200);
+            }
+
+            $finance->status = $r->s;
+            $finance->save();
+        }
+
         return response(array('success' => "true"), 200);
     }
 
@@ -243,7 +250,7 @@ class FinanceController extends Controller
 
             $finance = Finance::find($r_id);
             $finance->file_id = $file->id;
-            $finance->date_payed  = Carbon::now();
+            $finance->date_payed = Carbon::now();
             $finance->save();
 
             return Response::json(array('success' => "true",
