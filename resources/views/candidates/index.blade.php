@@ -406,7 +406,7 @@
                 cancelButtonText: 'Нет, отмена!',
                 customClass: {
                     confirmButton: "btn btn-primary",
-                    cancelButton: 'btn btn-danger'
+                    cancelButton: 'btn btn-secondary'
                 }
             }).then((result) => {
                 /* Read more about isConfirmed, isDenied below */
@@ -428,6 +428,11 @@
 
             if (changeActivation == 3) {
                 reason_reject = prompt('Причина отказа?');
+                if(reason_reject == ''){
+                    toastr.error('Укажите причину');
+                    oTable.draw();
+                    return '';
+                }
             }
 
             $.get('{{url('/')}}/candidate/set_status?r=' + reason_reject + '&s=' + changeActivation + '&id=' + id, function (res) {

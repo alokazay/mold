@@ -30,7 +30,7 @@ return new class extends Migration
             $table->float('count_hours')->nullable();
             $table->integer('doc_id')->nullable();
             $table->integer('housing_cost')->nullable();
-            $table->integer('housing_people')->nullable();
+            $table->string('housing_people')->nullable();
             $table->string('housing_description')->nullable();
             $table->integer('recruting_cost')->nullable();
             $table->timestamps();
