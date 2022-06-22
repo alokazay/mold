@@ -190,19 +190,16 @@ class CandidateController extends Controller
         $candidate = Candidate::find($r->id);
         if ($candidate->active == 10) {
             if (!Auth::user()->isAdmin()) {
-                return response(array('success' => "true", 'error' => 'Статус менять больше нельщя'), 200);
+                return response(array('success' => "true", 'error' => 'Статус менять больше нельзя'), 200);
             }
         }
+        if ($r->s == 10) {
+            return response(array('success' => "true", 'error' => 'Статус ставить нельзя, єто авто статус'), 200);
+        }
+
         if ($candidate != null) {
 
-            if ($r->s == 10 && $candidate->is_payed != 1) {
-                $user = User::find($candidate->user_id);
-                $user->balance = $user->balance + $candidate->cost_pay;
-                $user->save();
 
-                $candidate->is_payed = 1;
-                $candidate->save();
-            }
 
             $history = new History_candidate();
             $history->preview_value = $candidate->active;
@@ -290,11 +287,30 @@ class CandidateController extends Controller
             return response(array('success' => "false", 'error' => $error), 200);
         }
 
+
+        $diff_year = Carbon::now()->diffInYears(Carbon::createFromFormat('d.m.Y', $r->dateOfBirth));
+        if ($diff_year < 18) {
+            return response(array('success' => "false", 'error' => 'Возраст менее 18'), 200);
+        }
+
+
         $candidate = Candidate::find($r->id);
         if ($candidate == null) {
             $candidate = new Candidate();
             $candidate->user_id = Auth::user()->id;
             $candidate->active = 1;
+        } else {
+
+            if (Candidate::where('id', $candidate->id)
+                    ->where('phone', $r->phone)->count() > 0) {
+                return response(array('success' => "false", 'error' => 'Телефон уже занят'), 200);
+            }
+            if (Candidate::where('id', $candidate->id)
+                    ->where('inn', $r->inn)->count() > 0) {
+                return response(array('success' => "false", 'error' => 'Телефон уже занят'), 200);
+            }
+
+
         }
         if (Auth::user()->isFreelancer()) {
             $candidate->recruiter_id = Auth::user()->recruter_id;

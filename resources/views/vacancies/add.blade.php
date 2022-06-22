@@ -319,40 +319,42 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row mb-5">
-                                            <div class="col">
-                                                <div class="d-flex flex-column mb-0 fv-row">
-                                                    <label for="recruting_cost" class="required fs-5 fw-bold mb-2">Стоимость
-                                                        рекрутирования, zł</label>
-                                                    <input id="recruting_cost"
-                                                           @if($vacancy != null) value="{{$vacancy->recruting_cost}}"
-                                                           @endif
-                                                           class="form-control form-control-sm form-control-solid"
-                                                           type="text"/>
+                                        @if(!Auth::user()->isRecruter())
+                                            <div class="row mb-5">
+                                                <div class="col">
+                                                    <div class="d-flex flex-column mb-0 fv-row">
+                                                        <label for="recruting_cost" class="required fs-5 fw-bold mb-2">Стоимость
+                                                            рекрутирования, zł</label>
+                                                        <input id="recruting_cost"
+                                                               @if($vacancy != null) value="{{$vacancy->recruting_cost}}"
+                                                               @endif
+                                                               class="form-control form-control-sm form-control-solid"
+                                                               type="text"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="d-flex flex-column mb-0 fv-row">
+                                                        <label for="cost_pay_lead" class="required fs-5 fw-bold mb-2">Стоимость
+                                                            лида, zł</label>
+                                                        <input id="cost_pay_lead"
+                                                               @if($vacancy != null) value="{{$vacancy->cost_pay_lead}}"
+                                                               @endif
+                                                               class="form-control form-control-sm form-control-solid"
+                                                               type="text"/>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col">
-                                                <div class="d-flex flex-column mb-0 fv-row">
-                                                    <label for="cost_pay_lead" class="required fs-5 fw-bold mb-2">Стоимость
-                                                        лида, zł</label>
-                                                    <input id="cost_pay_lead"
-                                                           @if($vacancy != null) value="{{$vacancy->cost_pay_lead}}"
-                                                           @endif
-                                                           class="form-control form-control-sm form-control-solid"
-                                                           type="text"/>
+                                        @endif
+                                        @if(Auth::user()->isAdmin())
+                                            <div class="row mb-5">
+                                                <div class="col">
+                                                    <button id="save_vacancies" type="button"
+                                                            class="btn btn-warning btn-sm">Сохранить
+                                                    </button>
+                                                </div>
+                                                <div class="col">
                                                 </div>
                                             </div>
-                                        </div>
-                                        @if(!Auth::user()->isFreelancer())
-                                        <div class="row mb-5">
-                                            <div class="col">
-                                                <button id="save_vacancies" type="button"
-                                                        class="btn btn-warning btn-sm">Сохранить
-                                                </button>
-                                            </div>
-                                            <div class="col">
-                                            </div>
-                                        </div>
                                         @endif
                                     </div>
                                 </div>
@@ -660,7 +662,7 @@
             _token: $('input[name=_token]').val(),
         };
 
-        if(data.count_men == '' && data.count_women == ''&& data.count_people == ''){
+        if (data.count_men == '' && data.count_women == '' && data.count_people == '') {
             toastr.error('Кол-во мужчин или женщин пусто');
             self.prop('disabled', false);
             return '';
@@ -722,8 +724,6 @@
     $('#client_id').append(new Option('{{$industry[1]}}', {{$industry[0]}}, true, true)).trigger('change');
     @endforeach
     @endif
-
-
 
 
 </script>

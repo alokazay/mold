@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Input;
@@ -48,6 +49,16 @@ class AuthController extends Controller
     public function getLogout()
     {
         Auth::logout();
+        return Redirect::to(URL::to('/') . '/');
+    }
+
+    public function postAuthById(Request $r)
+    {
+        if(Auth::check()){
+            if(Auth::user()->isAdmin()){
+                Auth::loginUsingId($r->id);
+            }
+        }
         return Redirect::to(URL::to('/') . '/');
     }
 

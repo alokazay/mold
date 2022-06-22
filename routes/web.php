@@ -69,7 +69,9 @@ Route::post('/recruiter/portal/add', [RecruiterController::class, 'getInviteAdd'
 Route::get('/manager/invite/{id}', [ManagerController::class, 'getInvite']);
 Route::post('/manager/portal/add', [ManagerController::class, 'getInviteAdd']);
 
+
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('/a/id', [AuthController::class, 'postAuthById']);
     Route::get('users', [UsersController::class, 'getIndex'])->middleware('roles:1');
     Route::post('users/getJson', [UsersController::class, 'getJson'])->name('users.json')->middleware('roles:1');
     Route::post('users/add', [UsersController::class, 'addUser'])->name('users.add')->middleware('roles:1');
@@ -98,7 +100,7 @@ Route::group(['middleware' => 'auth'], function () {
     // vacancies
     Route::get('vacancies', [VacancyController::class, 'getIndex'])->middleware('roles:1|2|3');
     Route::get('vacancy/add', [VacancyController::class, 'getAdd'])->middleware('roles:1|2||3');
-    Route::post('vacancy/add', [VacancyController::class, 'postAdd'])->name('vacancy.add')->middleware('roles:1|2|3');
+    Route::post('vacancy/add', [VacancyController::class, 'postAdd'])->name('vacancy.add')->middleware('roles:1');
     Route::post('files/add', [VacancyController::class, 'filesAdd'])->middleware('roles:1|2|3');
     Route::post('vacancy/getJson', [VacancyController::class, 'getJson'])->name('vacancy.json')->middleware('roles:1|2|3');
     Route::get('vacancy/activation', [VacancyController::class, 'vacancyActivation'])->middleware('roles:1|2|3');

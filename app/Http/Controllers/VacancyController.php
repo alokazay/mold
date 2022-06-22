@@ -151,7 +151,6 @@ class VacancyController extends Controller
             'housing_cost' => '«стоимость жилья»',
             'housing_description' => '«описание жилья»',
             'housing_people' => '«кол-во людей в комнате»',
-            'recruting_cost' => '«стоимость рекрутинга»',
             'industry_id' => '«отрасль»',
             'nationality_id' => '«национальность»',
             'work_place_id' => '«место работы»',
@@ -169,7 +168,6 @@ class VacancyController extends Controller
             'housing_cost' => 'required|numeric',
             'housing_people' => 'required',
             'housing_description' => 'required',
-            'recruting_cost' => 'required|numeric',
             'industry_id' => 'required',
             'nationality_id' => 'required',
             'work_place_id' => 'required',
@@ -198,11 +196,19 @@ class VacancyController extends Controller
         $vacancy->housing_cost = $r->housing_cost;
         $vacancy->housing_people = $r->housing_people;
         $vacancy->housing_description = $r->housing_description;
-        $vacancy->recruting_cost = $r->recruting_cost;
-        $vacancy->cost_pay_lead = $r->cost_pay_lead;
         $vacancy->user_id = Auth::user()->id;
         $vacancy->deadline_from = Carbon::createFromFormat('d.m.Y', $r->deadline_from);
         $vacancy->deadline_to = Carbon::createFromFormat('d.m.Y', $r->deadline_to);
+
+        if(!Auth::user()->isRecruter()){
+            $vacancy->recruting_cost = $r->recruting_cost;
+            $vacancy->cost_pay_lead = $r->cost_pay_lead;
+        } else {
+           if($vacancy->recruting_cost == '' ||  $vacancy->cost_pay_lead == ''){
+               return response(array('success' => "false", 'error' => 'Заполните стоимость'), 200);
+           }
+        }
+
         $vacancy->save();
 
 

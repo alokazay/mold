@@ -21,7 +21,20 @@ class CronController extends Controller
     {
         $d = Carbon::now()->subDays(10);
         $candidates = Candidate::where('active', 9)
-            ->where('date_start_work', '<=', $d)->update(array('active' => 10));
+            ->where('date_start_work', '<=', $d)->limit(50)->get();
+        foreach ($candidates as $candidate) {
+            $candidate->active = 10;
+            if ($candidate->is_payed != 1) {
+                $user = User::find($candidate->user_id);
+                $user->balance = $user->balance + $candidate->cost_pay;
+                $user->save();
+
+                $candidate->is_payed = 1;
+            }
+            $candidate->save();
+        }
+
+
     }
 
     public function setDeclineFreelance()

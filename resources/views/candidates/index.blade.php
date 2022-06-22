@@ -399,7 +399,7 @@
         if (changeActivation == 2 || changeActivation == 4 || changeActivation == 6 || changeActivation == 8) {
             Swal.fire({
                 html: `Сменить статус?`,
-                icon: "info",
+                icon: "question",
                 buttonsStyling: false,
                 showCancelButton: true,
                 confirmButtonText: "Да!",
@@ -428,21 +428,26 @@
 
             if (changeActivation == 3) {
                 reason_reject = prompt('Причина отказа?');
-                if(reason_reject == ''){
+                if(reason_reject === ''){
                     toastr.error('Укажите причину');
                     oTable.draw();
                     return '';
                 }
+
+
+            }
+            if(reason_reject !=  null){
+                $.get('{{url('/')}}/candidate/set_status?r=' + reason_reject + '&s=' + changeActivation + '&id=' + id, function (res) {
+                    if (res.error) {
+                        toastr.error(res.error);
+                    } else {
+                        toastr.success('Успешно');
+                    }
+                    oTable.draw();
+                });
             }
 
-            $.get('{{url('/')}}/candidate/set_status?r=' + reason_reject + '&s=' + changeActivation + '&id=' + id, function (res) {
-                if (res.error) {
-                    toastr.error(res.error);
-                } else {
-                    toastr.success('Успешно');
-                }
-                oTable.draw();
-            });
+
         }
 
 

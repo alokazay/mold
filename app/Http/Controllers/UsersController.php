@@ -118,11 +118,16 @@ class UsersController extends Controller
                             </select>';
             }
 
+            if(Auth::user()->isAdmin()){
+                $login = ' <a href="'.url('/').'/a/id?id=' . $u->id . '">войти</a>';
+            } else {
+                $login = '';
+            }
 
             $temp_arr = [
                 //  $checkbox,
                 '<a href="javascript:;" onclick="editUser(' . $u->id . ')">' . $u->id . '</a>',
-                $u->firstName,
+                $u->firstName .$login,
                 $u->lastName,
                 $u->getGroup(),
                 $u->phone,
