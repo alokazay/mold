@@ -54,6 +54,10 @@ class Candidate extends Model
     {
         return $this->hasMany(Candidate_arrival::class);
     }
+    public function Client()
+    {
+        return $this->belongsTo(Client::class);
+    }
 
     public function Transport()
     {

@@ -20,14 +20,15 @@ class CandidateController extends Controller
     public function getIndex()
     {
         $invited = Candidate::where('user_id', Auth::user()->id)->count();
-        $verif = Candidate::where('user_id', Auth::user()->id)->whereNotIn('active',[1,2])->count();
-        $work = Candidate::where('user_id', Auth::user()->id)->whereNotIn('active',[8,9,10])->count();
-        $cost_pay = Candidate::where('user_id', Auth::user()->id)->whereNotIn('active',[8,9,10])->sum('cost_pay');
+        $verif = Candidate::where('user_id', Auth::user()->id)->whereNotIn('active', [1, 2])->count();
+        $work = Candidate::where('user_id', Auth::user()->id)->whereNotIn('active', [8, 9, 10])->count();
+        $cost_pay = Candidate::where('user_id', Auth::user()->id)
+            ->whereNotIn('active', [8, 9, 10])->sum('cost_pay');
         return view('candidates.index')
-            ->with('cost_pay',$cost_pay)
-            ->with('work',$work)
-            ->with('verif',$verif)
-            ->with('invited',$invited);
+            ->with('cost_pay', $cost_pay)
+            ->with('work', $work)
+            ->with('verif', $verif)
+            ->with('invited', $invited);
     }
 
     public function getArrivals()
@@ -136,14 +137,14 @@ class CandidateController extends Controller
 
 
             $reason_reject = $u->reason_reject;
-            if($reason_reject != ''){
-                $reason_reject = '<br> '.$u->reason_reject;
+            if ($reason_reject != '') {
+                $reason_reject = '<br> ' . $u->reason_reject;
             }
             $select_active = '<select onchange="changeActivation(' . $u->id . ')"
                                     class="form-select form-select-sm form-select-solid changeActivation' . $u->id . '">
                                         <option value="">Статус</option>
                                              ' . $u->getStatusOptions() . '
-                            </select>'. $reason_reject;
+                            </select>' . $reason_reject;
 
 
             $Vacancy = '';
@@ -187,8 +188,8 @@ class CandidateController extends Controller
 
 
         $candidate = Candidate::find($r->id);
-        if($candidate->active == 10){
-            if(!Auth::user()->isAdmin()){
+        if ($candidate->active == 10) {
+            if (!Auth::user()->isAdmin()) {
                 return response(array('success' => "true", 'error' => 'Статус менять больше нельщя'), 200);
             }
         }
@@ -221,8 +222,8 @@ class CandidateController extends Controller
     public function getAdd(Request $r)
     {
 
-        if(Auth::user()->isFreelancer()){
-            if (Auth::user()->fl_status != 2){
+        if (Auth::user()->isFreelancer()) {
+            if (Auth::user()->fl_status != 2) {
                 return response(array('success' => "false"), 200);
             }
         }
@@ -240,6 +241,7 @@ class CandidateController extends Controller
                 ->with('Logist_place_arrive')
                 ->with('Real_status_work')
                 ->with('Transport')
+                ->with('Client')
                 ->first();
         } else {
             $canddaite = null;
@@ -265,8 +267,8 @@ class CandidateController extends Controller
 
     public function postAdd(Request $r)
     {
-        if(Auth::user()->isFreelancer()){
-            if (Auth::user()->fl_status != 2){
+        if (Auth::user()->isFreelancer()) {
+            if (Auth::user()->fl_status != 2) {
                 return response(array('success' => "false"), 200);
             }
         }
@@ -336,9 +338,7 @@ class CandidateController extends Controller
         if ($r->comment != '' && $r->comment != 'undefined') {
             $candidate->comment = $r->comment;
         }
-        if ($r->cost_pay != '' && $r->cost_pay != 'undefined') {
-            $candidate->cost_pay = $r->cost_pay;
-        }
+
         // logist
         if ($r->logist_date_arrive != '' && $r->logist_date_arrive != 'undefined') {
             $candidate->logist_date_arrive = Carbon::createFromFormat('d.m.Y H:i', $r->logist_date_arrive);
@@ -352,11 +352,24 @@ class CandidateController extends Controller
         if ($r->real_vacancy_id != '' && $r->real_vacancy_id != 'undefined') {
             $candidate->real_vacancy_id = $r->real_vacancy_id;
         }
+        if ($r->client_id != '' && $r->client_id != 'undefined') {
+            $candidate->client_id = $r->client_id;
+        }
         if ($r->real_status_work_id != '' && $r->real_status_work_id != 'undefined') {
             $candidate->real_status_work_id = $r->real_status_work_id;
         }
         // trudo
+
         $candidate->save();
+
+        // Фиксируем для кандидата текущую ставку
+        $candidate = Candidate::find($candidate->id);
+        if ($candidate->Vacancy != null) {
+            $candidate->cost_pay = $candidate->Vacancy->recruting_cost;
+            $candidate->cost_pay_lead = $candidate->Vacancy->cost_pay_lead;
+            $candidate->save();
+        }
+
         return Response::json(array('success' => "true", 200));
     }
 
@@ -477,7 +490,7 @@ class CandidateController extends Controller
 
 
         if ($status == '') {
-            $users = Candidate_arrival::whereIn('status', [0,1,2,3]);
+            $users = Candidate_arrival::whereIn('status', [0, 1, 2, 3]);
         } else {
             $users = Candidate_arrival::where('status', $status);
         }
@@ -606,7 +619,7 @@ class CandidateController extends Controller
             $users = Candidate_arrival::where('status', $status);
         }
 
-        if(Auth::user()->isLogist()){
+        if (Auth::user()->isLogist()) {
             $users = $users->whereIn('status', [0, 1, 3]);
         }
 
@@ -769,8 +782,8 @@ class CandidateController extends Controller
     public function postArrivalsActivation(Request $r)
     {
 
-        if(Auth::user()->isTrud()){
-            if($r->s == 1){
+        if (Auth::user()->isTrud()) {
+            if ($r->s == 1) {
                 return response(array('success' => "false", 'error' => 'У вас нет прав ставить статус в пути'), 200);
             }
         }

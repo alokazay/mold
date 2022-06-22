@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\C_file;
+use App\Models\Vacancy_client;
 use App\Models\Handbook;
 use App\Models\Handbook_vacancy;
 use App\Models\User;
@@ -33,7 +34,7 @@ class VacancyController extends Controller
             $h_v_industry = [];
             $h_v_nacionality = [];
             $h_v_city = [];
-            $Client = [];
+            $Clients = [];
             $Doc = [];
             $vacancy = Vacancy::where('id', $r->id)
                 ->with('h_v_industry')
@@ -42,7 +43,8 @@ class VacancyController extends Controller
                 ->with('h_v_nacionality.Handbooks')
                 ->with('h_v_city')
                 ->with('h_v_city.Handbooks')
-                ->with('Client')
+                ->with('Vacancy_client')
+                ->with('Vacancy_client.Client')
                 ->with('Doc')
                 ->first();
 
@@ -61,10 +63,13 @@ class VacancyController extends Controller
                     $h_v_city[] = [$industry->Handbooks->id, $industry->Handbooks->name];
                 }
             }
-
-            if ($vacancy->Client != null) {
-                $Client = [$vacancy->Client->id, $vacancy->Client->name];
+            foreach ($vacancy->Vacancy_client as $industry) {
+                if ($industry->Client != null) {
+                    $Clients[] = [$industry->Client->id, $industry->Client->name];
+                }
             }
+
+
             if ($vacancy->Doc != null) {
                 $Doc = [$vacancy->Doc->id, $vacancy->Doc->name];
             }
@@ -74,7 +79,7 @@ class VacancyController extends Controller
             $h_v_industry = null;
             $h_v_nacionality = null;
             $h_v_city = null;
-            $Client = null;
+            $Clients = null;
             $Doc = null;
 
         }
@@ -82,7 +87,7 @@ class VacancyController extends Controller
             ->with('h_v_city', $h_v_city)
             ->with('h_v_nacionality', $h_v_nacionality)
             ->with('h_v_industry', $h_v_industry)
-            ->with('Client', $Client)
+            ->with('Clients', $Clients)
             ->with('Doc', $Doc)
             ->with('vacancy', $vacancy);
     }
@@ -183,7 +188,6 @@ class VacancyController extends Controller
 
         $vacancy->title = $r->title;
         $vacancy->description = $r->description;
-        $vacancy->client_id = $r->client_id;
         $vacancy->count_men = $r->count_men;
         $vacancy->count_women = $r->count_women;
         $vacancy->count_people = $r->count_people;
@@ -195,10 +199,12 @@ class VacancyController extends Controller
         $vacancy->housing_people = $r->housing_people;
         $vacancy->housing_description = $r->housing_description;
         $vacancy->recruting_cost = $r->recruting_cost;
+        $vacancy->cost_pay_lead = $r->cost_pay_lead;
         $vacancy->user_id = Auth::user()->id;
         $vacancy->deadline_from = Carbon::createFromFormat('d.m.Y', $r->deadline_from);
         $vacancy->deadline_to = Carbon::createFromFormat('d.m.Y', $r->deadline_to);
         $vacancy->save();
+
 
         Handbook_vacancy::where('vacancy_id', $vacancy->id)->delete();
         $arrs = explode(',', $r->industry_id);
@@ -225,6 +231,16 @@ class VacancyController extends Controller
             $Hand->handbook_category_id = 3;
             $Hand->save();
         }
+
+        Vacancy_client::where('vacancy_id', $vacancy->id)->delete();
+        $arrs = explode(',', $r->client_id);
+        foreach ($arrs as $arr) {
+            $Hand = new Vacancy_client();
+            $Hand->vacancy_id = $vacancy->id;
+            $Hand->client_id = $arr;
+            $Hand->save();
+        }
+
 
         return Response::json(array('success' => "true", 200));
     }
@@ -371,7 +387,13 @@ class VacancyController extends Controller
                             </select>';
             }
 
-            $recruting_cost = '<input  onchange="changeCost(' . $u->id . ')" class="changeCost' . $u->id . '" value="' . $u->recruting_cost . '" style="border: none;" type="text">';
+            $recruting_cost = '<input  onchange="changeCost(' . $u->id . ')" class="w-55px changeCost' . $u->id . '" value="' . $u->recruting_cost . '" style="border: none;" type="text">';
+            $recruting_cost_pay_lead = '<input  onchange="changeCost_pay_lead(' . $u->id . ')" class="w-55px changeCost_pay_lead' . $u->id . '" value="' . $u->cost_pay_lead . '" style="border: none;" type="text">';
+            $recruting_housing_cost = '<input  onchange="change_housing_cost(' . $u->id . ')" class="w-45px change_housing_cost' . $u->id . '" value="' . $u->housing_cost . '" style="border: none;" type="text">';
+            $recruting_count_men = '<input  onchange="change_count_men(' . $u->id . ')" class="w-30px change_count_men' . $u->id . '" value="' . $u->count_men . '" style="border: none;" type="text">';
+            $recruting_count_women = '<input  onchange="change_count_women(' . $u->id . ')" class="w-30px change_count_women' . $u->id . '" value="' . $u->count_women . '" style="border: none;" type="text">';
+            $recruting_count_people = '<input  onchange="change_count_people(' . $u->id . ')" class="w-30px change_count_people' . $u->id . '" value="' . $u->count_people . '" style="border: none;" type="text">';
+            $recruting_salary = '<input  onchange="change_salary(' . $u->id . ')" class="w-45px change_salary' . $u->id . '" value="' . $u->salary . '" style="border: none;" type="text">';
             if (Auth::user()->isRecruter() || Auth::user()->isFreelancer()) {
 
 
@@ -405,7 +427,7 @@ class VacancyController extends Controller
 
                 // Только фрилансер
                 $temp_arr = [
-                    $u->id,
+                    '<a href="vacancy/add?id=' . $u->id . '">' . $u->id . '</a>',
                     $u->title,
                     $h_v_industry,
                     Carbon::parse($u->deadline_to)->format('d.m.Y'),
@@ -415,7 +437,6 @@ class VacancyController extends Controller
                     $u->salary,
                     $u->salary_description,
                     $u->housing_cost,
-                    $recruting_cost,
                     $add_link
                 ];
             } else {
@@ -424,12 +445,13 @@ class VacancyController extends Controller
                     $u->title,
                     $h_v_industry,
                     Carbon::parse($u->deadline_to)->format('d.m.Y'),
-                    $u->count_men,
-                    $u->count_women,
-                    $u->count_people,
-                    $u->salary,
+                    $recruting_count_men,
+                    $recruting_count_women,
+                    $recruting_count_people,
+                    $recruting_salary,
                     $u->salary_description,
-                    $u->housing_cost,
+                    $recruting_housing_cost,
+                    $recruting_cost_pay_lead,
                     $recruting_cost,
                     $select_active
                 ];
@@ -455,6 +477,42 @@ class VacancyController extends Controller
     public function vacancyChangecost(Request $r)
     {
         Vacancy::where('id', $r->id)->update(['recruting_cost' => $r->s]);
+        return response(array('success' => "true"), 200);
+    }
+
+    public function vacancyChangecostpaylead(Request $r)
+    {
+        Vacancy::where('id', $r->id)->update(['cost_pay_lead' => $r->s]);
+        return response(array('success' => "true"), 200);
+    }
+
+    public function vacancyChangehousingcost(Request $r)
+    {
+        Vacancy::where('id', $r->id)->update(['housing_cost' => $r->s]);
+        return response(array('success' => "true"), 200);
+    }
+
+    public function vacancySalary(Request $r)
+    {
+        Vacancy::where('id', $r->id)->update(['salary' => $r->s]);
+        return response(array('success' => "true"), 200);
+    }
+
+    public function vacancyCountpeople(Request $r)
+    {
+        Vacancy::where('id', $r->id)->update(['count_people' => $r->s]);
+        return response(array('success' => "true"), 200);
+    }
+
+    public function vacancyCountwomen(Request $r)
+    {
+        Vacancy::where('id', $r->id)->update(['count_women' => $r->s]);
+        return response(array('success' => "true"), 200);
+    }
+
+    public function vacancyCountmen(Request $r)
+    {
+        Vacancy::where('id', $r->id)->update(['count_men' => $r->s]);
         return response(array('success' => "true"), 200);
     }
 

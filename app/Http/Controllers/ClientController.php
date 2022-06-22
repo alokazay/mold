@@ -55,7 +55,7 @@ class ClientController extends Controller
 
 
         if ($status == '') {
-            $users = Client::whereIn('active', [1, 2]);
+            $users = Client::whereIn('active', [1]);
         } else {
             $users = Client::where('active', $status);
         }

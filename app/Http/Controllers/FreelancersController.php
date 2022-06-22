@@ -60,9 +60,7 @@ class FreelancersController extends Controller
         $users = User::where('activation', 1);
         $users = $users->where('group_id', 3);
 
-        if ($fl_status == '') {
-            $users = $users->whereIn('fl_status', [1, 2, 3, 4]);
-        } else {
+        if ($fl_status != '') {
             $users = $users->where('fl_status', $fl_status);
         }
 
@@ -141,12 +139,17 @@ class FreelancersController extends Controller
             if ($u->Recruter != null) {
                 $Recruter = $u->Recruter->firstName . ' ' . $u->Recruter->lastName;
             }
+            $Manager = '';
+            if ($u->Manager != null) {
+                $Manager = $u->Manager->firstName . ' ' . $u->Manager->lastName;
+            }
 
             $temp_arr = [
-                //  $checkbox,
+
                 '<a href="javascript:;" onclick="editUser(' . $u->id . ')">' . $u->id . '</a>',
                 $u->firstName,
                 $u->lastName,
+                $Manager,
                 $Recruter,
                 $u->phone,
                 $u->email,

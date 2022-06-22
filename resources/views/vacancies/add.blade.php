@@ -157,7 +157,7 @@
                                         <div class="row mb-5">
                                             <div class="col">
                                                 <label for="client_id" class="required form-label">Клиент</label>
-                                                <select id="client_id"
+                                                <select id="client_id" multiple="multiple"
                                                         class="form-select form-select-sm form-select-solid"></select>
                                             </div>
                                             <div class="col">
@@ -332,8 +332,18 @@
                                                 </div>
                                             </div>
                                             <div class="col">
+                                                <div class="d-flex flex-column mb-0 fv-row">
+                                                    <label for="cost_pay_lead" class="required fs-5 fw-bold mb-2">Стоимость
+                                                        лида, zł</label>
+                                                    <input id="cost_pay_lead"
+                                                           @if($vacancy != null) value="{{$vacancy->cost_pay_lead}}"
+                                                           @endif
+                                                           class="form-control form-control-sm form-control-solid"
+                                                           type="text"/>
+                                                </div>
                                             </div>
                                         </div>
+                                        @if(!Auth::user()->isFreelancer())
                                         <div class="row mb-5">
                                             <div class="col">
                                                 <button id="save_vacancies" type="button"
@@ -343,6 +353,7 @@
                                             <div class="col">
                                             </div>
                                         </div>
+                                        @endif
                                     </div>
                                 </div>
 
@@ -505,7 +516,7 @@
             data: function (params) {
                 return {
                     s: '{{request('s')}}',
-                    client_id: $('#client_id').val(),
+                    client_id: $('#client_id').val().join(','),
                     f_search: params.term,
                 };
             },
@@ -532,7 +543,7 @@
             data: function (params) {
                 return {
                     s: '{{request('s')}}',
-                    client_id: $('#client_id').val(),
+                    client_id: $('#client_id').val().join(','),
                     f_search: params.term,
                 };
             },
@@ -559,7 +570,7 @@
             data: function (params) {
                 return {
                     s: '{{request('s')}}',
-                    client_id: $('#client_id').val(),
+                    client_id: $('#client_id').val().join(','),
                     f_search: params.term,
                 };
             },
@@ -641,7 +652,8 @@
             housing_people: $('#housing_people').val(),
             housing_description: housing_description.root.innerHTML,
             recruting_cost: $('#recruting_cost').val(),
-            client_id: $('#client_id').val(),
+            cost_pay_lead: $('#cost_pay_lead').val(),
+            client_id: $('#client_id').val().join(','),
             industry_id: $('#industry_id').val().join(','),
             nationality_id: $('#nationality_id').val().join(','),
             work_place_id: $('#work_place_id').val().join(','),
@@ -681,9 +693,6 @@
     $('#id').val('{{request('id')}}');
     @endif
 
-    @if($Client != null)
-    $('#client_id').append(new Option('{{$Client[1]}}', {{$Client[0]}}, true, true)).trigger('change');
-    @endif
 
     @if($Doc != null)
     $('#doc_id').append(new Option('{{$Doc[1]}}', {{$Doc[0]}}, true, true)).trigger('change');
@@ -707,6 +716,13 @@
     $('#work_place_id').append(new Option('{{$industry[1]}}', {{$industry[0]}}, true, true)).trigger('change');
     @endforeach
     @endif
+
+    @if($Clients != null)
+    @foreach($Clients as $industry)
+    $('#client_id').append(new Option('{{$industry[1]}}', {{$industry[0]}}, true, true)).trigger('change');
+    @endforeach
+    @endif
+
 
 
 

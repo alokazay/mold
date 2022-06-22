@@ -19,7 +19,6 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->integer('activation')->nullable();
             $table->integer('user_id')->nullable();
-            $table->integer('client_id')->nullable();
             $table->timestamp('deadline_from')->nullable();
             $table->timestamp('deadline_to')->nullable();
             $table->integer('count_men')->nullable();
@@ -33,6 +32,7 @@ return new class extends Migration
             $table->string('housing_people')->nullable();
             $table->string('housing_description')->nullable();
             $table->integer('recruting_cost')->nullable();
+            $table->integer('cost_pay_lead')->nullable();
             $table->timestamps();
         });
     }

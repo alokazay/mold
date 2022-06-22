@@ -222,15 +222,7 @@
                                                             class="form-select  form-select-sm form-select-solid"> </select>
                                                 </div>
                                             </div>
-                                            <div class="col-6">
-                                                <div class="d-flex flex-column mb-0 fv-row">
-                                                    <label class=" fs-5 fw-bold mb-2">Вознаграждение</label>
-                                                    <input
-                                                        @if($canddaite != null) value="{{$canddaite->cost_pay}}" @endif
-                                                        id="cost_pay"
-                                                            class="form-control form-control-sm form-control-solid" />
-                                                </div>
-                                            </div>
+
                                         </div>
                                         <div class="row mb-5">
                                             <div class="col-6">
@@ -276,6 +268,9 @@
                                                            type="text"/>
                                                 </div>
                                             </div>
+                                        </div>
+
+                                        <div class="row mb-5">
                                             <div class="col-6">
                                                 <div class="d-flex flex-column mb-0 fv-row">
                                                     <label class="fs-5 fw-bold mb-2">Вакансия</label>
@@ -284,7 +279,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="row mb-5">
                                             <div class="col">
                                                 <div class="d-flex flex-column mb-0 fv-row">
@@ -442,6 +436,13 @@
                                                     <select id="real_status_work_id"
                                                             class="form-select  form-select-sm form-select-solid"> </select>
 
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="d-flex flex-column mb-0 fv-row">
+                                                    <label class="fs-5 fw-bold mb-2">Клиент</label>
+                                                    <select id="client_id"
+                                                            class="form-select  form-select-sm form-select-solid"> </select>
                                                 </div>
                                             </div>
                                         @endif
@@ -688,10 +689,10 @@
             citizenship_id: $('#citizenship_id').val(),
             nacionality_id: $('#nacionality_id').val(),
             country_id: $('#country_id').val(),
-            cost_pay: $('#cost_pay').val(),
             date_arrive: $('#date_arrive').val(),
             type_doc_id: $('#type_doc_id').val(),
             transport_id: $('#transport_id').val(),
+            client_id: $('#client_id').val(),
             inn: $('#inn').val(),
             comment: $('#comment').val(),
             logist_date_arrive: $('#logist_date_arrive').val(),
@@ -936,6 +937,32 @@
             }
         },
     });
+    $('#client_id').select2({
+        placeholder: 'Клиент',
+        ajax: {
+            url: "{{url('/')}}/search/candidate/client",
+            dataType: 'json',
+            // delay: 250,
+            data: function (params) {
+                return {
+                    f_search: params.term,
+                    vacancy_id: $('#real_vacancy_id').val(),
+                };
+            },
+            processResults: function (data) {
+                var results = [];
+                $.each(data, function (index, item) {
+                    results.push({
+                        id: item.id,
+                        text: item.value
+                    });
+                });
+                return {
+                    results: results
+                };
+            }
+        },
+    });
     $('#real_status_work_id').select2({
         placeholder: 'трудоустройство',
         ajax: {
@@ -1086,6 +1113,10 @@
     @endif
     @if($canddaite != null && $canddaite->Transport != null)
     $('#transport_id').append(new Option('{{ $canddaite->Transport->name }}', {{ $canddaite->Transport->id }}, true, true)).trigger('change');
+    @endif
+
+    @if($canddaite != null && $canddaite->Client != null)
+    $('#client_id').append(new Option('{{ $canddaite->Client->name }}', {{ $canddaite->Client->id }}, true, true)).trigger('change');
     @endif
 
     @if(Auth::user()->isAdmin() || Auth::user()->isLogist() )

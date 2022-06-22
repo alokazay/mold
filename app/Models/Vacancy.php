@@ -19,11 +19,12 @@ class Vacancy extends Model
         return $this->hasMany(Handbook_vacancy::class)->where('handbook_category_id', 2);
     }
 
-    public function Client (){
-        return $this->belongsTo(Client::class);
+    public function Vacancy_client (){
+        return $this->hasMany(Vacancy_client::class);
     }
     public function Doc (){
         return $this->belongsTo(Handbook::class)->where('handbook_category_id', 4);
     }
+
 
 }

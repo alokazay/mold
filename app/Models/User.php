@@ -172,6 +172,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(User::class, 'recruter_id');
     }
+    public function Manager()
+    {
+        return $this->belongsTo(User::class, 'manager_id');
+    }
 
     public function Candidates()
     {

@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\User;
+use App\Models\Candidate_client;
 use App\Models\Handbook_category;
 use App\Models\Handbook_client;
 use App\Models\Handbook;
 use App\Models\Vacancy;
+use App\Models\Vacancy_client;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,7 +50,7 @@ class SearchController extends Controller
     {
         $search = request('f_search');
 
-        $ids = Handbook_client::where('client_id', request('client_id'))->pluck('handbook_id');
+        $ids = Handbook_client::whereIn('client_id', explode(',', request('client_id')))->pluck('handbook_id');
         $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
             ->where('active', 1)
             ->where('handbook_category_id', 2)
@@ -77,7 +79,7 @@ class SearchController extends Controller
     public function getAjaxVacancyWorkplace()
     {
         $search = request('f_search');
-        $ids = Handbook_client::where('client_id', request('client_id'))->pluck('handbook_id');
+        $ids = Handbook_client::whereIn('client_id', explode(',', request('client_id')))->pluck('handbook_id');
 
         $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
             ->where('active', 1)
@@ -107,7 +109,7 @@ class SearchController extends Controller
     public function getAjaxVacancyIndustry()
     {
         $search = request('f_search');
-        $ids = Handbook_client::where('client_id', request('client_id'))->pluck('handbook_id');
+        $ids = Handbook_client::whereIn('client_id', explode(',', request('client_id')))->pluck('handbook_id');
 
         $Course = Handbook::where('name', 'LIKE', '%' . $search . '%')
             ->where('active', 1)
@@ -255,7 +257,7 @@ class SearchController extends Controller
 
         $Course = Vacancy::where(function ($query) use ($search) {
             $query->where('title', 'LIKE', '%' . $search . '%');
-        })->take(10)
+        })->where('activation', 1)->take(10)
             ->get();
 
         $p_temp = [];
@@ -526,7 +528,7 @@ class SearchController extends Controller
         if (count($Course)) {
             foreach ($Course as $c) {
                 $p_temp_arr = [];
-                $p_temp_arr['value'] = $c->firstName.' '.$c->lastName;
+                $p_temp_arr['value'] = $c->firstName . ' ' . $c->lastName;
                 $p_temp_arr['id'] = $c->id;
                 $p_temp[] = $p_temp_arr;
             }
@@ -538,6 +540,36 @@ class SearchController extends Controller
             return response(array('success' => "false"), 200);
         }
     }
+
+    public function getAjaxCandidateClient()
+    {
+        $search = request('f_search');
+
+        $ids = Vacancy_client::where('vacancy_id', request('vacancy_id'))->pluck('id');
+        $Course = Client::where(function ($query) use ($search) {
+            $query->where('name', 'LIKE', '%' . $search . '%');
+        })->whereIn('id', $ids)
+            ->take(10)
+            ->get();
+
+        $p_temp = [];
+
+        if (count($Course)) {
+            foreach ($Course as $c) {
+                $p_temp_arr = [];
+                $p_temp_arr['value'] = $c->name;
+                $p_temp_arr['id'] = $c->id;
+                $p_temp[] = $p_temp_arr;
+            }
+        }
+
+        if (count($Course)) {
+            return response($p_temp, 200);
+        } else {
+            return response(array('success' => "false"), 200);
+        }
+    }
+
     public function getAjaxCandidateFreelacnsers()
     {
         $search = request('f_search');
@@ -556,7 +588,7 @@ class SearchController extends Controller
         if (count($Course)) {
             foreach ($Course as $c) {
                 $p_temp_arr = [];
-                $p_temp_arr['value'] = $c->firstName.' '.$c->lastName;
+                $p_temp_arr['value'] = $c->firstName . ' ' . $c->lastName;
                 $p_temp_arr['id'] = $c->id;
                 $p_temp[] = $p_temp_arr;
             }

@@ -168,18 +168,12 @@
                                         <thead>
                                         <!--begin::Table row-->
                                         <tr class="text-start text-muted fw-bolder fs-7 gs-0">
-                                            {{--  <th class="w-10px pe-2 sorting_disabled" style="width: 29.25px;">
-                                                  <div
-                                                      class="form-check form-check-sm form-check-custom form-check-solid me-3">
-                                                      <input class="form-check-input" type="checkbox"
-                                                             value="1">
-                                                  </div>
-                                              </th>--}}
                                             <th class="max-w-55px sorting_disabled">Id</th>
                                             <th class="max-w-85px sorting_disabled">Имя</th>
                                             <th class="max-w-85px sorting_disabled">Фамилия</th>
-                                            <th class="w-65px sorting_disabled">Приглашен</th>
-                                            <th class="max-w-45px sorting_disabled">Телефон</th>
+                                            <th class="w-65px sorting_disabled">Менджер</th>
+                                            <th class="w-65px sorting_disabled">Рекрутер</th>
+                                             <th class="max-w-45px sorting_disabled">Телефон</th>
                                             <th class="max-w-65px sorting_disabled">Email</th>
                                             <th class="w-35px sorting_disabled">Скан</th>
                                             <th class="min-w-100px sorting_disabled">Статус</th>

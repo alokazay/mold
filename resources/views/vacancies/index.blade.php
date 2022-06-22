@@ -214,7 +214,6 @@
                                                 <th class="sorting_disabled">Ставка</th>
                                                 <th class="sorting_disabled">Описание</th>
                                                 <th class="sorting_disabled">Жилье</th>
-                                                <th class="sorting_disabled">Стоимость рекрутирования</th>
                                                 <th class="sorting_disabled">Добавить</th>
                                             @else
                                                 <th class="max-w-55px sorting_disabled">Id</th>
@@ -227,8 +226,9 @@
                                                 <th class="sorting_disabled">Ставка</th>
                                                 <th class="sorting_disabled">Описание</th>
                                                 <th class="sorting_disabled">Жилье</th>
-                                                <th class="sorting_disabled">Стоимость рекрутирования</th>
-                                                <th class="sorting_disabled">Статус</th>
+                                                <th class="sorting_disabled">Стоимость Лид</th>
+                                                <th class="sorting_disabled">Стоимость кандидат</th>
+                                                <th class="w-125px sorting_disabled">Статус</th>
                                             @endif
                                         </tr>
                                         <!--end::Table row-->
@@ -340,6 +340,71 @@
     function changeCost(id) {
         var changeCost = $('.changeCost' + id).val();
         $.get('{{url('/')}}/vacancy/changecost?s=' + changeCost + '&id=' + id, function (res) {
+            if (res.error) {
+                toastr.error(res.error);
+            } else {
+                toastr.success('Успешно');
+            }
+        });
+    }
+    function changeCost_pay_lead(id) {
+        var changeCost = $('.changeCost_pay_lead' + id).val();
+        $.get('{{url('/')}}/vacancy/change_сost_pay_lead?s=' + changeCost + '&id=' + id, function (res) {
+            if (res.error) {
+                toastr.error(res.error);
+            } else {
+                toastr.success('Успешно');
+            }
+        });
+    }
+
+    function change_housing_cost(id) {
+        var changeCost = $('.change_housing_cost' + id).val();
+        $.get('{{url('/')}}/vacancy/change_housing_cost?s=' + changeCost + '&id=' + id, function (res) {
+            if (res.error) {
+                toastr.error(res.error);
+            } else {
+                toastr.success('Успешно');
+            }
+        });
+    }
+
+    function change_salary(id) {
+        var changeCost = $('.change_salary' + id).val();
+        $.get('{{url('/')}}/vacancy/change_salary?s=' + changeCost + '&id=' + id, function (res) {
+            if (res.error) {
+                toastr.error(res.error);
+            } else {
+                toastr.success('Успешно');
+            }
+        });
+    }
+
+    function change_count_people(id) {
+        var changeCost = $('.change_count_people' + id).val();
+        $.get('{{url('/')}}/vacancy/count_people?s=' + changeCost + '&id=' + id, function (res) {
+            if (res.error) {
+                toastr.error(res.error);
+            } else {
+                toastr.success('Успешно');
+            }
+        });
+    }
+
+    function change_count_women(id) {
+        var changeCost = $('.change_count_women' + id).val();
+        $.get('{{url('/')}}/vacancy/count_women?s=' + changeCost + '&id=' + id, function (res) {
+            if (res.error) {
+                toastr.error(res.error);
+            } else {
+                toastr.success('Успешно');
+            }
+        });
+    }
+
+    function change_count_men(id) {
+        var changeCost = $('.change_count_men' + id).val();
+        $.get('{{url('/')}}/vacancy/count_men?s=' + changeCost + '&id=' + id, function (res) {
             if (res.error) {
                 toastr.error(res.error);
             } else {

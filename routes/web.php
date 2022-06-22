@@ -103,6 +103,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('vacancy/getJson', [VacancyController::class, 'getJson'])->name('vacancy.json')->middleware('roles:1|2|3');
     Route::get('vacancy/activation', [VacancyController::class, 'vacancyActivation'])->middleware('roles:1|2|3');
     Route::get('vacancy/changecost', [VacancyController::class, 'vacancyChangecost'])->middleware('roles:1|2|3');
+    Route::get('vacancy/change_сost_pay_lead', [VacancyController::class, 'vacancyChangecostpaylead'])->middleware('roles:1|2|3');
+    Route::get('vacancy/change_housing_cost', [VacancyController::class, 'vacancyChangehousingcost'])->middleware('roles:1|2|3');
+    Route::get('vacancy/change_salary', [VacancyController::class, 'vacancySalary'])->middleware('roles:1|2|3');
+    Route::get('vacancy/count_people', [VacancyController::class, 'vacancyCountpeople'])->middleware('roles:1|2|3');
+    Route::get('vacancy/count_women', [VacancyController::class, 'vacancyCountwomen'])->middleware('roles:1|2|3');
+    Route::get('vacancy/count_men', [VacancyController::class, 'vacancyCountmen'])->middleware('roles:1|2|3');
 
     // candidates
     Route::get('candidates', [CandidateController::class, 'getIndex'])->middleware('roles:1|2|3|4|5|6');
@@ -165,6 +171,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('search/candidate/nacionality', [SearchController::class, 'getAjaxClientNacionality'])->middleware('roles:1|2|3|4|5|6');
     Route::get('search/candidate/vacancy', [SearchController::class, 'getAjaxCandidateVacancy'])->middleware('roles:1|2|3|4|5|6');
     Route::get('search/candidate/recruter', [SearchController::class, 'getAjaxCandidateRecruter'])->middleware('roles:1|2|3|4|5|6');
+    Route::get('search/candidate/client', [SearchController::class, 'getAjaxCandidateClient'])->middleware('roles:1|2|3|4|5|6');
 
     Route::get('search/requests/freelacnsers', [SearchController::class, 'getAjaxCandidateFreelacnsers'])->middleware('roles:1|7');
 });
