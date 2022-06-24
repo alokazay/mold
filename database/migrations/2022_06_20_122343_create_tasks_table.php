@@ -15,6 +15,12 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
+            $table->integer('to_user_id');
+            $table->integer('autor_id');
+            $table->integer('type');
+            $table->integer('candidate_id');
+            $table->integer('status');
+            $table->text('title');
             $table->timestamps();
         });
     }

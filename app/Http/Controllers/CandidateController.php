@@ -6,6 +6,7 @@ use App\Models\C_file;
 use App\Models\Candidate;
 use App\Models\Candidate_arrival;
 use App\Models\History_candidate;
+use App\Models\Task;
 use App\Models\User;
 use App\Models\Vacancy;
 use Carbon\Carbon;
@@ -178,7 +179,7 @@ class CandidateController extends Controller
 
         return Response::json(array('data' => $data,
             "draw" => $draw,
-            "recordsTotal" => User::count(),
+            "recordsTotal" => Candidate::count(),
             "recordsFiltered" => count($users),
         ), 200);
     }
@@ -197,10 +198,16 @@ class CandidateController extends Controller
             return response(array('success' => "true", 'error' => 'Статус ставить нельзя, єто авто статус'), 200);
         }
 
+        if ($candidate->active == 4) {
+            if ($r->s == 6) {
+                if(Candidate_arrival::where('candidate_id', $candidate->id)->count() == 0){
+                    return response(array('success' => "true", 'error' => 'Добавте хоть один приезд'), 200);
+                }
+            }
+        }
+
+
         if ($candidate != null) {
-
-
-
             $history = new History_candidate();
             $history->preview_value = $candidate->active;
             $history->new_value = $r->s;
@@ -211,6 +218,77 @@ class CandidateController extends Controller
             $candidate->active = $r->s;
             $candidate->reason_reject = $r->r;
             $candidate->save();
+
+            if (Auth::user()->isFreelancer() && $candidate->active == 3) {
+                $task = new Task();
+                $task->title = 'Связаться с кандидатом';
+                $task->autor_id = Auth::user()->id;
+                $task->to_user_id = Auth::user()->id;
+                $task->status = 1;
+                $task->type = 2;
+                $task->candidate_id = $candidate->id;
+                $task->save();
+            }
+            if (Auth::user()->isRecruter() && $candidate->active == 2) {
+                $task = new Task();
+                $task->title = 'Обработать лид';
+                $task->autor_id = Auth::user()->id;
+                $task->to_user_id = Auth::user()->id;
+                $task->status = 1;
+                $task->type = 3;
+                $task->candidate_id = $candidate->id;
+                $task->save();
+            }
+            if (Auth::user()->isRecruter() && $candidate->active == 3) {
+                $task = new Task();
+                $task->title = 'Связаться с кандидатом';
+                $task->autor_id = Auth::user()->id;
+                $task->to_user_id = Auth::user()->id;
+                $task->status = 1;
+                $task->type = 3;
+                $task->candidate_id = $candidate->id;
+                $task->save();
+            }
+            if ($candidate->active == 4) {
+                $logists = User::where('group_id', 4)->where('activation', 1)->get();
+                foreach ($logists as $logist) {
+                    $task = new Task();
+                    $task->title = 'Утвердить дату приезда';
+                    $task->autor_id = Auth::user()->id;
+                    $task->to_user_id = $logist->id;
+                    $task->status = 1;
+                    $task->type = 4;
+                    $task->candidate_id = $candidate->id;
+                    $task->save();
+                }
+            }
+            if ($candidate->active == 4) {
+                $logists = User::where('group_id', 4)->where('activation', 1)->get();
+                foreach ($logists as $logist) {
+                    $task = new Task();
+                    $task->title = 'Встертить кандидата';
+                    $task->autor_id = Auth::user()->id;
+                    $task->to_user_id = $logist->id;
+                    $task->status = 1;
+                    $task->type = 5;
+                    $task->candidate_id = $candidate->id;
+                    $task->save();
+                }
+            }
+            if ($candidate->active == 4) {
+                $logists = User::where('group_id', 5)->where('activation', 1)->get();
+                foreach ($logists as $logist) {
+                    $task = new Task();
+                    $task->title = 'Указать первый рабочий день';
+                    $task->autor_id = Auth::user()->id;
+                    $task->to_user_id = $logist->id;
+                    $task->status = 1;
+                    $task->type = 6;
+                    $task->candidate_id = $candidate->id;
+                    $task->save();
+                }
+            }
+
         }
 
         return response(array('success' => "true"), 200);
@@ -296,11 +374,12 @@ class CandidateController extends Controller
 
         $candidate = Candidate::find($r->id);
         if ($candidate == null) {
+            $is_new = true;
             $candidate = new Candidate();
             $candidate->user_id = Auth::user()->id;
             $candidate->active = 1;
         } else {
-
+            $is_new = false;
             if (Candidate::where('id', $candidate->id)
                     ->where('phone', $r->phone)->count() > 0) {
                 return response(array('success' => "false", 'error' => 'Телефон уже занят'), 200);
@@ -385,6 +464,21 @@ class CandidateController extends Controller
             $candidate->cost_pay_lead = $candidate->Vacancy->cost_pay_lead;
             $candidate->save();
         }
+
+        // Авто задачи
+        if ($is_new) {
+            if (Auth::user()->isFreelancer()) {
+                $task = new Task();
+                $task->title = 'Утвердить дату приезда';
+                $task->autor_id = Auth::user()->id;
+                $task->to_user_id = Auth::user()->id;
+                $task->status = 1;
+                $task->type = 1;
+                $task->candidate_id = $candidate->id;
+                $task->save();
+            }
+        }
+
 
         return Response::json(array('success' => "true", 200));
     }
@@ -746,7 +840,7 @@ class CandidateController extends Controller
 
         return Response::json(array('data' => $data,
             "draw" => $draw,
-            "recordsTotal" => User::count(),
+            "recordsTotal" => Candidate_arrival::count(),
             "recordsFiltered" => count($users),
         ), 200);
     }

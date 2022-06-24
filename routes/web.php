@@ -16,6 +16,7 @@ use App\Http\Controllers\RecruiterController;
 use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\AccountSettingController;
 use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\TaskController;
 
 /*
 |--------------------------------------------------------------------------
@@ -150,6 +151,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/accountant/firm/delete', [AccountSettingController::class, 'deleteFirm'])->middleware('roles:1|7');
 
     Route::get('/manager/dashboard', [ManagerController::class, 'getIndex'])->middleware('roles:8');
+
+    // tasks
+    Route::get('tasks', [TaskController::class, 'getIndex']);
+    Route::post('tasks/getJson', [TaskController::class, 'getJson'])->name('tasks.json');
+    Route::get('/tasks/activation', [TaskController::class, 'tasksActivation']);
+    Route::get('tasks/ajax/id/{id}', [TaskController::class, 'getTaskAjax']);
 
 
     // ajax search

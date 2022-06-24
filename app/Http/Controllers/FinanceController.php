@@ -160,7 +160,7 @@ class FinanceController extends Controller
 
         return Response::json(array('data' => $data,
             "draw" => $draw,
-            "recordsTotal" => User::count(),
+            "recordsTotal" => Finance::count(),
             "recordsFiltered" => count($users),
         ), 200);
     }

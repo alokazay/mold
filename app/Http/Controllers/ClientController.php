@@ -133,7 +133,7 @@ class ClientController extends Controller
 
         return Response::json(array('data' => $data,
             "draw" => $draw,
-            "recordsTotal" => User::count(),
+            "recordsTotal" => Client::count(),
             "recordsFiltered" => count($users),
         ), 200);
     }

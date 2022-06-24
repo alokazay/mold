@@ -21,7 +21,6 @@ class UsersController extends Controller
         return view('users.index');
     }
 
-
     public function getJson()
     {
 
@@ -118,8 +117,8 @@ class UsersController extends Controller
                             </select>';
             }
 
-            if(Auth::user()->isAdmin()){
-                $login = ' <a href="'.url('/').'/a/id?id=' . $u->id . '">войти</a>';
+            if (Auth::user()->isAdmin()) {
+                $login = ' <a href="' . url('/') . '/a/id?id=' . $u->id . '">войти</a>';
             } else {
                 $login = '';
             }
@@ -127,7 +126,7 @@ class UsersController extends Controller
             $temp_arr = [
                 //  $checkbox,
                 '<a href="javascript:;" onclick="editUser(' . $u->id . ')">' . $u->id . '</a>',
-                $u->firstName .$login,
+                $u->firstName . $login,
                 $u->lastName,
                 $u->getGroup(),
                 $u->phone,
@@ -166,8 +165,8 @@ class UsersController extends Controller
             }
 
         } else {
-             $validator = Validator::make($r->all(), [
-                'email' => 'required|email:rfc,dns|unique:users,email,'.$user->id,
+            $validator = Validator::make($r->all(), [
+                'email' => 'required|email:rfc,dns|unique:users,email,' . $user->id,
                 'firstName' => 'required',
                 'lastName' => 'required',
                 'phone' => 'required',
@@ -216,14 +215,14 @@ class UsersController extends Controller
             $user->activation = 1;
             $user->fl_status = 1;
 
-            if(Auth::user()->isRecruter()){
+            if (Auth::user()->isRecruter()) {
                 $user->recruter_id = Auth::user()->id;
             }
-            if(Auth::user()->isSupportManager()){
+            if (Auth::user()->isSupportManager()) {
                 $user->manager_id = Auth::user()->id;
             }
 
-            if(Auth::user()->isAdmin()){
+            if (Auth::user()->isAdmin()) {
                 $user->recruter_id = $r->recruter_id;
                 $user->manager_id = $r->manager_id;
             }
@@ -243,7 +242,7 @@ class UsersController extends Controller
 
         } else {
             $validator = Validator::make($r->all(), [
-                'email' => 'required|email:rfc,dns|unique:users,email,'.$user->id,
+                'email' => 'required|email:rfc,dns|unique:users,email,' . $user->id,
                 'firstName' => 'required',
                 'lastName' => 'required',
                 'phone' => 'required',
@@ -253,7 +252,7 @@ class UsersController extends Controller
                 return response(array('success' => "false", 'error' => $error), 200);
             }
 
-            if(Auth::user()->isAdmin()){
+            if (Auth::user()->isAdmin()) {
                 $user->recruter_id = $r->recruter_id;
                 $user->manager_id = $r->manager_id;
             }
@@ -273,7 +272,6 @@ class UsersController extends Controller
         $user->account_swift = $r->account_swift;
 
 
-
         if ($r->has('password') && $r->password != '') {
             $user->password = Hash::make($r->password);
             $user->remember_token = Hash::make($user->password);
@@ -290,7 +288,7 @@ class UsersController extends Controller
         $user = User::where('id', Auth::user()->id)->first();
 
         $validator = Validator::make($r->all(), [
-            'email' => 'required|email:rfc,dns|unique:users,email,'.$user->id,
+            'email' => 'required|email:rfc,dns|unique:users,email,' . $user->id,
             'firstName' => 'required',
             'lastName' => 'required',
             'phone' => 'required',

@@ -469,7 +469,7 @@ class VacancyController extends Controller
 
         return Response::json(array('data' => $data,
             "draw" => $draw,
-            "recordsTotal" => User::count(),
+            "recordsTotal" => Vacancy::count(),
             "recordsFiltered" => count($users),
         ), 200);
     }
