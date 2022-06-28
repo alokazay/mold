@@ -39,25 +39,25 @@ Route::get('/dashboard', function () {
         return Redirect::to('users');
     }
     if (Auth::user()->group_id == 2) {
-        return Redirect::to('/recruiter/dashboard');
+        return Redirect::to('/tasks');
     }
     if (Auth::user()->group_id == 3) {
-        return Redirect::to('vacancies');
+        return Redirect::to('tasks');
     }
     if (Auth::user()->group_id == 4) {
-        return Redirect::to('candidates');
+        return Redirect::to('tasks');
     }
     if (Auth::user()->group_id == 5) {
-        return Redirect::to('/candidates/arrivals');
+        return Redirect::to('/tasks');
     }
     if (Auth::user()->group_id == 6) {
-        return Redirect::to('candidates');
+        return Redirect::to('tasks');
     }
     if (Auth::user()->group_id == 7) {
-        return Redirect::to('/requests');
+        return Redirect::to('/tasks');
     }
     if (Auth::user()->group_id == 8) {
-        return Redirect::to('/freelancers');
+        return Redirect::to('/tasks');
     }
 })->middleware('auth');
 
@@ -157,6 +157,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('tasks/getJson', [TaskController::class, 'getJson'])->name('tasks.json');
     Route::get('/tasks/activation', [TaskController::class, 'tasksActivation']);
     Route::get('tasks/ajax/id/{id}', [TaskController::class, 'getTaskAjax']);
+    Route::get('tasks/unfinished', [TaskController::class, 'getUnfinished']);
 
 
     // ajax search
@@ -180,7 +181,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('search/candidate/nacionality', [SearchController::class, 'getAjaxClientNacionality'])->middleware('roles:1|2|3|4|5|6');
     Route::get('search/candidate/vacancy', [SearchController::class, 'getAjaxCandidateVacancy'])->middleware('roles:1|2|3|4|5|6');
     Route::get('search/candidate/recruter', [SearchController::class, 'getAjaxCandidateRecruter'])->middleware('roles:1|2|3|4|5|6');
-    Route::get('search/candidate/client', [SearchController::class, 'getAjaxCandidateClient'])->middleware('roles:1|2|3|4|5|6');
+    Route::get('search/candidate/client', [SearchController::class, 'getAjaxCandidateClient'])->middleware('roles:1|2|3|4|5|6|7|8');
 
     Route::get('search/requests/freelacnsers', [SearchController::class, 'getAjaxCandidateFreelacnsers'])->middleware('roles:1|7');
 });

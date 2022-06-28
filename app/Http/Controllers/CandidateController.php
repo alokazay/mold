@@ -162,8 +162,8 @@ class CandidateController extends Controller
             $temp_arr = [
                 //  $checkbox,
                 '<a href="candidate/add?id=' . $u->id . '">' . $u->id . '</a>',
-                $u->firstName,
-                $u->lastName,
+                mb_strtoupper($u->firstName),
+                mb_strtoupper($u->lastName),
                 $u->phone,
                 $Vacancy,
                 $u->viber,
@@ -200,9 +200,15 @@ class CandidateController extends Controller
 
         if ($candidate->active == 4) {
             if ($r->s == 6) {
-                if(Candidate_arrival::where('candidate_id', $candidate->id)->count() == 0){
+                if (Candidate_arrival::where('candidate_id', $candidate->id)->count() == 0) {
                     return response(array('success' => "true", 'error' => 'Добавте хоть один приезд'), 200);
                 }
+            }
+        }
+
+        if(Auth::user()->isRecruter()){
+            if ($r->s == 2) {
+                return response(array('success' => "true", 'error' => 'Статус ставить нельзя'), 200);
             }
         }
 
@@ -698,7 +704,7 @@ class CandidateController extends Controller
         $rowperpage = request()->get("length"); // Rows display per page
 
         //ordering
-        $order_col = 'id';
+        $order_col = 'date_arrive';
         $order_direction = 'desc';
         $cols = request('columns');
         $order = request('order');
@@ -711,8 +717,8 @@ class CandidateController extends Controller
             if (isset($cols[$col_number]) && isset($cols[$col_number]['data'])) {
                 $data = $cols[$col_number]['data'];
                 if ($data == 0) {
-                    $order_col = 'id';
-                    $order_direction = 'desc';
+                    $order_col = 'date_arrive';
+                    $order_direction = 'asc';
                 }
             }
         }
@@ -724,7 +730,7 @@ class CandidateController extends Controller
 
 
         if ($status == '') {
-            $users = Candidate_arrival::whereIn('status', [0, 1, 2, 3]);
+            $users = Candidate_arrival::whereIn('status', [1]);
         } else {
             $users = Candidate_arrival::where('status', $status);
         }
@@ -820,8 +826,8 @@ class CandidateController extends Controller
             $temp_arr = [
                 //  $checkbox,
                 '<a href="' . url('/') . '/candidate/add?id=' . $u->candidate_id . '">' . $u->id . '</a>',
-                $u->Candidate->firstName,
-                $u->Candidate->lastName,
+                mb_strtoupper($u->Candidate->firstName),
+                mb_strtoupper($u->Candidate->lastName),
                 $u->Candidate->phone,
                 $u->Candidate->viber,
                 $Place_arrive,

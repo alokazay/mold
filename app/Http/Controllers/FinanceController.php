@@ -207,7 +207,14 @@ class FinanceController extends Controller
     public function postRequestsChangeStatus(Request $r)
     {
         $finance = Finance::find($r->id);
+
         if ($finance != null) {
+
+            if($r->s == 2){
+                if($finance->file_id == null || $finance->file_id == ''){
+                    return response(array('success' => "false" , 'error' => 'Загрузите подтверждающий документ'), 200);
+                }
+            }
 
             if ($finance->status == 2) {
                 return response(array('success' => "false" , 'error' => 'Понизить статус нельзя'), 200);

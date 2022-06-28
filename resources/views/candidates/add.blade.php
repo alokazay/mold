@@ -133,7 +133,7 @@
                                                     <label class="required fs-5 fw-bold mb-2">Фамилия</label>
                                                     <input
                                                         @if($canddaite != null) value="{{$canddaite->lastName}}" @endif
-                                                    id="lastName"
+                                                    id="lastName"  style="text-transform: uppercase"
                                                         class="form-control form-control-sm form-control-solid"
                                                         type="text"/>
                                                 </div>
@@ -141,7 +141,7 @@
                                             <div class="col-6">
                                                 <div class="d-flex flex-column mb-0 fv-row">
                                                     <label class="required fs-5 fw-bold mb-2">Имя</label>
-                                                    <input
+                                                    <input  style="text-transform: uppercase"
                                                         @if($canddaite != null) value="{{$canddaite->firstName}}" @endif
                                                     id="firstName"
                                                         class="form-control form-control-sm form-control-solid"
@@ -166,8 +166,9 @@
                                                     <label class="required fs-5 fw-bold mb-2">Телефон</label>
                                                     <input
                                                         @if($canddaite != null) value="{{$canddaite->phone}}" @endif
-                                                    id="phone"
+                                                    id="phone" placeholder="Писать в междунаробном формате, например Украина +380664252585"
                                                         class="form-control form-control-sm form-control-solid"
+                                                        title="Писать в междунаробном формате, например Украина +380664252585"
                                                         type="text"/>
                                                 </div>
                                             </div>

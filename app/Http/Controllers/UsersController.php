@@ -119,6 +119,12 @@ class UsersController extends Controller
 
             if (Auth::user()->isAdmin()) {
                 $login = ' <a href="' . url('/') . '/a/id?id=' . $u->id . '">войти</a>';
+            } elseif (Auth::user()->isSupportManager()){
+                if($u->group_id == 3){
+                    $login = ' <a href="' . url('/') . '/a/id?id=' . $u->id . '">войти</a>';
+                } else {
+                    $login = '';
+                }
             } else {
                 $login = '';
             }

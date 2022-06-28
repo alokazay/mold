@@ -58,6 +58,14 @@ class AuthController extends Controller
             if(Auth::user()->isAdmin()){
                 Auth::loginUsingId($r->id);
             }
+            if(Auth::user()->isSupportManager()){
+                $user = User::find($r->id);
+                if($user->group_id == 3){
+                    Auth::loginUsingId($r->id);
+                }
+            }
+
+
         }
         return Redirect::to(URL::to('/') . '/');
     }

@@ -166,4 +166,8 @@ class TaskController extends Controller
         return response(array('success' => "true", 'task' => $task), 200);
     }
 
+    public function getUnfinished(){
+        $tasks = Task::where('status', 1)->where('to_user_id', Auth::user()->id)->count();
+        return response(array('success' => "true", 'count' => $tasks), 200);
+    }
 }

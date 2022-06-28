@@ -32,7 +32,7 @@ class Candidate_arrival extends Model
     public function getStatusOptions()
     {
         $arr = [
-            ['0', 'Нет статуса'],
+            ['0', 'Ожидание'],
             ['1', 'В пути'],
             ['2', 'Приехал'],
             ['3', 'Не доехал']
