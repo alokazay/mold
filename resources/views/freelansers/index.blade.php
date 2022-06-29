@@ -173,7 +173,7 @@
                                             <th class="max-w-85px sorting_disabled">Фамилия</th>
                                             <th class="w-65px sorting_disabled">Менджер</th>
                                             <th class="w-65px sorting_disabled">Рекрутер</th>
-                                             <th class="max-w-45px sorting_disabled">Телефон</th>
+                                            <th class="max-w-45px sorting_disabled">Телефон</th>
                                             <th class="max-w-65px sorting_disabled">Email</th>
                                             <th class="w-35px sorting_disabled">Скан</th>
                                             <th class="min-w-100px sorting_disabled">Статус</th>
@@ -279,37 +279,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mb-5">
-                    <div class="col-6">
-                        <div class="d-flex flex-column mb-0 fv-row">
-                            <label class="required fs-5 fw-bold mb-2">Банк</label>
-                            <select class="form-control form-control-sm form-control-solid"
-                                    id="modal_users_add__account_type">
-                                <option value="1">Польский</option>
-                                <option value="2">Заграничный</option>
-                                <option value="3">PayPal</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    @if(Auth::user()->isAdmin())
-                        <div class="col-6">
-                            <div class="d-flex flex-column mb-0 fv-row">
-                                <label class="fs-5 fw-bold mb-2">Рекрутер</label>
-                                <select id="modal_users_add__recruter_id"
-                                        class="form-select form-select-sm form-select-solid">
-                                    @foreach($recruters as $recruter)
-                                        <option
-                                            value="{{$recruter->id}}">{{$recruter->firstName}} {{$recruter->lastName}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    @endif
-                </div>
-
-                <div class="row mb-5">
-                    @if(Auth::user()->isAdmin())
+                @if(Auth::user()->isAdmin())
+                    <div class="row mb-5">
                         <div class="col-6">
                             <div class="d-flex flex-column mb-0 fv-row">
                                 <label class="fs-5 fw-bold mb-2">Манджер</label>
@@ -322,11 +293,37 @@
                                 </select>
                             </div>
                         </div>
-                    @endif
-                </div>
+                        <div class="col-6">
+                            <div class="d-flex flex-column mb-0 fv-row">
+                                <label class="fs-5 fw-bold mb-2">Рекрутер</label>
+                                <select id="modal_users_add__recruter_id"
+                                        class="form-select form-select-sm form-select-solid">
+                                    @foreach($recruters as $recruter)
+                                        <option
+                                            value="{{$recruter->id}}">{{$recruter->firstName}} {{$recruter->lastName}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                @endif
 
                 <div class="row mb-5">
                     <div class="col-6">
+                        <div class="d-flex flex-column mb-0 fv-row">
+                            <label class="required fs-5 fw-bold mb-2">Банк</label>
+                            <select class="form-control form-control-sm form-control-solid"
+                                    id="modal_users_add__account_type">
+                                <option value="1">Польский</option>
+                                <option value="2">Заграничный</option>
+                                <option value="3">PayPal</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-5">
+                    <div class="col-6 change_bank bank1">
                         <div class="d-flex flex-column mb-0 fv-row">
                             <label class="fs-5 fw-bold mb-2">Польский</label>
                             <input placeholder="Номер банковского счета" id="modal_users_add__account_poland"
@@ -334,7 +331,7 @@
                                    type="text"/>
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div style="display: none;" class="col-6 change_bank bank3">
                         <div class="d-flex flex-column mb-0 fv-row">
                             <label class="fs-5 fw-bold mb-2">PayPal</label>
                             <input placeholder="email" id="modal_users_add__account_paypal"
@@ -343,7 +340,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mb-5">
+                <div style="display: none;" class="row mb-5 change_bank bank2">
                     <div class="col-6">
                         <div class="d-flex flex-column mb-0 fv-row">
                             <label class="fs-5 fw-bold mb-2">Название банка</label>
@@ -361,7 +358,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mb-5">
+                <div style="display: none;" class="row mb-5  change_bank bank2">
                     <div class="col-6">
                         <div class="d-flex flex-column mb-0 fv-row">
                             <label class="fs-5 fw-bold mb-2">Номер карты</label>
@@ -435,6 +432,10 @@
 
 <script>
 
+    $(document).on('click', '#modal_users_add__account_type', function () {
+        $('.change_bank').hide();
+        $('.bank' + $(this).val()).show();
+    });
 
     var groupColumn = 0;
     oTable = $('#users').DataTable({
@@ -526,6 +527,10 @@
         $('#modal_users_add__account_iban').val('');
         $('#modal_users_add__account_card').val('');
         $('#modal_users_add__account_swift').val('');
+
+        $('.change_bank').hide();
+        $('.bank1').show();
+
         $('#modal_users_add').modal('show');
     });
 
@@ -551,6 +556,10 @@
             $('#modal_users_add__account_iban').val(res.user.account_iban);
             $('#modal_users_add__account_card').val(res.user.account_card);
             $('#modal_users_add__account_swift').val(res.user.account_swift);
+
+
+            $('.change_bank').hide();
+            $('.bank' + res.user.account_type).show();
 
             $('#modal_users_add').modal('show');
         });

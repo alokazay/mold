@@ -7,7 +7,12 @@
 <script>
     function updateCountTask() {
         $.get('{{url('/')}}/tasks/unfinished', function (res) {
-            $('#countTask').html(res.count);
+
+            if(res.count > 0){
+                $('#countTask').show().html(res.count);
+            } else {
+                $('#countTask').hide();
+            }
         })
     }
 

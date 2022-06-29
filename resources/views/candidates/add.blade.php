@@ -262,7 +262,7 @@
                                             </div>
                                             <div class="col-6">
                                                 <div class="d-flex flex-column mb-0 fv-row">
-                                                    <label class=" fs-5 fw-bold mb-2">ИНН</label>
+                                                    <label class="required fs-5 fw-bold mb-2">ИНН</label>
                                                     <input id="inn"
                                                            @if($canddaite != null) value="{{$canddaite->inn}}" @endif
                                                            class="form-control form-control-sm form-control-solid"
@@ -733,6 +733,7 @@
     });
     $('#date_arrive').flatpickr({
         dateFormat: 'd.m.Y',
+        minDate: "today",
         locale: {
             firstDayOfWeek: 1
         },

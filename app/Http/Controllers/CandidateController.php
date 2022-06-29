@@ -32,11 +32,6 @@ class CandidateController extends Controller
             ->with('invited', $invited);
     }
 
-    public function getArrivals()
-    {
-        return view('candidates.arrivals.index');
-    }
-
     public function getJson()
     {
 
@@ -182,6 +177,139 @@ class CandidateController extends Controller
             "recordsTotal" => Candidate::count(),
             "recordsFiltered" => count($users),
         ), 200);
+    }
+
+    public function getLeads()
+    {
+        return view('candidates.leads.index');
+    }
+
+    public function getLeadsJson()
+    {
+
+        $draw = request()->get('draw');
+        $start = request()->get("start");
+        $rowperpage = request()->get("length"); // Rows display per page
+
+        //ordering
+        $order_col = 'id';
+        $order_direction = 'desc';
+        $cols = request('columns');
+        $order = request('order');
+
+        if (isset($order[0]['dir'])) {
+            $order_direction = $order[0]['dir'];
+        }
+        if (isset($order[0]['column']) && isset($cols)) {
+            $col_number = $order[0]['column'];
+            if (isset($cols[$col_number]) && isset($cols[$col_number]['data'])) {
+                $data = $cols[$col_number]['data'];
+                if ($data == 0) {
+                    $order_col = 'id';
+                    $order_direction = 'desc';
+                }
+            }
+        }
+        // search
+        $status = request('status');
+        $search = request('search');
+        $vacancies = request('vacancies');
+
+
+        $users = Candidate::whereIn('active', [2]);
+
+        if ($vacancies != '') {
+            $users = $users->where('real_vacancy_id', $vacancies);
+        }
+
+
+        if ($search != '') {
+            $users = $users->where(function ($query) use ($search) {
+                $query->where('firstName', 'LIKE', '%' . $search . '%')
+                    ->orWhere('lastName', 'LIKE', '%' . $search . '%')
+                    ->orWhere('phone', 'LIKE', '%' . $search . '%')
+                    ->orWhere('viber', 'LIKE', '%' . $search . '%')
+                    ->orWhere('phone_parent', 'LIKE', '%' . $search . '%');
+            });
+        }
+
+        $users = $users->orderBy($order_col, $order_direction);
+
+
+        $users = $users
+            ->with('Vacancy')
+            ->with('D_file')
+            ->skip($start)
+            ->take($rowperpage)
+            ->get();
+
+        $data = [];
+
+
+        foreach ($users as $u) {
+
+            if ($u->D_file != null) {
+                $file = '<a target="_blank" href="' . url('/') . $u->D_file->path . '" style="cursor: pointer;" class="svg-icon svg-icon-2x svg-icon-primary me-4">
+																<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																	<path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22Z" fill="currentColor"></path>
+																	<path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor"></path>
+																</svg>
+															</a>';
+            } else {
+                $file = '';
+            }
+
+
+            $reason_reject = $u->reason_reject;
+            if ($reason_reject != '') {
+                $reason_reject = '<br> ' . $u->reason_reject;
+            }
+            $select_active = '<select onchange="changeActivation(' . $u->id . ')"
+                                    class="form-select form-select-sm form-select-solid changeActivation' . $u->id . '">
+                                        <option value="">Статус</option>
+                                             ' . $u->getStatusOptions() . '
+                            </select>' . $reason_reject;
+
+
+            $Vacancy = '';
+            if ($u->Vacancy != null) {
+                $Vacancy = $u->Vacancy->title;
+            }
+
+            if ($u->date_arrive != null) {
+                $date_arrive = Carbon::parse($u->date_arrive)->format('d.m.Y H:i');
+            } else {
+                $date_arrive = '';
+            }
+
+            $temp_arr = [
+                //  $checkbox,
+                '<a href="candidate/add?id=' . $u->id . '">' . $u->id . '</a>',
+                mb_strtoupper($u->firstName),
+                mb_strtoupper($u->lastName),
+                $u->phone,
+                $Vacancy,
+                $u->viber,
+                $u->phone_parent,
+                $date_arrive,
+                $file,
+                $select_active
+
+            ];
+            $data[] = $temp_arr;
+        }
+
+
+        return Response::json(array('data' => $data,
+            "draw" => $draw,
+            "recordsTotal" => Candidate::count(),
+            "recordsFiltered" => count($users),
+        ), 200);
+    }
+
+    public function getArrivals()
+    {
+        return view('candidates.arrivals.index');
     }
 
     function setStatus(Request $r)

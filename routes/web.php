@@ -126,6 +126,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('candidates/arrivals/add', [CandidateController::class, 'postArrivalAdd'])->middleware('roles:1|4');
     Route::get('candidates/arrivals/activation', [CandidateController::class, 'postArrivalsActivation'])->middleware('roles:1|4|5');
 
+    Route::get('leads', [CandidateController::class, 'getLeads'])->middleware('roles:1|2|3|4|5|6');
+    Route::post('leads/getJson', [CandidateController::class, 'getLeadsJson'])->name('leads.json')->middleware('roles:1|2|3|4|5|6');
+
+
+
     // arrivals
     Route::get('candidates/arrivals', [CandidateController::class, 'getArrivals'])->middleware('roles:1|4|5');
     Route::post('candidates/arrivals/add_ticket', [CandidateController::class, 'addTicketDoc'])->middleware('roles:1|4|5');
