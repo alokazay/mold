@@ -272,7 +272,7 @@
                     </div>
                     <div class="col-6">
                         <div class="d-flex flex-column mb-0 fv-row">
-                            <label class="required fs-5 fw-bold mb-2">Facebook</label>
+                            <label class="fs-5 fw-bold mb-2">Facebook</label>
                             <input id="modal_users_add__facebook"
                                    class="form-control form-control-sm form-control-solid"
                                    type="email"/>

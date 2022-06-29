@@ -32,7 +32,7 @@ class Candidate_arrival extends Model
     public function getStatusOptions()
     {
         $arr = [
-            ['0', 'Ожидание'],
+            ['0', 'Готов к выезду'],
             ['1', 'В пути'],
             ['2', 'Приехал'],
             ['3', 'Не доехал']
@@ -40,7 +40,7 @@ class Candidate_arrival extends Model
 
         if (Auth::user()->isLogist()) {
             $arr = [
-                ['0', 'Нет статуса'],
+                ['0', 'Готов к выезду'],
                 ['1', 'В пути']
             ];
         }

@@ -18,7 +18,8 @@ return new class extends Migration
             $table->integer('to_user_id');
             $table->integer('autor_id');
             $table->integer('type');
-            $table->integer('candidate_id');
+            $table->integer('candidate_id')->nullable();
+            $table->integer('freelancer_id')->nullable();
             $table->integer('status');
             $table->text('title');
             $table->timestamps();

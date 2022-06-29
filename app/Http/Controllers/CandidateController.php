@@ -387,11 +387,15 @@ class CandidateController extends Controller
         } else {
             $is_new = false;
             if (Candidate::where('id', $candidate->id)
-                    ->where('phone', $r->phone)->count() > 0) {
+                    ->where('phone', $r->phone)
+                    ->where('phone', '!=', $candidate->phone)
+                    ->count() > 0) {
                 return response(array('success' => "false", 'error' => 'Телефон уже занят'), 200);
             }
             if (Candidate::where('id', $candidate->id)
-                    ->where('inn', $r->inn)->count() > 0) {
+                    ->where('inn', $r->inn)
+                    ->where('inn', '!=', $candidate->inn)
+                    ->count() > 0) {
                 return response(array('success' => "false", 'error' => 'Телефон уже занят'), 200);
             }
 
@@ -480,6 +484,15 @@ class CandidateController extends Controller
                 $task->to_user_id = Auth::user()->id;
                 $task->status = 1;
                 $task->type = 1;
+                $task->candidate_id = $candidate->id;
+                $task->save();
+
+                $task = new Task();
+                $task->title = 'Обработать лид';
+                $task->autor_id = Auth::user()->id;
+                $task->to_user_id = Auth::user()->recruter_id;
+                $task->status = 1;
+                $task->type = 8;
                 $task->candidate_id = $candidate->id;
                 $task->save();
             }

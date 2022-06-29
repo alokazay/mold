@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\C_file;
+use App\Models\Task;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -284,6 +285,23 @@ class UsersController extends Controller
         }
 
         $user->save();
+
+        if ($user == null) {
+
+            $managers = User::where('group_id', 8)->where('activation', 1)->get();
+            foreach ($managers as $manager) {
+                $task = new Task();
+                $task->title = 'Верифицировать фрилансера';
+                $task->autor_id = Auth::user()->id;
+                $task->to_user_id = $manager->id;
+                $task->status = 1;
+                $task->type = 7;
+                $task->freelancer_id = $user->id;
+                $task->save();
+            }
+        }
+
+
         return response(array('success' => "true"), 200);
     }
 
