@@ -545,10 +545,40 @@ class SearchController extends Controller
     {
         $search = request('f_search');
 
-        $ids = Vacancy_client::where('vacancy_id', request('vacancy_id'))->pluck('id');
+        $ids = Vacancy_client::where('vacancy_id', request('vacancy_id'))->pluck('client_id');
+
         $Course = Client::where(function ($query) use ($search) {
             $query->where('name', 'LIKE', '%' . $search . '%');
         })->whereIn('id', $ids)
+            ->take(10)
+            ->get();
+
+        $p_temp = [];
+
+        if (count($Course)) {
+            foreach ($Course as $c) {
+                $p_temp_arr = [];
+                $p_temp_arr['value'] = $c->name;
+                $p_temp_arr['id'] = $c->id;
+                $p_temp[] = $p_temp_arr;
+            }
+        }
+
+        if (count($Course)) {
+            return response($p_temp, 200);
+        } else {
+            return response(array('success' => "false"), 200);
+        }
+    }
+
+
+    public function getAjaxCandidateCoordinatorsClient()
+    {
+        $search = request('f_search');
+
+        $Course = Client::where(function ($query) use ($search) {
+            $query->where('name', 'LIKE', '%' . $search . '%');
+        })->where('coordinator_id', Auth::user()->id)
             ->take(10)
             ->get();
 

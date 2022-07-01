@@ -127,10 +127,27 @@ class TaskController extends Controller
         $task = Task::where('id', $r->id)->first();
 
         $candidate = Candidate::find($r->id);
-        if ($candidate != null && $task->type == 4) {
-            if ($r->s == 2) {
-                if (Candidate_arrival::where('candidate_id', $candidate->id)->count() == 0) {
-                    return response(array('success' => "true", 'error' => 'Добавте хоть один приезд'), 200);
+        if ($candidate != null ) {
+            if($task->type == 4){
+                if ($r->s == 2) {
+                    if (Candidate_arrival::where('candidate_id', $candidate->id)->count() == 0) {
+                        return response(array('success' => "true", 'error' => 'Добавте хоть один приезд'), 200);
+                    }
+                }
+            }
+
+            if(Auth::user()->isTrud()){
+                // Указать первый рабочий день
+                if($task->type == 6){
+                    if($candidate->real_vacancy_id == '' || $candidate->real_vacancy_id == null){
+                        return response(array('success' => "true", 'error' => 'Добавте вакансию'), 200);
+                    }
+                    if($candidate->real_status_work_id == '' || $candidate->real_status_work_id == null){
+                        return response(array('success' => "true", 'error' => 'Добавте Статус трудоустройства'), 200);
+                    }
+                    if($candidate->client_id == '' || $candidate->client_id == null){
+                        return response(array('success' => "true", 'error' => 'Добавте клиента'), 200);
+                    }
                 }
             }
         }

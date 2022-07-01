@@ -153,13 +153,13 @@
 
                                     <div class="w-100 mw-150px">
 
-                                             <select id="filter__status" class="form-select form-select-solid">
-                                                <option value="">Статус</option>
-                                                <option value="0">Нет статуса</option>
-                                                <option value="1">В пути</option>
-                                                <option value="2">Приехал</option>
-                                                <option value="3">Не доехал</option>
-                                            </select>
+                                        <select id="filter__status" class="form-select form-select-solid">
+                                            <option value="">Статус</option>
+                                            <option value="0">Нет статуса</option>
+                                            <option value="1">В пути</option>
+                                            <option value="2">Приехал</option>
+                                            <option value="3">Не доехал</option>
+                                        </select>
 
 
                                     </div>
@@ -188,6 +188,7 @@
                                             <th class="max-w-85px sorting_disabled">Время приезда</th>
                                             <th class="max-w-85px sorting_disabled">Билет</th>
                                             <th class="max-w-85px sorting_disabled">Вид транспорта</th>
+                                            <th class="max-w-85px sorting_disabled">Комментарий</th>
                                             <th class="max-w-85px sorting_disabled">Гражданство</th>
                                             <th class="max-w-85px sorting_disabled">Вакансия</th>
                                             <th class="min-w-100px sorting_disabled">Статус</th>
@@ -218,6 +219,66 @@
     <!--end::Page-->
 </div>
 <!--end::Root-->
+<div class="modal fade" tabindex="-1" id="modal_add_arrivals">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Добавить приезд</h3>
+
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal"
+                     aria-label="Close">
+                    <span class="svg-icon svg-icon-2x"></span>
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--begin::Modal body-->
+            <div class="modal-body">
+
+                <input type="hidden" id="modal_add_arrivals_id">
+
+                <div class="row mb-5">
+                    <div class="col-6">
+                        <div class="d-flex flex-column mb-0 fv-row">
+                            <label class="required fs-5 fw-bold mb-2">Место</label>
+                            <select id="modal_place_arrive_id"
+                                    class="form-select  form-select-sm form-select-solid"> </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex flex-column mb-0 fv-row">
+                            <label class="required fs-5 fw-bold mb-2">Вид транспорта</label>
+                            <select id="modal_transport_id"
+                                    class="form-select  form-select-sm form-select-solid"> </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <div class="col-6">
+                        <label class="required fs-5 fw-bold mb-2">Дата и время</label>
+                        <input id="modal__date_arrive"
+                               class="form-control form-control-sm form-control-solid" type="text"/>
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <div class="col-6">
+                        <label class="required fs-5 fw-bold mb-2">Комментарий</label>
+                        <input id="modal__comment"
+                               class="form-control form-control-sm form-control-solid" type="text"/>
+                    </div>
+                </div>
+
+
+            </div>
+            <!--end::Modal body-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Отмена</button>
+                <button id="modal_add_arrivals__save" type="button" class="btn btn-primary btn-sm">Сохранить
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @include('includes.global_scripts')
@@ -225,6 +286,61 @@
 <script src="{{url('/')}}/assets/plugins/custom/datatables/datatables.bundle.js"></script>
 <!--end::Page Vendors Javascript-->
 <script>
+    @if(Auth::user()->isAdmin() || Auth::user()->isLogist() )
+    $(document).on('click', '.edit_arrival', function () {
+        $('#modal_add_arrivals_id').val($(this).data('id'))
+
+        $('#modal_place_arrive_id').append(new Option($(this).data('place_arrive_name'), $(this).data('place_arrive_id'), true, true)).trigger('change');
+        $('#modal_transport_id').append(new Option($(this).data('transport_name'), $(this).data('transport_id'), true, true)).trigger('change');
+
+
+        $('#modal__comment').val($(this).data('comment'))
+        $('#modal__date_arrive').val($(this).data('date_arrive'))
+        $('#modal_add_arrivals').modal('show');
+    });
+    $('#modal__date_arrive').flatpickr({
+        dateFormat: 'd.m.Y H:i',
+        enableTime: true,
+        time_24hr: true,
+        locale: {
+            firstDayOfWeek: 2
+        },
+    });
+    $('#modal_add_arrivals__save').click(function (e) {
+        e.preventDefault();
+        let self = $(this);
+
+        self.prop('disabled', true);
+
+        var data = {
+            place_arrive_id: $('#modal_place_arrive_id').val(),
+            transport_id: $('#modal_transport_id').val(),
+            date_arrive: $('#modal__date_arrive').val(),
+            comment: $('#modal__comment').val(),
+            _token: $('input[name=_token]').val(),
+        };
+
+        let id = $('#modal_add_arrivals_id').val();
+        if (id !== '') {
+            data.id = id;
+        }
+
+        $.ajax({
+            url: "{{url('/')}}/candidates/arrivals/add",
+            method: 'post',
+            data: data,
+            success: function (response, status, xhr, $form) {
+                if (response.error) {
+                    toastr.error(response.error);
+                } else {
+                    $('#modal_add_arrivals').modal('hide');
+                    oTable.draw();
+                }
+                self.prop('disabled', false);
+            }
+        });
+    })
+    @endif
 
 
     var groupColumn = 0;

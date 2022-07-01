@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('place_arrive_id')->nullable();
             $table->integer('transport_id')->nullable();
             $table->integer('status')->nullable();
+            $table->string('comment')->nullable();
             $table->char('file_id', 36)->nullable();
             $table->timestamps();
         });

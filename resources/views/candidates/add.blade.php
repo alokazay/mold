@@ -293,7 +293,7 @@
 
                                                             <!--begin::Info-->
                                                             <div class="ms-4">
-                                                                <h3 class="fs-5 fw-bolder text-gray-900 mb-1">Загрузить
+                                                                <h3 class="fs-5 fw-bolder text-gray-900 mb-1 required">Загрузить
                                                                     документ</h3>
                                                                 <span class="fs-7 fw-bold text-gray-400">Перетащите документ сюда</span>
                                                             </div>
@@ -404,6 +404,7 @@
                                             <tr class="text-start text-muted fw-bolder fs-7 gs-0">
 
                                                 <th class="max-w-55px sorting_disabled">Id</th>
+                                                <th class="max-w-85px sorting_disabled">Комментарий</th>
                                                 <th class="max-w-85px sorting_disabled">Место приезда</th>
                                                 <th class="max-w-85px sorting_disabled">Планируемая дата
                                                     приезда
@@ -514,6 +515,13 @@
                                class="form-control form-control-sm form-control-solid" type="text"/>
                     </div>
                 </div>
+                <div class="row mb-5">
+                    <div class="col-6">
+                        <label class="required fs-5 fw-bold mb-2">Комментарий</label>
+                        <input id="modal__comment"
+                               class="form-control form-control-sm form-control-solid" type="text"/>
+                    </div>
+                </div>
 
 
             </div>
@@ -579,6 +587,7 @@
         $('#modal_transport_id').append(new Option($(this).data('transport_name'), $(this).data('transport_id'), true, true)).trigger('change');
 
 
+        $('#modal__comment').val($(this).data('comment'))
         $('#modal__date_arrive').val($(this).data('date_arrive'))
         $('#modal_add_arrivals').modal('show');
     });
@@ -641,6 +650,7 @@
             place_arrive_id: $('#modal_place_arrive_id').val(),
             transport_id: $('#modal_transport_id').val(),
             date_arrive: $('#modal__date_arrive').val(),
+            comment: $('#modal__comment').val(),
             _token: $('input[name=_token]').val(),
         };
 

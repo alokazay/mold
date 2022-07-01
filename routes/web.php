@@ -187,6 +187,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('search/candidate/vacancy', [SearchController::class, 'getAjaxCandidateVacancy'])->middleware('roles:1|2|3|4|5|6');
     Route::get('search/candidate/recruter', [SearchController::class, 'getAjaxCandidateRecruter'])->middleware('roles:1|2|3|4|5|6');
     Route::get('search/candidate/client', [SearchController::class, 'getAjaxCandidateClient'])->middleware('roles:1|2|3|4|5|6|7|8');
+    Route::get('search/candidate/coordinators/client', [SearchController::class, 'getAjaxCandidateCoordinatorsClient'])->middleware('roles:1|2|3|4|5|6|7|8');
 
     Route::get('search/requests/freelacnsers', [SearchController::class, 'getAjaxCandidateFreelacnsers'])->middleware('roles:1|7');
 });

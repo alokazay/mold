@@ -181,7 +181,7 @@
 </svg>
 										</span>
                             <span class="menu-title">Задачи</span>
-                            <span id="countTask" class="badge badge-circle badge-warning"></span>
+                            <span style="display: none;" id="countTask" class="badge badge-circle badge-warning"></span>
                         </a>
                     </div>
                     <div class="menu-item">
@@ -265,7 +265,7 @@
 </svg>
 										</span>
                             <span class="menu-title">Задачи</span>
-                            <span id="countTask" class="badge badge-circle badge-warning"></span>
+                            <span style="display: none;" id="countTask" class="badge badge-circle badge-warning"></span>
                         </a>
                     </div>
                     <div class="menu-item">
@@ -334,7 +334,7 @@
 </svg>
 										</span>
                             <span class="menu-title">Задачи</span>
-                            <span id="countTask" class="badge badge-circle badge-warning"></span>
+                            <span style="display: none;" id="countTask" class="badge badge-circle badge-warning"></span>
                         </a>
                     </div>
                     <div class="menu-item">
@@ -396,7 +396,7 @@
 </svg>
 										</span>
                             <span class="menu-title">Задачи</span>
-                            <span id="countTask" class="badge badge-circle badge-warning"></span>
+                            <span style="display: none;" id="countTask" class="badge badge-circle badge-warning"></span>
                         </a>
                     </div>
                     <div class="menu-item">
@@ -457,7 +457,7 @@
 </svg>
 										</span>
                             <span class="menu-title">Задачи</span>
-                            <span id="countTask" class="badge badge-circle badge-warning"></span>
+                            <span style="display: none;" id="countTask" class="badge badge-circle badge-warning"></span>
                         </a>
                     </div>
                     <div class="menu-item">
@@ -492,7 +492,7 @@
 </svg>
 										</span>
                             <span class="menu-title">Задачи</span>
-                            <span id="countTask" class="badge badge-circle badge-warning"></span>
+                            <span style="display: none;" id="countTask" class="badge badge-circle badge-warning"></span>
                         </a>
                     </div>
                     <div class="menu-item">
@@ -542,7 +542,7 @@
 </svg>
 										</span>
                             <span class="menu-title">Задачи</span>
-                            <span id="countTask" class="badge badge-circle badge-warning"></span>
+                            <span style="display: none;" id="countTask" class="badge badge-circle badge-warning"></span>
                         </a>
                     </div>
                     <div class="menu-item">

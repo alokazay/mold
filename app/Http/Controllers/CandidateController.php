@@ -62,6 +62,7 @@ class CandidateController extends Controller
         $status = request('status');
         $search = request('search');
         $vacancies = request('vacancies');
+        $clients = request('clients');
 
 
         if ($status == '') {
@@ -87,6 +88,15 @@ class CandidateController extends Controller
 
         if (Auth::user()->isKoordinator()) {
             $users = $users->whereIn('active', [8]);
+
+            $users = $users->whereHas('client', function($q){
+                $q->where('coordinator_id', Auth::user()->id);
+            });
+
+            if ($clients != '') {
+                $users = $users->where('client_id', $clients);
+            }
+
         }
 
 
@@ -109,6 +119,7 @@ class CandidateController extends Controller
 
 
         $users = $users
+            ->with('client')
             ->with('Vacancy')
             ->with('D_file')
             ->skip($start)
@@ -145,7 +156,7 @@ class CandidateController extends Controller
 
             $Vacancy = '';
             if ($u->Vacancy != null) {
-                $Vacancy = $u->Vacancy->title;
+                $Vacancy = '<span style="font-size: 11px;line-height: 1;">'.$u->Vacancy->title.'</span>';
             }
 
             if ($u->date_arrive != null) {
@@ -353,35 +364,45 @@ class CandidateController extends Controller
             $candidate->reason_reject = $r->r;
             $candidate->save();
 
-            if (Auth::user()->isFreelancer() && $candidate->active == 3) {
-                $task = new Task();
-                $task->title = 'Связаться с кандидатом';
-                $task->autor_id = Auth::user()->id;
-                $task->to_user_id = Auth::user()->id;
-                $task->status = 1;
-                $task->type = 2;
-                $task->candidate_id = $candidate->id;
-                $task->save();
+            if (Auth::user()->isFreelancer() ) {
+                if($candidate->active == 3){
+                    $task = new Task();
+                    $task->title = 'Связаться с кандидатом';
+                    $task->autor_id = Auth::user()->id;
+                    $task->to_user_id = Auth::user()->id;
+                    $task->status = 1;
+                    $task->type = 2;
+                    $task->candidate_id = $candidate->id;
+                    $task->save();
+                }
+
+                if($candidate->active == 2){
+                    $task = new Task();
+                    $task->title = 'Обработать лид';
+                    $task->autor_id = Auth::user()->id;
+                    $task->to_user_id = Auth::user()->recruter_id;
+                    $task->status = 1;
+                    $task->type = 3;
+                    $task->candidate_id = $candidate->id;
+                    $task->save();
+                }
+
             }
-            if (Auth::user()->isRecruter() && $candidate->active == 2) {
-                $task = new Task();
-                $task->title = 'Обработать лид';
-                $task->autor_id = Auth::user()->id;
-                $task->to_user_id = Auth::user()->id;
-                $task->status = 1;
-                $task->type = 3;
-                $task->candidate_id = $candidate->id;
-                $task->save();
-            }
-            if (Auth::user()->isRecruter() && $candidate->active == 3) {
-                $task = new Task();
-                $task->title = 'Связаться с кандидатом';
-                $task->autor_id = Auth::user()->id;
-                $task->to_user_id = Auth::user()->id;
-                $task->status = 1;
-                $task->type = 3;
-                $task->candidate_id = $candidate->id;
-                $task->save();
+
+            if (Auth::user()->isRecruter() ) {
+
+
+                if($candidate->active == 3){
+                    $task = new Task();
+                    $task->title = 'Связаться с кандидатом';
+                    $task->autor_id = Auth::user()->id;
+                    $task->to_user_id = Auth::user()->id;
+                    $task->status = 1;
+                    $task->type = 3;
+                    $task->candidate_id = $candidate->id;
+                    $task->save();
+                }
+
             }
             if ($candidate->active == 4) {
                 $logists = User::where('group_id', 4)->where('activation', 1)->get();
@@ -395,8 +416,7 @@ class CandidateController extends Controller
                     $task->candidate_id = $candidate->id;
                     $task->save();
                 }
-            }
-            if ($candidate->active == 4) {
+
                 $logists = User::where('group_id', 4)->where('activation', 1)->get();
                 foreach ($logists as $logist) {
                     $task = new Task();
@@ -408,8 +428,7 @@ class CandidateController extends Controller
                     $task->candidate_id = $candidate->id;
                     $task->save();
                 }
-            }
-            if ($candidate->active == 4) {
+
                 $logists = User::where('group_id', 5)->where('activation', 1)->get();
                 foreach ($logists as $logist) {
                     $task = new Task();
@@ -474,6 +493,9 @@ class CandidateController extends Controller
             ->with('canddaite', $canddaite);
     }
 
+    /*
+    Add Candidate
+    */
     public function postAdd(Request $r)
     {
         if (Auth::user()->isFreelancer()) {
@@ -527,8 +549,27 @@ class CandidateController extends Controller
                 return response(array('success' => "false", 'error' => 'Телефон уже занят'), 200);
             }
 
-
         }
+
+        if($is_new == false){
+            if (Auth::user()->isTrud()) {
+                $niceNames = [
+                    'real_vacancy_id' => '«Вакансия»',
+                    'real_status_work_id' => '«Статус трудоустройства»',
+                    'client_id' => '«Клиент»'
+                ];
+                $validator = Validator::make($r->all(), [
+                    'real_vacancy_id' => 'required',
+                    'real_status_work_id' => 'required',
+                    'client_id' => 'required'
+                ], [], $niceNames);
+                if ($validator->fails()) {
+                    $error = $validator->errors()->first();
+                    return response(array('success' => "false", 'error' => $error), 200);
+                }
+            }
+        }
+
         if (Auth::user()->isFreelancer()) {
             $candidate->recruiter_id = Auth::user()->recruter_id;
         } else {
@@ -612,15 +653,6 @@ class CandidateController extends Controller
                 $task->to_user_id = Auth::user()->id;
                 $task->status = 1;
                 $task->type = 1;
-                $task->candidate_id = $candidate->id;
-                $task->save();
-
-                $task = new Task();
-                $task->title = 'Обработать лид';
-                $task->autor_id = Auth::user()->id;
-                $task->to_user_id = Auth::user()->recruter_id;
-                $task->status = 1;
-                $task->type = 8;
                 $task->candidate_id = $candidate->id;
                 $task->save();
             }
@@ -818,7 +850,8 @@ class CandidateController extends Controller
 
             $temp_arr = [
                 //  $checkbox,
-                '<a data-place_arrive_name="' . $Place_arrive . '" data-transport_name="' . $Transport . '" data-id="' . $u->id . '" data-date_arrive="' . Carbon::parse($u->date_arrive)->format('d.m.Y H:i') . '" data-transport_id="' . $u->transport_id . '" data-place_arrive_id="' . $u->place_arrive_id . '" class="edit_arrival" href="javascript:;"><i class="fa fa-pen"></i></a>',
+                '<a data-comment="' . $u->comment . '" data-place_arrive_name="' . $Place_arrive . '" data-transport_name="' . $Transport . '" data-id="' . $u->id . '" data-date_arrive="' . Carbon::parse($u->date_arrive)->format('d.m.Y H:i') . '" data-transport_id="' . $u->transport_id . '" data-place_arrive_id="' . $u->place_arrive_id . '" class="edit_arrival" href="javascript:;"><i class="fa fa-pen"></i></a>',
+                $u->comment,
                 $Place_arrive,
                 $date_arrive,
                 $date_arrive_time,
@@ -972,10 +1005,11 @@ class CandidateController extends Controller
                 $u->Candidate->phone,
                 $u->Candidate->viber,
                 $Place_arrive,
-                $date_arrive,
+                '<a data-comment="' . $u->comment . '" data-place_arrive_name="' . $Place_arrive . '" data-transport_name="' . $Transport . '" data-id="' . $u->id . '" data-date_arrive="' . Carbon::parse($u->date_arrive)->format('d.m.Y H:i') . '" data-transport_id="' . $u->transport_id . '" data-place_arrive_id="' . $u->place_arrive_id . '" class="edit_arrival" href="javascript:;">'.$date_arrive.'</a>',
                 $date_arrive_time,
                 $file,
                 $Transport,
+                $u->comment,
                 $Nacionality,
                 $Vacancy,
                 $select_active
@@ -994,29 +1028,53 @@ class CandidateController extends Controller
 
     public function postArrivalAdd(Request $r)
     {
-        $niceNames = [
-            'place_arrive_id' => '«Место»',
-            'transport_id' => '«Транспорт»',
-            'date_arrive' => '«Дата»',
-            'candidate_id' => '«ID»',
-        ];
-        $validator = Validator::make($r->all(), [
-            'place_arrive_id' => 'required',
-            'transport_id' => 'required',
-            'date_arrive' => 'required',
-            'candidate_id' => 'required',
-        ], [], $niceNames);
-        if ($validator->fails()) {
-            $error = $validator->errors()->first();
-            return response(array('success' => "false", 'error' => $error), 200);
+
+        if($r->has('id')){
+            $niceNames = [
+                'place_arrive_id' => '«Место»',
+                'transport_id' => '«Транспорт»',
+                'date_arrive' => '«Дата»',
+            ];
+            $validator = Validator::make($r->all(), [
+                'place_arrive_id' => 'required',
+                'transport_id' => 'required',
+                'date_arrive' => 'required'
+            ], [], $niceNames);
+            if ($validator->fails()) {
+                $error = $validator->errors()->first();
+                return response(array('success' => "false", 'error' => $error), 200);
+            }
+
+            $arrival = Candidate_arrival::find($r->id);
+            $candidate = Candidate::find($arrival->candidate_id);
+        } else {
+            $niceNames = [
+                'place_arrive_id' => '«Место»',
+                'transport_id' => '«Транспорт»',
+                'date_arrive' => '«Дата»',
+                'candidate_id' => '«ID»',
+            ];
+            $validator = Validator::make($r->all(), [
+                'place_arrive_id' => 'required',
+                'transport_id' => 'required',
+                'date_arrive' => 'required',
+                'candidate_id' => 'required',
+            ], [], $niceNames);
+            if ($validator->fails()) {
+                $error = $validator->errors()->first();
+                return response(array('success' => "false", 'error' => $error), 200);
+            }
+            $candidate = Candidate::find($r->candidate_id);
+            if ($candidate == null) {
+                return response(array('success' => "false", 'error' => 'Кандидат не найден'), 200);
+            }
+            $arrival = Candidate_arrival::find($r->id);
         }
 
-        $candidate = Candidate::find($r->candidate_id);
-        if ($candidate == null) {
-            return response(array('success' => "false", 'error' => 'Кандидат не найден'), 200);
-        }
 
-        $arrival = Candidate_arrival::find($r->id);
+
+
+
         if ($arrival == null) {
             $arrival = new  Candidate_arrival();
             $arrival->status = 0;
@@ -1024,6 +1082,7 @@ class CandidateController extends Controller
 
         $arrival->place_arrive_id = $r->place_arrive_id;
         $arrival->transport_id = $r->transport_id;
+        $arrival->comment = $r->comment;
         $arrival->date_arrive = Carbon::createFromFormat('d.m.Y H:i', $r->date_arrive);
         $arrival->candidate_id = $candidate->id;
         $arrival->save();

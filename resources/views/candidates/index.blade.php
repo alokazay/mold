@@ -14,6 +14,13 @@
         .sorting_disabled.sorting_desc:after {
             display: none !important;
         }
+        .table.gy-3 td, .table.gy-3 th {
+            padding-top: 0.3rem;
+            padding-bottom: 0.3rem;
+        }
+        td {
+            line-height: 1;
+        }
     </style>
 
 </head>
@@ -173,6 +180,12 @@
                                 <!--end::Card title-->
                                 <!--begin::Card toolbar-->
                                 <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
+                                    @if(Auth::user()->isKoordinator())
+                                    <div class="w-200px">
+                                        <select id="filter__clients"
+                                                class="form-select form-select form-select-solid"></select>
+                                    </div>
+                                    @endif
                                     <div class="w-200px">
 
                                         <select id="filter__vacancies"
@@ -337,7 +350,9 @@
             data.search = $('#f__search').val().trim();
             data.status = $('#filter__status').val().trim();
             data.vacancies = $('#filter__vacancies').val();
-
+            @if(Auth::user()->isKoordinator())
+            data.clients = $('#filter__clients').val();
+            @endif
             $.ajax({
                 url: '{{ route('candidates.json') }}',
                 type: 'POST',
@@ -390,6 +405,39 @@
     }).on('select2:clear', function (e) {
         oTable.draw();
     })
+
+    @if(Auth::user()->isKoordinator())
+    $('#filter__clients').select2({
+        placeholder: 'Поиск клиента',
+        allowClear: true,
+        ajax: {
+            url: "{{url('/')}}/search/candidate/coordinators/client",
+            dataType: 'json',
+            data: function (params) {
+                return {
+                    s: '{{request('s')}}',
+                    f_search: params.term,
+                };
+            },
+            processResults: function (data) {
+                var results = [];
+                $.each(data, function (index, item) {
+                    results.push({
+                        id: item.id,
+                        text: item.value
+                    });
+                });
+                return {
+                    results: results
+                };
+            }
+        },
+    }).on('select2:select', function (e) {
+        oTable.draw();
+    }).on('select2:clear', function (e) {
+        oTable.draw();
+    })
+    @endif
 
 
     function changeActivation(id) {
