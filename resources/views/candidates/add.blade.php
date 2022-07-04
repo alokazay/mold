@@ -251,7 +251,7 @@
                                     <div class="col">
 
                                         <div class="row mb-5">
-                                            <div @if(Auth::user()->isFreelancer()) style="display:none;"
+                                            <div @if(Auth::user()->isFreelancer() || Auth::user()->isRecruter()) style="display:none;"
                                                  @endif class="col-6">
                                                 <div class="d-flex flex-column mb-0 fv-row">
                                                     <label class="fs-5 fw-bold mb-2">Рекрутер</label>
@@ -517,9 +517,9 @@
                 </div>
                 <div class="row mb-5">
                     <div class="col-6">
-                        <label class="required fs-5 fw-bold mb-2">Комментарий</label>
-                        <input id="modal__comment"
-                               class="form-control form-control-sm form-control-solid" type="text"/>
+                        <label for="modal__comment" class="required fs-5 fw-bold mb-2">Комментарий</label>
+                        <textarea  class="form-control form-control-sm form-control-solid"
+                                   cols="20" id="modal__comment"></textarea>
                     </div>
                 </div>
 
@@ -761,6 +761,7 @@
     $('#modal__date_arrive').flatpickr({
         dateFormat: 'd.m.Y H:i',
         enableTime: true,
+        minDate: "today",
         time_24hr: true,
         locale: {
             firstDayOfWeek: 2

@@ -146,7 +146,7 @@
                                             <div class="col-6">
                                                 <div class="d-flex flex-column mb-0 fv-row">
                                                     <label class="required fs-5 fw-bold mb-2">Банк</label>
-                                                    <select class="form-control form-control-sm form-control-solid"
+                                                    <select class="form-select form-select-sm form-select-solid"
                                                             id="modal_users_add__account_type">
                                                         <option value="1">Польский</option>
                                                         <option value="2">Заграничный</option>
@@ -157,16 +157,15 @@
 
                                         </div>
                                         <div class="row mb-5">
-                                            <div class="col-6">
+                                            <div class="col-6 change_bank bank1">
                                                 <div class="d-flex flex-column mb-0 fv-row">
                                                     <label class="fs-5 fw-bold mb-2">Польский</label>
-                                                    <input placeholder="Номер банковского счета"
-                                                           id="modal_users_add__account_poland"
+                                                    <input placeholder="Номер банковского счета" id="modal_users_add__account_poland"
                                                            class="form-control form-control-sm form-control-solid"
                                                            type="text"/>
                                                 </div>
                                             </div>
-                                            <div class="col-6">
+                                            <div style="display: none;" class="col-6 change_bank bank3">
                                                 <div class="d-flex flex-column mb-0 fv-row">
                                                     <label class="fs-5 fw-bold mb-2">PayPal</label>
                                                     <input placeholder="email" id="modal_users_add__account_paypal"
@@ -175,7 +174,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row mb-5">
+                                        <div style="display: none;" class="row mb-5 change_bank bank2">
                                             <div class="col-6">
                                                 <div class="d-flex flex-column mb-0 fv-row">
                                                     <label class="fs-5 fw-bold mb-2">Название банка</label>
@@ -193,7 +192,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row mb-5">
+                                        <div style="display: none;" class="row mb-5  change_bank bank2">
                                             <div class="col-6">
                                                 <div class="d-flex flex-column mb-0 fv-row">
                                                     <label class="fs-5 fw-bold mb-2">Номер карты</label>
@@ -211,6 +210,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                         <div class="row mb-5">
                                             <div class="col">
                                                 <div class="d-flex flex-column mb-0 fv-row">
@@ -324,6 +324,11 @@
 <script src="{{url('/')}}/assets/js/scripts.bundle.js"></script>
 <!--end::Global Javascript Bundle-->
 <script>
+
+    $(document).on('click', '#modal_users_add__account_type', function () {
+        $('.change_bank').hide();
+        $('.bank' + $(this).val()).show();
+    });
 
     $('#modal_users_add__save').click(function (e) {
         e.preventDefault();

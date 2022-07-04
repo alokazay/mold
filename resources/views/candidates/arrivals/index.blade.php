@@ -155,7 +155,7 @@
 
                                         <select id="filter__status" class="form-select form-select-solid">
                                             <option value="">Статус</option>
-                                            <option value="0">Нет статуса</option>
+                                            <option value="0">Готов к выезду</option>
                                             <option value="1">В пути</option>
                                             <option value="2">Приехал</option>
                                             <option value="3">Не доехал</option>
@@ -262,9 +262,9 @@
                 </div>
                 <div class="row mb-5">
                     <div class="col-6">
-                        <label class="required fs-5 fw-bold mb-2">Комментарий</label>
-                        <input id="modal__comment"
-                               class="form-control form-control-sm form-control-solid" type="text"/>
+                        <label for="modal__comment" class="required fs-5 fw-bold mb-2">Комментарий</label>
+                        <textarea  class="form-control form-control-sm form-control-solid"
+                                   cols="20" id="modal__comment"></textarea>
                     </div>
                 </div>
 
@@ -302,6 +302,7 @@
         dateFormat: 'd.m.Y H:i',
         enableTime: true,
         time_24hr: true,
+        minDate: "today",
         locale: {
             firstDayOfWeek: 2
         },

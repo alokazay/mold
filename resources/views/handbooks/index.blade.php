@@ -210,7 +210,6 @@
     function deleteHandbook(id) {
         Swal.fire({
             html: `Вы уверены что хотите удалить?`,
-            icon: "info",
             buttonsStyling: false,
             showCancelButton: true,
             confirmButtonText: "да!",

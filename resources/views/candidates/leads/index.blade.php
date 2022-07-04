@@ -180,7 +180,6 @@
                                             <th class="max-w-65px sorting_disabled">Контактное</th>
                                             <th class="max-w-65px sorting_disabled">Дата приезда</th>
                                             <th class="w-35px sorting_disabled">Скан</th>
-                                            <th class="min-w-100px sorting_disabled">Статус</th>
                                         </tr>
                                         <!--end::Table row-->
                                         </thead>

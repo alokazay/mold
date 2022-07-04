@@ -6,6 +6,7 @@ use App\Models\Account_firm;
 use App\Models\C_file;
 use App\Models\Finance;
 use App\Models\Handbook;
+use App\Models\Task;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -200,6 +201,19 @@ class FinanceController extends Controller
 
         $user->balance = Auth::user()->balance - $f->amount;
         $user->save();
+
+        $buxs = User::where('group_id', 7)->where('activation', 1)->get();
+        foreach ($buxs as $bux) {
+            $task = new Task();
+            $task->title = 'Оплатить счет';
+            $task->autor_id = Auth::user()->id;
+            $task->to_user_id = $bux->id;
+            $task->status = 1;
+            $task->type = 8;
+            $task->freelancer_id = $user->id;
+            $task->save();
+        }
+
 
         return response(array('success' => "true", 'amount' => $user->balance), 200);
     }

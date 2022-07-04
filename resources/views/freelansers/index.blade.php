@@ -312,7 +312,7 @@
                     <div class="col-6">
                         <div class="d-flex flex-column mb-0 fv-row">
                             <label class="required fs-5 fw-bold mb-2">Банк</label>
-                            <select class="form-control form-control-sm form-control-solid"
+                            <select class="form-select form-select-sm form-select-solid"
                                     id="modal_users_add__account_type">
                                 <option value="1">Польский</option>
                                 <option value="2">Заграничный</option>

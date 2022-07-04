@@ -89,7 +89,7 @@ class CandidateController extends Controller
         if (Auth::user()->isKoordinator()) {
             $users = $users->whereIn('active', [8]);
 
-            $users = $users->whereHas('client', function($q){
+            $users = $users->whereHas('client', function ($q) {
                 $q->where('coordinator_id', Auth::user()->id);
             });
 
@@ -156,7 +156,7 @@ class CandidateController extends Controller
 
             $Vacancy = '';
             if ($u->Vacancy != null) {
-                $Vacancy = '<span style="font-size: 11px;line-height: 1;">'.$u->Vacancy->title.'</span>';
+                $Vacancy = '<span style="font-size: 11px;line-height: 1;">' . $u->Vacancy->title . '</span>';
             }
 
             if ($u->date_arrive != null) {
@@ -275,11 +275,6 @@ class CandidateController extends Controller
             if ($reason_reject != '') {
                 $reason_reject = '<br> ' . $u->reason_reject;
             }
-            $select_active = '<select onchange="changeActivation(' . $u->id . ')"
-                                    class="form-select form-select-sm form-select-solid changeActivation' . $u->id . '">
-                                        <option value="">Статус</option>
-                                             ' . $u->getStatusOptions() . '
-                            </select>' . $reason_reject;
 
 
             $Vacancy = '';
@@ -303,9 +298,7 @@ class CandidateController extends Controller
                 $u->viber,
                 $u->phone_parent,
                 $date_arrive,
-                $file,
-                $select_active
-
+                $file
             ];
             $data[] = $temp_arr;
         }
@@ -334,7 +327,7 @@ class CandidateController extends Controller
             }
         }
         if ($r->s == 10) {
-            return response(array('success' => "true", 'error' => 'Статус ставить нельзя, єто авто статус'), 200);
+            return response(array('success' => "true", 'error' => 'Статус менять нельзя, это автостату'), 200);
         }
 
         if ($candidate->active == 4) {
@@ -345,7 +338,7 @@ class CandidateController extends Controller
             }
         }
 
-        if(Auth::user()->isRecruter()){
+        if (Auth::user()->isRecruter()) {
             if ($r->s == 2) {
                 return response(array('success' => "true", 'error' => 'Статус ставить нельзя'), 200);
             }
@@ -353,19 +346,22 @@ class CandidateController extends Controller
 
 
         if ($candidate != null) {
-            $history = new History_candidate();
-            $history->preview_value = $candidate->active;
-            $history->new_value = $r->s;
-            $history->user_id = Auth::user()->id;
-            $history->table_id = 'candidates_active';
-            $history->save();
+            if( $r->s != '' ) {
+                $history = new History_candidate();
+                $history->preview_value = $candidate->active;
+                $history->new_value = $r->s;
+                $history->user_id = Auth::user()->id;
+                $history->table_id = 'candidates_active';
+                $history->save();
+            }
+
 
             $candidate->active = $r->s;
             $candidate->reason_reject = $r->r;
             $candidate->save();
 
-            if (Auth::user()->isFreelancer() ) {
-                if($candidate->active == 3){
+            if (Auth::user()->isFreelancer()) {
+                if ($candidate->active == 3) {
                     $task = new Task();
                     $task->title = 'Связаться с кандидатом';
                     $task->autor_id = Auth::user()->id;
@@ -376,7 +372,7 @@ class CandidateController extends Controller
                     $task->save();
                 }
 
-                if($candidate->active == 2){
+                if ($candidate->active == 2) {
                     $task = new Task();
                     $task->title = 'Обработать лид';
                     $task->autor_id = Auth::user()->id;
@@ -388,11 +384,10 @@ class CandidateController extends Controller
                 }
 
             }
+            if (Auth::user()->isRecruter()) {
 
-            if (Auth::user()->isRecruter() ) {
 
-
-                if($candidate->active == 3){
+                if ($candidate->active == 3) {
                     $task = new Task();
                     $task->title = 'Связаться с кандидатом';
                     $task->autor_id = Auth::user()->id;
@@ -417,29 +412,48 @@ class CandidateController extends Controller
                     $task->save();
                 }
 
-                $logists = User::where('group_id', 4)->where('activation', 1)->get();
-                foreach ($logists as $logist) {
+            }
+            if ($candidate->active == 6) {
+                $trudos = User::where('group_id', 5)->where('activation', 1)->get();
+                foreach ($trudos as $trudo) {
                     $task = new Task();
-                    $task->title = 'Встертить кандидата';
+                    $task->title = 'Встретить кандидата и подписать договор';
                     $task->autor_id = Auth::user()->id;
-                    $task->to_user_id = $logist->id;
+                    $task->to_user_id = $trudo->id;
                     $task->status = 1;
-                    $task->type = 5;
+                    $task->type = 9;
                     $task->candidate_id = $candidate->id;
                     $task->save();
                 }
 
-                $logists = User::where('group_id', 5)->where('activation', 1)->get();
-                foreach ($logists as $logist) {
+            }
+
+            if ($candidate->active == 8) {
+                $Clinets_c_id = [];
+
+
+                if ($candidate->Vacancy != null) {
+                    foreach ($candidate->Vacancy->Vacancy_client as $client) {
+                        if ($client->Client != null) {
+                            if(!in_array($client->Client->coordinator_id,$Clinets_c_id)){
+                                $Clinets_c_id[] = $client->Client->coordinator_id;
+                            }
+
+                        }
+                    }
+                }
+
+                foreach ($Clinets_c_id as $Cl_id){
                     $task = new Task();
                     $task->title = 'Указать первый рабочий день';
                     $task->autor_id = Auth::user()->id;
-                    $task->to_user_id = $logist->id;
+                    $task->to_user_id = $Cl_id;
                     $task->status = 1;
                     $task->type = 6;
                     $task->candidate_id = $candidate->id;
                     $task->save();
                 }
+
             }
 
         }
@@ -509,12 +523,14 @@ class CandidateController extends Controller
             'firstName' => '«Имя»',
             'phone' => '«Телефон»',
             'viber' => '«viber»',
+            'dateOfBirth' => '«Дата»',
         ];
         $validator = Validator::make($r->all(), [
             'lastName' => 'required',
             'firstName' => 'required',
             'phone' => 'required',
             'viber' => 'required',
+            'dateOfBirth' => 'required|date_format:d.m.Y',
         ], [], $niceNames);
         if ($validator->fails()) {
             $error = $validator->errors()->first();
@@ -530,28 +546,45 @@ class CandidateController extends Controller
 
         $candidate = Candidate::find($r->id);
         if ($candidate == null) {
+
+
+            $niceNames = [
+                'phone' => '«Телефон»',
+                'inn' => '«ИНН»',
+            ];
+            $validator = Validator::make($r->all(), [
+                'phone' => 'required|unique:candidates,phone',
+                'inn' => 'required|unique:candidates,inn'
+            ], [], $niceNames);
+            if ($validator->fails()) {
+                $error = $validator->errors()->first();
+                return response(array('success' => "false", 'error' => $error), 200);
+            }
+
+
             $is_new = true;
             $candidate = new Candidate();
             $candidate->user_id = Auth::user()->id;
             $candidate->active = 1;
+
+
         } else {
             $is_new = false;
-            if (Candidate::where('id', $candidate->id)
-                    ->where('phone', $r->phone)
-                    ->where('phone', '!=', $candidate->phone)
-                    ->count() > 0) {
-                return response(array('success' => "false", 'error' => 'Телефон уже занят'), 200);
+            $niceNames = [
+                'phone' => '«Телефон»',
+                'inn' => '«ИНН»',
+            ];
+            $validator = Validator::make($r->all(), [
+                'phone' => 'required|unique:candidates,phone,' . $candidate->id,
+                'inn' => 'required|unique:candidates,inn,' . $candidate->id
+            ], [], $niceNames);
+            if ($validator->fails()) {
+                $error = $validator->errors()->first();
+                return response(array('success' => "false", 'error' => $error), 200);
             }
-            if (Candidate::where('id', $candidate->id)
-                    ->where('inn', $r->inn)
-                    ->where('inn', '!=', $candidate->inn)
-                    ->count() > 0) {
-                return response(array('success' => "false", 'error' => 'Телефон уже занят'), 200);
-            }
-
         }
 
-        if($is_new == false){
+        if ($is_new == false) {
             if (Auth::user()->isTrud()) {
                 $niceNames = [
                     'real_vacancy_id' => '«Вакансия»',
@@ -572,7 +605,11 @@ class CandidateController extends Controller
 
         if (Auth::user()->isFreelancer()) {
             $candidate->recruiter_id = Auth::user()->recruter_id;
-        } else {
+        }
+        if (Auth::user()->isRecruter()) {
+            $candidate->recruiter_id = Auth::user()->id;
+        }
+        if (Auth::user()->isAdmin()) {
             $candidate->recruiter_id = $r->recruiter_id;
         }
 
@@ -646,16 +683,16 @@ class CandidateController extends Controller
 
         // Авто задачи
         if ($is_new) {
-            if (Auth::user()->isFreelancer()) {
-                $task = new Task();
-                $task->title = 'Утвердить дату приезда';
-                $task->autor_id = Auth::user()->id;
-                $task->to_user_id = Auth::user()->id;
-                $task->status = 1;
-                $task->type = 1;
-                $task->candidate_id = $candidate->id;
-                $task->save();
-            }
+            /*  if (Auth::user()->isFreelancer()) {
+                  $task = new Task();
+                  $task->title = 'Утвердить дату приезда';
+                  $task->autor_id = Auth::user()->id;
+                  $task->to_user_id = Auth::user()->id;
+                  $task->status = 1;
+                  $task->type = 1;
+                  $task->candidate_id = $candidate->id;
+                  $task->save();
+              }*/
         }
 
 
@@ -985,13 +1022,13 @@ class CandidateController extends Controller
             } else {
                 $Transport = '';
             }
-            if ($u->Candidate->Nacionality != null) {
+            if ($u->Candidate != null && $u->Candidate->Nacionality != null) {
                 $Nacionality = $u->Candidate->Nacionality->name;
             } else {
                 $Nacionality = '';
             }
 
-            if ($u->Candidate->Vacancy != null) {
+            if ($u->Candidate != null && $u->Candidate->Vacancy != null) {
                 $Vacancy = $u->Candidate->Vacancy->title;
             } else {
                 $Vacancy = '';
@@ -1005,7 +1042,7 @@ class CandidateController extends Controller
                 $u->Candidate->phone,
                 $u->Candidate->viber,
                 $Place_arrive,
-                '<a data-comment="' . $u->comment . '" data-place_arrive_name="' . $Place_arrive . '" data-transport_name="' . $Transport . '" data-id="' . $u->id . '" data-date_arrive="' . Carbon::parse($u->date_arrive)->format('d.m.Y H:i') . '" data-transport_id="' . $u->transport_id . '" data-place_arrive_id="' . $u->place_arrive_id . '" class="edit_arrival" href="javascript:;">'.$date_arrive.'</a>',
+                '<a data-comment="' . $u->comment . '" data-place_arrive_name="' . $Place_arrive . '" data-transport_name="' . $Transport . '" data-id="' . $u->id . '" data-date_arrive="' . Carbon::parse($u->date_arrive)->format('d.m.Y H:i') . '" data-transport_id="' . $u->transport_id . '" data-place_arrive_id="' . $u->place_arrive_id . '" class="edit_arrival" href="javascript:;">' . $date_arrive . '</a>',
                 $date_arrive_time,
                 $file,
                 $Transport,
@@ -1029,7 +1066,7 @@ class CandidateController extends Controller
     public function postArrivalAdd(Request $r)
     {
 
-        if($r->has('id')){
+        if ($r->has('id')) {
             $niceNames = [
                 'place_arrive_id' => '«Место»',
                 'transport_id' => '«Транспорт»',
@@ -1070,9 +1107,6 @@ class CandidateController extends Controller
             }
             $arrival = Candidate_arrival::find($r->id);
         }
-
-
-
 
 
         if ($arrival == null) {
