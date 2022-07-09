@@ -85,6 +85,9 @@ class CandidateController extends Controller
         if (Auth::user()->isLogist()) {
             $users = $users->whereIn('active', [3, 4, 6]);
         }
+        if (Auth::user()->isTrud()) {
+            $users = $users->whereIn('active', [3, 8, 6]);
+        }
 
         if (Auth::user()->isKoordinator()) {
             $users = $users->whereIn('active', [8]);
@@ -346,7 +349,7 @@ class CandidateController extends Controller
 
 
         if ($candidate != null) {
-            if( $r->s != '' ) {
+            if ($r->s != '') {
                 $history = new History_candidate();
                 $history->preview_value = $candidate->active;
                 $history->new_value = $r->s;
@@ -435,7 +438,7 @@ class CandidateController extends Controller
                 if ($candidate->Vacancy != null) {
                     foreach ($candidate->Vacancy->Vacancy_client as $client) {
                         if ($client->Client != null) {
-                            if(!in_array($client->Client->coordinator_id,$Clinets_c_id)){
+                            if (!in_array($client->Client->coordinator_id, $Clinets_c_id)) {
                                 $Clinets_c_id[] = $client->Client->coordinator_id;
                             }
 
@@ -443,7 +446,7 @@ class CandidateController extends Controller
                     }
                 }
 
-                foreach ($Clinets_c_id as $Cl_id){
+                foreach ($Clinets_c_id as $Cl_id) {
                     $task = new Task();
                     $task->title = 'Указать первый рабочий день';
                     $task->autor_id = Auth::user()->id;
@@ -525,13 +528,15 @@ class CandidateController extends Controller
             'viber' => '«viber»',
             'dateOfBirth' => '«Дата»',
         ];
-        $validator = Validator::make($r->all(), [
+        $validate_arr = [
             'lastName' => 'required',
             'firstName' => 'required',
-            'phone' => 'required',
-            'viber' => 'required',
+            'phone' => 'required|regex:/\+[0-9]{9,12}/',
+            'viber' => 'required|regex:/\+[0-9]{9,12}/',
             'dateOfBirth' => 'required|date_format:d.m.Y',
-        ], [], $niceNames);
+        ];
+
+        $validator = Validator::make($r->all(), $validate_arr, [], $niceNames);
         if ($validator->fails()) {
             $error = $validator->errors()->first();
             return response(array('success' => "false", 'error' => $error), 200);
@@ -553,8 +558,8 @@ class CandidateController extends Controller
                 'inn' => '«ИНН»',
             ];
             $validator = Validator::make($r->all(), [
-                'phone' => 'required|unique:candidates,phone',
-                'inn' => 'required|unique:candidates,inn'
+                'phone' => 'required|regex:/\+[0-9]{9,12}/|unique:candidates,phone',
+                'inn' => 'required|numeric|unique:candidates,inn'
             ], [], $niceNames);
             if ($validator->fails()) {
                 $error = $validator->errors()->first();
@@ -568,6 +573,13 @@ class CandidateController extends Controller
             $candidate->active = 1;
 
 
+            if (Auth::user()->isRecruter()) {
+                if ($candidate->D_file == null) {
+                    return response(array('success' => "false", 'error' => 'Загрузите документ'), 200);
+                }
+            }
+
+
         } else {
             $is_new = false;
             $niceNames = [
@@ -575,13 +587,21 @@ class CandidateController extends Controller
                 'inn' => '«ИНН»',
             ];
             $validator = Validator::make($r->all(), [
-                'phone' => 'required|unique:candidates,phone,' . $candidate->id,
+                'phone' => 'required|regex:/\+[0-9]{9,12}/|unique:candidates,phone,' . $candidate->id,
                 'inn' => 'required|unique:candidates,inn,' . $candidate->id
             ], [], $niceNames);
             if ($validator->fails()) {
                 $error = $validator->errors()->first();
                 return response(array('success' => "false", 'error' => $error), 200);
             }
+
+            if (Auth::user()->isRecruter()) {
+                if ($candidate->D_file == null) {
+                    return response(array('success' => "false", 'error' => 'Загрузите документ'), 200);
+                }
+            }
+
+
         }
 
         if ($is_new == false) {
@@ -683,16 +703,16 @@ class CandidateController extends Controller
 
         // Авто задачи
         if ($is_new) {
-            /*  if (Auth::user()->isFreelancer()) {
-                  $task = new Task();
-                  $task->title = 'Утвердить дату приезда';
-                  $task->autor_id = Auth::user()->id;
-                  $task->to_user_id = Auth::user()->id;
-                  $task->status = 1;
-                  $task->type = 1;
-                  $task->candidate_id = $candidate->id;
-                  $task->save();
-              }*/
+            if (Auth::user()->isFreelancer()) {
+                $task = new Task();
+                $task->title = 'Обработать кандидата';
+                $task->autor_id = Auth::user()->id;
+                $task->to_user_id = Auth::user()->id;
+                $task->status = 1;
+                $task->type = 1;
+                $task->candidate_id = $candidate->id;
+                $task->save();
+            }
         }
 
 
@@ -1141,7 +1161,6 @@ class CandidateController extends Controller
         $arrivals = Candidate_arrival::find($r->id);
         if ($arrivals != null) {
             Candidate_arrival::where('id', $r->id)->update(['status' => $r->s]);
-            Candidate::where('id', $arrivals->candidate_id)->update(['active' => $r->s]);
         }
 
         return response(array('success' => "true"), 200);

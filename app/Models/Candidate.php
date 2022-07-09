@@ -84,7 +84,6 @@ class Candidate extends Model
         if (Auth::user()->isRecruter()) {
             $arr = [
                 ['1', 'Новый кандидат'],
-                ['2', 'Лид'],
                 ['3', 'Отказ'],
                 ['4', 'Готов к выезду'],
                 ['5', 'Архив']

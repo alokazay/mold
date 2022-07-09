@@ -163,7 +163,7 @@ class UsersController extends Controller
                 'password' => ['required', Password::min(10)],
                 'firstName' => 'required',
                 'lastName' => 'required',
-                'phone' => 'required',
+                'phone' => 'required|regex:/\+[0-9]{9,12}/',
                 'email' => 'required|email:rfc,dns|unique:users,email',
             ]);
             if ($validator->fails()) {
@@ -176,7 +176,7 @@ class UsersController extends Controller
                 'email' => 'required|email:rfc,dns|unique:users,email,' . $user->id,
                 'firstName' => 'required',
                 'lastName' => 'required',
-                'phone' => 'required',
+                'phone' => 'required|regex:/\+[0-9]{9,12}/',
             ]);
             if ($validator->fails()) {
                 $error = $validator->errors()->first();
@@ -239,7 +239,7 @@ class UsersController extends Controller
                 'password' => ['required', Password::min(10)],
                 'firstName' => 'required',
                 'lastName' => 'required',
-                'phone' => 'required',
+                'phone' => 'required|regex:/\+[0-9]{9,12}/',
                 'email' => 'required|email:rfc,dns|unique:users,email',
             ]);
             if ($validator->fails()) {
@@ -252,7 +252,7 @@ class UsersController extends Controller
                 'email' => 'required|email:rfc,dns|unique:users,email,' . $user->id,
                 'firstName' => 'required',
                 'lastName' => 'required',
-                'phone' => 'required',
+                'phone' => 'required|regex:/\+[0-9]{9,12}/',
             ]);
             if ($validator->fails()) {
                 $error = $validator->errors()->first();
@@ -315,7 +315,7 @@ class UsersController extends Controller
             'email' => 'required|email:rfc,dns|unique:users,email,' . $user->id,
             'firstName' => 'required',
             'lastName' => 'required',
-            'phone' => 'required',
+            'phone' => 'required|regex:/\+[0-9]{9,12}/',
         ]);
         if ($validator->fails()) {
             $error = $validator->errors()->first();

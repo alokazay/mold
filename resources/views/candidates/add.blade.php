@@ -231,7 +231,7 @@
                                                     <label class=" fs-5 fw-bold mb-2">Планируемая дата
                                                         приезда</label>
                                                     <input id="date_arrive"
-                                                           @if($canddaite != null) value="{{\Carbon\Carbon::parse($canddaite->date_arrive)->format('d.m.Y')}}"
+                                                           @if($canddaite != null && $canddaite->date_arrive != null) value="{{\Carbon\Carbon::parse($canddaite->date_arrive)->format('d.m.Y')}}"
                                                            @endif
                                                            class="form-control form-control-sm form-control-solid"
                                                            type="text"/>
@@ -1163,8 +1163,14 @@
             formData.append('id', $('#id').val());
         },
         success: function (file, done) {
-            $('#id').val(done.id);
+            if (done.error) {
+                toastr.error(done.error);
+            } else {
+                $('#id').val(done.id);
+            }
+
         },
+
         accept: function (file, done) {
             done();
         }
