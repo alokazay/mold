@@ -6,6 +6,13 @@
 
     @include('includes.global_styles')
     <style>
+        .disnone {
+            display: none !important;
+        } 
+
+        .select2-container .select2-selection--multiple {
+            cursor: default!important;
+         }       
 
         .sorting_disabled.sorting_asc:after {
             display: none !important;
@@ -16,20 +23,41 @@
         }
 
         .form-control:disabled, .form-control[readonly] {
-            background-color: #cfcfcf78!important;
+            background-color: #fff!important;
             opacity: 1;
+            border:none;
         }
         .form-select-solid {
-            background-color: #cfcfcf78!important;
+            background-color: #fff!important;
             opacity: 1;
+            border:none;
         }
         #description, #housing_description {
-            background-color: #cfcfcf78!important;
+            background-color: #fff!important;
             opacity: 1;
+            border:none;
         }
         .ql-toolbar {
             display: none;
         }
+
+        .select2-selection__choice {
+            background-color: #fff!important;
+        }
+
+        .select2-selection__choice__remove {
+            display: none!important;
+        }
+
+        .select2-container--bootstrap5 .select2-selection--multiple.form-select-sm .select2-selection__choice .select2-selection__choice__display {
+            margin-left: 0;
+            font-size: 0.9rem;
+        }
+
+        .mb-5 {
+            margin-bottom: 0!important;
+        }
+
     </style>
 
 </head>
@@ -172,7 +200,7 @@
                                             </div>
                                         </div>
                                         <div class="row mb-5">
-                                            <div class="col disabled">
+                                            <div class="col disabled disnone">
                                                 <label for="client_id" class="form-label">Клиент</label>
                                                 <select  id="client_id" multiple="multiple"
                                                         class="form-select form-select-sm form-select-solid"></select>
