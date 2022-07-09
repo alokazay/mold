@@ -151,7 +151,7 @@
                                         <div class="row mb-5">
                                             <div class="col">
                                                 <div class="d-flex flex-column mb-0 fv-row">
-                                                    <label class="required fs-5 fw-bold mb-2">Название</label>
+                                                    <label class="fs-5 fw-bold mb-2">Название</label>
                                                     <input disabled id="title"
                                                            @if($vacancy != null) value="{{$vacancy->title}}" @endif
                                                            class="form-control form-control-sm form-control-solid"
@@ -162,7 +162,7 @@
                                         <div class="row mb-5">
                                             <div class="col">
                                                 <div class="d-flex flex-column mb-0 fv-row">
-                                                    <label class="required fs-5 fw-bold mb-2">Описание вакансии</label>
+                                                    <label class="fs-5 fw-bold mb-2">Описание вакансии</label>
                                                     <div disabled style="overflow: auto;height: 200px;"
                                                          id="description"
                                                          class="mb-2"> @if($vacancy != null){!! $vacancy->description !!}@endif</div>
@@ -173,12 +173,12 @@
                                         </div>
                                         <div class="row mb-5">
                                             <div class="col disabled">
-                                                <label for="client_id" class="required form-label">Клиент</label>
+                                                <label for="client_id" class="form-label">Клиент</label>
                                                 <select  id="client_id" multiple="multiple"
                                                         class="form-select form-select-sm form-select-solid"></select>
                                             </div>
                                             <div class="col">
-                                                <label for="industry_id" class="required form-label">Отрасль</label>
+                                                <label for="industry_id" class="form-label">Отрасль</label>
                                                 <select disabled id="industry_id" multiple="multiple"
                                                         class="form-select form-select-sm form-select-solid"></select>
                                             </div>
@@ -186,12 +186,12 @@
                                         <div class="row mb-5">
                                             <div class="col">
                                                 <label for="nationality_id"
-                                                       class="required form-label">Национальность</label>
+                                                       class="form-label">Национальность</label>
                                                 <select disabled id="nationality_id" multiple="multiple"
                                                         class="form-select  form-select-sm form-select-solid"> </select>
                                             </div>
                                             <div class="col">
-                                                <label for="work_place_id" class="required form-label">Место
+                                                <label for="work_place_id" class="form-label">Место
                                                     работы</label>
                                                 <select disabled id="work_place_id" multiple="multiple"
                                                         class="form-select form-select-sm form-select-solid"></select>
@@ -200,7 +200,7 @@
                                         <div class="row mb-5">
                                             <div class="col">
                                                 <div class="d-flex flex-column mb-0 fv-row">
-                                                    <label for="deadline_from" class="required fs-5 fw-bold mb-2">Дедлайн,
+                                                    <label for="deadline_from" class="fs-5 fw-bold mb-2">Дедлайн,
                                                         от</label>
                                                     <input disabled id="deadline_from"
                                                            @if($vacancy != null) value="{{\Carbon\Carbon::parse($vacancy->deadline_from)->format('d.m.Y')}}"
@@ -211,7 +211,7 @@
                                             </div>
                                             <div class="col">
                                                 <div class="d-flex flex-column mb-0 fv-row">
-                                                    <label for="deadline_to" class="required fs-5 fw-bold mb-2">Дедлайн,
+                                                    <label for="deadline_to" class="fs-5 fw-bold mb-2">Дедлайн,
                                                         до</label>
                                                     <input disabled id="deadline_to"
                                                            @if($vacancy != null) value="{{\Carbon\Carbon::parse($vacancy->deadline_to)->format('d.m.Y')}}"
@@ -224,7 +224,7 @@
                                         <div class="row mb-5">
                                             <div class="col">
                                                 <div class="d-flex flex-column mb-0 fv-row">
-                                                    <label for="count_men" class="required fs-5 fw-bold mb-2">Мужчины,
+                                                    <label for="count_men" class="fs-5 fw-bold mb-2">Мужчины,
                                                         кол-во</label>
                                                     <input disabled id="count_men"
                                                            @if($vacancy != null && $vacancy->count_men > 0) value="Да" @endif
@@ -234,7 +234,7 @@
                                             </div>
                                             <div class="col">
                                                 <div class="d-flex flex-column mb-0 fv-row">
-                                                    <label for="count_women" class="required fs-5 fw-bold mb-2">Женщины,
+                                                    <label for="count_women" class="fs-5 fw-bold mb-2">Женщины,
                                                         кол-во</label>
                                                     <input disabled id="count_women"
                                                            @if($vacancy != null && $vacancy->count_women > 0) value="Да"
@@ -245,7 +245,7 @@
                                             </div>
                                             <div class="col">
                                                 <div class="d-flex flex-column mb-0 fv-row">
-                                                    <label for="count_people" class="required fs-5 fw-bold mb-2">Не
+                                                    <label for="count_people" class="fs-5 fw-bold mb-2">Не
                                                         важно, кол-во</label>
                                                     <input disabled id="count_people"
                                                            @if($vacancy != null && $vacancy->count_people > 0) value="Да"
@@ -262,7 +262,7 @@
                                         <div class="row mb-5">
                                             <div class="col">
                                                 <div class="d-flex flex-column mb-0 fv-row">
-                                                    <label for="salary" class="required fs-5 fw-bold mb-2">Ставка,
+                                                    <label for="salary" class="fs-5 fw-bold mb-2">Ставка,
                                                         зл/ч</label>
                                                     <input disabled id="salary"
                                                            @if($vacancy != null) value="{{$vacancy->salary}}" @endif
@@ -272,7 +272,7 @@
                                             </div>
                                             <div class="col">
                                                 <div class="d-flex flex-column mb-0 fv-row">
-                                                    <label for="salary_description" class="required fs-5 fw-bold mb-2">Описание
+                                                    <label for="salary_description" class="fs-5 fw-bold mb-2">Описание
                                                         ставки</label>
                                                     <input disabled id="salary_description"
                                                            @if($vacancy != null) value="{{$vacancy->salary_description}}"
@@ -285,7 +285,7 @@
                                         <div class="row mb-5">
                                             <div class="col">
                                                 <div class="d-flex flex-column mb-0 fv-row">
-                                                    <label for="count_hours" class="required fs-5 fw-bold mb-2">Кол-во
+                                                    <label for="count_hours" class="fs-5 fw-bold mb-2">Кол-во
                                                         часов</label>
                                                     <input disabled id="count_hours"
                                                            @if($vacancy != null) value="{{$vacancy->count_hours}}"
@@ -295,7 +295,7 @@
                                                 </div>
                                             </div>
                                             <div class="col">
-                                                <label for="doc_id" class="required form-label">Тип договора</label>
+                                                <label for="doc_id" class="form-label">Тип договора</label>
                                                 <select disabled id="doc_id"
                                                         class="form-select  form-select-sm form-select-solid"></select>
                                             </div>
@@ -303,7 +303,7 @@
                                         <div class="row mb-5">
                                             <div class="col">
                                                 <div class="d-flex flex-column mb-0 fv-row">
-                                                    <label for="housing_cost" class="required fs-5 fw-bold mb-2">Жилье,
+                                                    <label for="housing_cost" class="fs-5 fw-bold mb-2">Жилье,
                                                         стоимость</label>
                                                     <input disabled id="housing_cost"
                                                            @if($vacancy != null) value="{{$vacancy->housing_cost}}"
@@ -314,7 +314,7 @@
                                             </div>
                                             <div class="col">
                                                 <div class="d-flex flex-column mb-0 fv-row">
-                                                    <label for="housing_people" class="required fs-5 fw-bold mb-2">Кол-во
+                                                    <label for="housing_people" class="fs-5 fw-bold mb-2">Кол-во
                                                         людей в комнате</label>
                                                     <input disabled id="housing_people"
                                                            @if($vacancy != null) value="{{$vacancy->housing_people}}"
@@ -327,7 +327,7 @@
                                         <div class="row mb-5">
                                             <div class="col">
                                                 <div class="d-flex flex-column mb-0 fv-row">
-                                                    <label class="required fs-5 fw-bold mb-2">Описание жилья</label>
+                                                    <label class="fs-5 fw-bold mb-2">Описание жилья</label>
                                                     <div disabled style="overflow: auto;height: 200px;"
                                                          id="housing_description"
                                                          class="mb-2"> @if($vacancy != null){!! $vacancy->housing_description !!}@endif</div>
