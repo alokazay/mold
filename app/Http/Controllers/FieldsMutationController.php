@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\FieldsMutation;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Candidate;
 
 class FieldsMutationController extends Controller
 {
@@ -52,6 +53,20 @@ class FieldsMutationController extends Controller
             $item['author_role'] = $this->getRole($item['author_data']['group_id']);
             $item['field'] = $this->getField($item['field_name']);
 
+            if ($item['model_name'] == 'CandidateArrival') {
+                $item['model_data'] = Candidate::find($item['parent_model_id']);
+            } else {
+                $item['model_data'] = Candidate::find($item['model_obj_id']);
+            }
+            
+            if ($item['field_name'] == 'active') {
+                $item['prev_value'] = $this->getStatus($item['prev_value']);
+                $item['current_value'] = $this->getStatus($item['current_value']);
+            } elseif ($item['field_name'] == 'status') {
+                $item['prev_value'] = $this->getArrivalStatus($item['prev_value']);
+                $item['current_value'] = $this->getArrivalStatus($item['current_value']);
+            }
+
             $result[] = $item;
         }
 
@@ -60,7 +75,7 @@ class FieldsMutationController extends Controller
 
     private function getRole($key)
     {
-        $roles_ids = array(
+        $dictr = array(
             "1" => "Администратор",
             "2" => "Рекрутер",
             "3" => "Фрилансер",
@@ -71,12 +86,12 @@ class FieldsMutationController extends Controller
             "8" => "Менеджер поддержки",
         );
 
-        return $roles_ids[$key];
+        return isset($dictr[$key]) ? $dictr[$key] : $key;
     }
 
     private function getField($key)
     {
-        $roles_ids = array(
+        $dictr = array(
             "firstName" => "Имя",
             "lastName" => "Фамилия",
             "dateOfBirth" => "Дата рождения",
@@ -91,7 +106,7 @@ class FieldsMutationController extends Controller
             "transport_id" => "Транспорт",
             "comment" => "Комментарий",
             "inn" => "ИНН",
-            "reason_reject" => "",
+            "reason_reject" => "Причина отказа",
             "is_payed" => "",
             "cost_pay" => "",
             "cost_pay_lead" => "",
@@ -101,9 +116,42 @@ class FieldsMutationController extends Controller
             "logist_place_arrive_id" => "Место приезда",
             "real_vacancy_id" => "Вакансия",
             "real_status_work_id" => "Статус трудоустройства",
-            "active" => "",
+            "active" => "Статус",
+            "status" => "Статус",
         );
 
-        return $roles_ids[$key];
+        return isset($dictr[$key]) ? $dictr[$key] : $key;
+    }
+
+    private function getStatus($key)
+    {
+        $dictr = array(
+            "1" => "Новый кандидат",
+            "2" => "Лид",
+            "3" => "Отказ",
+            "4" => "Готов к выезду",
+            "5" => "Архив",
+            "6" => "Подтвердил Выезд",
+            "7" => "Готов к Работе",
+            "8" => "Трудоустроен",
+            "9" => "Приступил к Работе",
+            "10" => "Отработал 7 дней",
+            "11" => "Уволен",
+            "12" => "Приехал",
+        );
+
+        return isset($dictr[$key]) ? $dictr[$key] : $key;
+    }
+
+    private function getArrivalStatus($key)
+    {
+        $dictr = array(
+            "0" => "Готов к выезду",
+            "1" => "В пути",
+            "2" => "Приехал",
+            "3" => "Не доехал",
+        );
+
+        return isset($dictr[$key]) ? $dictr[$key] : $key;
     }
 }

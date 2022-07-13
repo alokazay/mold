@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('user_role');
             $table->string('model_name');
             $table->integer('model_obj_id');
+            $table->integer('parent_model_id')->nullable();
             $table->string('field_name');
             $table->text('prev_value')->nullable();
             $table->text('current_value')->nullable();

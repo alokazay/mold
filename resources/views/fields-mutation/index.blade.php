@@ -2,7 +2,7 @@
 <html lang="en">
 <!--begin::Head-->
 <head>
-    <title>История изменения полей</title>
+    <title>История изменения полей кандидатов</title>
 
     @include('includes.global_styles')
     <style>
@@ -105,7 +105,7 @@
                                     <span class="bullet bg-gray-300 w-5px h-2px"></span>
                                 </li>
 
-                                <li class="breadcrumb-item text-dark">Кандидаты</li>
+                                <li class="breadcrumb-item text-dark">История изменения полей кандидатов</li>
                                 <!--end::Item-->
                             </ul>
                             <!--end::Title-->
@@ -151,10 +151,11 @@
                                         <!--begin::Table row-->
                                         <tr class="text-start text-muted fw-bolder fs-7 gs-0">
                                             <th class="max-w-55px sorting_disabled">Дата</th>
-                                            <th class="max-w-55px sorting_disabled">Model Name</th>
-                                            <th class="max-w-55px sorting_disabled">Model Id</th>
-                                            <th class="max-w-85px sorting_disabled">Поле</th>
                                             <th class="max-w-85px sorting_disabled">Автор</th>
+                                            <th class="max-w-55px sorting_disabled">Кандидат</th>
+                                            {{-- <th class="max-w-55px sorting_disabled">Model Name</th>
+                                            <th class="max-w-55px sorting_disabled">Model Id</th> --}}
+                                            <th class="max-w-85px sorting_disabled">Поле</th>
                                             <th class="max-w-85px sorting_disabled">Изменения</th>
                                         </tr>
                                         <!--end::Table row-->
@@ -225,11 +226,12 @@
                         const data = !!res.data && res.data.map(item => {
                             return [
                                 item.date_time,
-                                item.model_name,
-                                item.model_obj_id,
-                                item.field || item.field_name,
                                 item.author_data.firstName +' '+ item.author_data.lastName +', '+ item.author_role,
-                                item.prev_value + ' -> ' + item.current_value,
+                                '<a href="/candidate/add?id='+ item.model_data.id +'">' + item.model_data.firstName +' '+ item.model_data.lastName + '</a>',
+                                // item.model_name,
+                                // item.model_obj_id,
+                                (item.model_name == 'CandidateArrival' ? 'Логистика, ' : '') + item.field || item.field_name,
+                                (item.prev_value ? item.prev_value : '') + ' -> ' + item.current_value,
                             ];
                         });
 
