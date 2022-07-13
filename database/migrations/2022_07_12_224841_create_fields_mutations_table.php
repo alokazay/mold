@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('fields_mutations', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
+            $table->integer('user_role');
             $table->string('model_name');
             $table->integer('model_obj_id');
             $table->string('field_name');

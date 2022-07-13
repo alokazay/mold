@@ -21,12 +21,7 @@ class FieldsMutationLog
     public function handle(Request $request, Closure $next, $params)
     {
         if ($params == 'Candidate') {
-
-            print_r($request->all());
-
             $candidate = $this->getCandidate($request->id);
-
-            print_r($candidate);
 
             if ($candidate) {
                 foreach ($request->all() as $key => $value) {
@@ -35,6 +30,7 @@ class FieldsMutationLog
                         $mutated = new FieldsMutation;
     
                         $mutated->user_id = Auth::user()->id;
+                        $mutated->user_role = Auth::user()->group_id;
                         $mutated->model_name = 'Candidate';
                         $mutated->model_obj_id = $request->id;
                         $mutated->field_name = $key;

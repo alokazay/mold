@@ -17,6 +17,7 @@ use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\AccountSettingController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\FieldsMutationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -190,6 +191,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('search/candidate/coordinators/client', [SearchController::class, 'getAjaxCandidateCoordinatorsClient'])->middleware('roles:1|2|3|4|5|6|7|8');
 
     Route::get('search/requests/freelacnsers', [SearchController::class, 'getAjaxCandidateFreelacnsers'])->middleware('roles:1|7');
+
+    // fields mutation
+    Route::get('fields-mutation', [FieldsMutationController::class, 'getIndex'])->middleware('roles:1');
+    Route::post('fields-mutation/getJson', [FieldsMutationController::class, 'getJson'])->name('fields-mutation.json')->middleware('roles:1');
 });
 
 
