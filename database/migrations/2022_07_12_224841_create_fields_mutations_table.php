@@ -15,8 +15,12 @@ return new class extends Migration
     {
         Schema::create('fields_mutations', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            
+            $table->integer('user_id');
+            $table->string('model_name');
+            $table->integer('model_obj_id');
+            $table->string('field_name');
+            $table->text('prev_value')->nullable();
+            $table->text('current_value')->nullable();
             $table->timestamps();
         });
     }

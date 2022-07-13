@@ -120,7 +120,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('candidates/arrivals/all/getJson', [CandidateController::class, 'getArrivalsallJson'])->name('candidates.arrivals.all.json')->middleware('roles:1|4|5');
     Route::get('candidate/set_status', [CandidateController::class, 'setStatus'])->middleware('roles:1|2|3|4|5|6');
     Route::get('candidate/add', [CandidateController::class, 'getAdd'])->middleware('roles:1|2|3|4|5|6');
-    Route::post('candidate/add', [CandidateController::class, 'postAdd'])->name('candidate.add')->middleware(['roles:1|2|3|4', 'fieldsMutationLog']);
+    Route::post('candidate/add', [CandidateController::class, 'postAdd'])->name('candidate.add')->middleware(['roles:1|2|3|4', 'fieldsMutationLog:Candidate']);
     Route::post('candidate/files/doc/add', [CandidateController::class, 'filesDocAdd'])->middleware('roles:1|2|3');
     Route::post('candidate/files/ticket/add', [CandidateController::class, 'filesTicketAdd'])->middleware('roles:1|2|3|4');
     Route::post('candidates/arrivals/add', [CandidateController::class, 'postArrivalAdd'])->middleware('roles:1|4');
