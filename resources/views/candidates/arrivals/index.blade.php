@@ -177,20 +177,18 @@
                                         <!--begin::Table row-->
                                         <tr class="text-start text-muted fw-bolder fs-7 gs-0">
                                             <th class="max-w-55px sorting_disabled">Id</th>
-                                            <th class="sorting_disabled">Фамилия</th>
                                             <th class="sorting_disabled">Имя</th>
+                                            <th class="sorting_disabled">Фамилия</th>
                                             <th class="sorting_disabled">Телефон</th>
                                             <th class="sorting_disabled">Viber</th>
-                                            <th class="max-w-85px sorting_disabled">Место приезда</th>
-                                            <th class="max-w-85px sorting_disabled">Планируемая дата
-                                                приезда
-                                            </th>
-                                            <th class="max-w-85px sorting_disabled">Время приезда</th>
-                                            <th class="max-w-85px sorting_disabled">Билет</th>
-                                            <th class="max-w-85px sorting_disabled">Вид транспорта</th>
-                                            <th class="max-w-85px sorting_disabled">Комментарий</th>
                                             <th class="max-w-85px sorting_disabled">Гражданство</th>
                                             <th class="max-w-85px sorting_disabled">Вакансия</th>
+                                            <th class="max-w-85px sorting_disabled">Место приезда</th>
+                                            <th class="max-w-85px sorting_disabled">Вид транспорта</th>
+                                            <th class="max-w-85px sorting_disabled">Планируемая дата приезда</th>
+                                            <th class="max-w-85px sorting_disabled">Время приезда</th>
+                                            <th class="max-w-85px sorting_disabled">Билет</th>
+                                            <th class="max-w-85px sorting_disabled">Комментарий</th>
                                             <th class="min-w-100px sorting_disabled">Статус</th>
                                         </tr>
                                         <!--end::Table row-->

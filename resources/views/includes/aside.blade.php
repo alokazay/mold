@@ -166,6 +166,7 @@
                             <span class="menu-title">Настройки</span>
                         </a>
                     </div>
+
                 @endif
                 @if(Auth::user()->group_id == 2)
                     <div class="menu-item">

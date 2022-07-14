@@ -12,3 +12,4 @@
 <link href="{{url('/')}}/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
 <!--end::Global Stylesheets Bundle-->
 
+<link href="{{url('/')}}/css/app.css" rel="stylesheet" type="text/css" />
