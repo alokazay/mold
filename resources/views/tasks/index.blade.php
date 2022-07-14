@@ -147,7 +147,7 @@
                                     <div class="w-200px">
                                         <select id="filter__period" class="form-select form-select form-select-solid">
                                             <option value=""></option>
-                                            <option value="today">Сегодня</option>
+                                            <option value="today" selected>Сегодня</option>
                                             <option value="yesterday">Вчера</option>
                                             <option value="lastWeek">7 дней</option>
                                             <option value="lastMonth">30 дней</option>
