@@ -14,10 +14,7 @@
         .sorting_disabled.sorting_desc:after {
             display: none !important;
         }
-        .table.gy-3 td, .table.gy-3 th {
-            padding-top: 0.3rem;
-            padding-bottom: 0.3rem;
-        }
+
         td {
             line-height: 1;
         }
@@ -118,39 +115,40 @@
 
                 <!--begin::Post-->
                 <div class="post d-flex flex-column-fluid" id="kt_post">
-                    <!--begin::Container-->
+
                     <div id="kt_content_container" class="container-fluid">
-                        <div class="row">
-                            <div class="col">
-                                <div class="card mb-10">
-                                    <div class="card-body pt-5 pb-5">
-                                        Приглашено: <span><b>{{$invited}}</b></span>
+                        @if(!Auth::user()->isRecruter())
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card mb-10">
+                                        <div class="card-body pt-5 pb-5">
+                                            Приглашено: <span><b>{{$invited}}</b></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="card mb-10">
+                                        <div class="card-body pt-5 pb-5">
+                                            Верифицировано: <span><b>{{$verif}}</b></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="card mb-10">
+                                        <div class="card-body pt-5 pb-5">
+                                            Трудоустроено: <span><b>{{$work}}</b></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="card mb-10">
+                                        <div class="card-body pt-5 pb-5">
+                                            Сумма: <span><b>{{$cost_pay}}</b></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col">
-                                <div class="card mb-10">
-                                    <div class="card-body pt-5 pb-5">
-                                        Верифицировано: <span><b>{{$verif}}</b></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card mb-10">
-                                    <div class="card-body pt-5 pb-5">
-                                        Трудоустроено: <span><b>{{$work}}</b></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="card mb-10">
-                                    <div class="card-body pt-5 pb-5">
-                                        Сумма: <span><b>{{$cost_pay}}</b></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--begin::Card-->
+                        @endif
                         <div class="card">
                             <div class="card-header align-items-center py-5 gap-2 gap-md-5">
                                 <!--begin::Card title-->
@@ -181,10 +179,10 @@
                                 <!--begin::Card toolbar-->
                                 <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
                                     @if(Auth::user()->isKoordinator())
-                                    <div class="w-200px">
-                                        <select id="filter__clients"
-                                                class="form-select form-select form-select-solid"></select>
-                                    </div>
+                                        <div class="w-200px">
+                                            <select id="filter__clients"
+                                                    class="form-select form-select form-select-solid"></select>
+                                        </div>
                                     @endif
                                     <div class="w-200px">
 
@@ -208,7 +206,6 @@
                                                 <option value="1">Новый кандидат</option>
                                                 <option value="2">Лид</option>
                                                 <option value="3">Отказ</option>
-                                                <option value="4">Готов к выезду</option>
                                                 <option value="5">Архив</option>
                                             @elseif(Auth::user()->isLogist())
                                                 <option value="">Статус</option>
@@ -246,20 +243,10 @@
                                         </select>
                                         <!--end::Select2-->
                                     </div>
-                                    @if(Auth::user()->isAdmin() || Auth::user()->isFreelancer() || Auth::user()->isRecruter())
-
-
-
-                                        @if(Auth::user()->isFreelancer())
-                                            @if(Auth::user()->fl_status == 2)
-                                                <a href="{{url('/')}}/candidate/add"
-                                                   class="btn btn-primary">Добавить</a>
-                                            @endif
-                                        @else
-                                            <a href="{{url('/')}}/candidate/add" class="btn btn-primary">Добавить</a>
-                                        @endif
-
+                                    @if(Auth::user()->isAdmin())
+                                        <a href="{{url('/')}}/candidate/add" class="btn btn-primary">Добавить</a>
                                     @endif
+
                                 </div>
                                 <!--end::Card toolbar-->
                             </div>
@@ -351,7 +338,7 @@
             data.status = $('#filter__status').val().trim();
             data.vacancies = $('#filter__vacancies').val();
             @if(Auth::user()->isKoordinator())
-            data.clients = $('#filter__clients').val();
+                data.clients = $('#filter__clients').val();
             @endif
             $.ajax({
                 url: '{{ route('candidates.json') }}',
@@ -438,70 +425,8 @@
         oTable.draw();
     })
     @endif
-
-
-    function changeActivation(id) {
-        let reason_reject = '';
-
-        var changeActivation = $('.changeActivation' + id).val();
-        if (changeActivation == 2 || changeActivation == 4 || changeActivation == 6 || changeActivation == 8) {
-            Swal.fire({
-                html: `Сменить статус?`,
-                icon: "question",
-                buttonsStyling: false,
-                showCancelButton: true,
-                confirmButtonText: "Да!",
-                cancelButtonText: 'Нет, отмена!',
-                customClass: {
-                    confirmButton: "btn btn-primary",
-                    cancelButton: 'btn btn-secondary'
-                }
-            }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
-                if (result.isConfirmed) {
-
-
-                    $.get('{{url('/')}}/candidate/set_status?r=&s=' + changeActivation + '&id=' + id, function (res) {
-                        if (res.error) {
-                            toastr.error(res.error);
-                        } else {
-                            toastr.success('Успешно');
-                        }
-                        oTable.draw();
-                    });
-                }
-            });
-        } else {
-
-
-            if (changeActivation == 3) {
-                reason_reject = prompt('Причина отказа?');
-                if(reason_reject === ''){
-                    toastr.error('Укажите причину');
-                    oTable.draw();
-                    return '';
-                }
-
-
-            }
-            if(reason_reject !=  null){
-                $.get('{{url('/')}}/candidate/set_status?r=' + reason_reject + '&s=' + changeActivation + '&id=' + id, function (res) {
-                    if (res.error) {
-                        toastr.error(res.error);
-                    } else {
-                        toastr.success('Успешно');
-                    }
-                    oTable.draw();
-                });
-            }
-
-
-        }
-
-
-    }
-
 </script>
+@include('candidates.include.change_status')
 
 </body>
 <!--end::Body-->

@@ -111,12 +111,12 @@ class TaskController extends Controller
 
             $Candidate = '';
             if ($u->Candidate != null) {
-                $Candidate = '<a href="' . url('/') . '/candidate/add?id=' . $u->Candidate->id . '">' . $u->Candidate->firstName . ' ' . $u->Candidate->lastName . '</a>';
+                $Candidate = '<a href="' . url('/') . '/candidate/view?id=' . $u->Candidate->id . '">' . $u->Candidate->firstName . ' ' . $u->Candidate->lastName . '</a>';
             }
 
             $temp_arr = [
                 '<a href="javascript:;" onclick="editTask(' . $u->id . ')">' . $u->id . '</a>',
-                Carbon::parse($u->created_at)->format('d.m.Y'),
+                Carbon::parse($u->start)->format('d.m.Y'),
                 $u->title,
                 $Autor,
                 $Candidate,
@@ -186,7 +186,7 @@ class TaskController extends Controller
 
         $Candidate = '';
         if ($task->Candidate != null) {
-            $Candidate = '<a href="' . url('/') . '/candidate/add?id=' . $task->Candidate->id . '">' . $task->Candidate->firstName . ' ' . $task->Candidate->lastName . '</a>';
+            $Candidate = '<a href="' . url('/') . '/candidate/view?id=' . $task->Candidate->id . '">' . $task->Candidate->firstName . ' ' . $task->Candidate->lastName . '</a>';
         }
         $task->Candidate = $Candidate;
         $task->Autor = $Autor;

@@ -26,7 +26,7 @@ class UserSeeder  extends Seeder
                     'lastName' => 'System',
                     'email' => 'admin@test.net',
                     'group_id'=>1,
-                    'password'=>Hash::make('oK5sU4rM'),
+                    'password'=>Hash::make('1111'),
                     'remember_token'=>Hash::make(Hash::make('oK5sU4rM')),
                     'activation'=>1,
                     'created_at'=>Carbon::now(),

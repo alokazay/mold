@@ -37,6 +37,7 @@ return new class extends Migration
             $table->integer('cost_pay')->nullable()->default(0);
             $table->integer('cost_pay_lead')->nullable()->default(0);
             $table->integer('client_id')->nullable();
+            $table->integer('count_failed_call')->nullable();
 
             $table->timestamp('logist_date_arrive')->nullable();
             $table->timestamp('date_start_work')->nullable();

@@ -386,7 +386,8 @@
         url: "{{url('/')}}/files/user/add", // Set the url for your upload script location
         paramName: "file",
         maxFiles: 1,
-        maxFilesize: 10, // MB
+        maxFilesize: 5,
+        acceptedFiles: ".jpeg,.jpg,.png,.gif,.pdf",
         addRemoveLinks: true,
         sending: function (file, xhr, formData) {
             formData.append('_token', $('input[name=_token]').val());
