@@ -144,6 +144,16 @@
                                 <!--begin::Card toolbar-->
                                 <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
 
+                                    <div class="w-200px">
+                                        <select id="filter__period" class="form-select form-select form-select-solid">
+                                            <option value=""></option>
+                                            <option value="today">Сегодня</option>
+                                            <option value="yesterday">Вчера</option>
+                                            <option value="lastWeek">7 дней</option>
+                                            <option value="lastMonth">30 дней</option>
+                                        </select>
+                                    </div>
+
                                     <div class="w-100 mw-150px">
                                         <!--begin::Select2-->
                                         <select id="filter__status" class="form-select form-select-solid">
@@ -167,7 +177,7 @@
                                         <!--begin::Table row-->
                                         <tr class="text-start text-muted fw-bolder fs-7 gs-0">
                                             <th class="max-w-55px sorting_disabled">Id</th>
-                                            <th class="max-w-85px sorting_disabled">Дата</th>
+                                            <th class="max-w-85px">Дата</th>
                                             <th class="max-w-85px sorting_disabled">Заголовок</th>
                                             <th class="min-w-125px sorting_disabled">Автор</th>
                                             <th class="max-w-65px sorting_disabled">Кандидат</th>
@@ -252,19 +262,19 @@
 
     var groupColumn = 0;
     oTable = $('#users').DataTable({
-        "dom": 'rt<"bottom"p>',
+        dom: 'rt<"bottom"p>',
         paginate: true,
-        "sor": false,
-        "searching": false,
-        "pagingType": "numbers",
-        "serverSide": true,
+        searching: false,
+        pagingType: "numbers",
+        serverSide: true,
         pageLength: 20,
-        "language": {
+        order: [[1, 'desc']],
+        language: {
             "emptyTable": "нет данных",
             "zeroRecords": "нет данных",
             'sSearch': "Поиск"
         },
-        'aoColumnDefs': [{
+        aoColumnDefs: [{
             'bSortable': false,
             'aTargets': ['sorting_disabled']
         }],
@@ -272,6 +282,7 @@
             data._token = $('input[name=_token]').val();
             data.search = $('#f__search').val().trim();
             data.status = $('#filter__status').val().trim();
+            data.period = $('#filter__period').val();
 
             $.ajax({
                 url: '{{ route('tasks.json') }}',
@@ -296,6 +307,16 @@
         oTable.draw();
     });
     $('#filter__group').change(function () {
+        oTable.draw();
+    });
+    
+    $('#filter__period').select2({
+        placeholder: 'Период',
+        allowClear: true,
+        minimumResultsForSearch: -1
+    }).on('select2:select', function (e) {
+        oTable.draw();
+    }).on('select2:clear', function (e) {
         oTable.draw();
     });
 

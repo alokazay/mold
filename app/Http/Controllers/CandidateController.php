@@ -1061,16 +1061,15 @@ class CandidateController extends Controller
                 mb_strtoupper($u->Candidate->lastName),
                 $u->Candidate->phone,
                 $u->Candidate->viber,
+                $Nacionality,
+                $Vacancy,
                 $Place_arrive,
+                $Transport,
                 '<a data-comment="' . $u->comment . '" data-place_arrive_name="' . $Place_arrive . '" data-transport_name="' . $Transport . '" data-id="' . $u->id . '" data-date_arrive="' . Carbon::parse($u->date_arrive)->format('d.m.Y H:i') . '" data-transport_id="' . $u->transport_id . '" data-place_arrive_id="' . $u->place_arrive_id . '" class="edit_arrival" href="javascript:;">' . $date_arrive . '</a>',
                 $date_arrive_time,
                 $file,
-                $Transport,
                 $u->comment,
-                $Nacionality,
-                $Vacancy,
                 $select_active
-
             ];
             $data[] = $temp_arr;
         }

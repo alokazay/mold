@@ -25,7 +25,7 @@ class TaskController extends Controller
         $rowperpage = request()->get("length"); // Rows display per page
 
         //ordering
-        $order_col = 'id';
+        $order_col = 'created_at';
         $order_direction = 'desc';
         $cols = request('columns');
         $order = request('order');
@@ -33,27 +33,41 @@ class TaskController extends Controller
         if (isset($order[0]['dir'])) {
             $order_direction = $order[0]['dir'];
         }
-        if (isset($order[0]['column']) && isset($cols)) {
-            $col_number = $order[0]['column'];
-            if (isset($cols[$col_number]) && isset($cols[$col_number]['data'])) {
-                $data = $cols[$col_number]['data'];
-                if ($data == 0) {
-                    $order_col = 'id';
-                    $order_direction = 'desc';
-                }
+        // if (isset($order[0]['column']) && isset($cols)) {
+        //     $col_number = $order[0]['column'];
+        //     if (isset($cols[$col_number]) && isset($cols[$col_number]['data'])) {
+        //         $data = $cols[$col_number]['data'];
+        //         if ($data == 0) {
+        //             $order_col = 'id';
+        //             $order_direction = 'desc';
+        //         }
 
-            }
-        }
+        //     }
+        // }
         // search
         $filter__status = request('status');
         $search = request('search');
+        $filter__period = request('period');
 
-
-        if ($filter__status == '') {
-            $users = Task::where('to_user_id', Auth::user()->id)->whereIn('status', [1]);
-        } else {
-            $users = Task::where('to_user_id', Auth::user()->id)->where('status', $filter__status);
-        }
+        $users = Task::where('to_user_id', Auth::user()->id)
+            ->where(function ($query) use ($filter__status) {
+                if ($filter__status == '') {
+                    return $query->whereIn('status', [1]);
+                } else {
+                    return $query->where('status', $filter__status);
+                }
+            })
+            ->when($filter__period, function ($query, $period) {
+                if ($period == 'today') {
+                    return $query->whereDate('created_at', '>=', Carbon::now()->subDays(1));
+                } elseif ($period == 'yesterday') {
+                    return $query->whereDate('created_at', Carbon::now()->subDays(1));
+                } elseif ($period == 'lastWeek') {
+                    return $query->whereDate('created_at', '>', Carbon::now()->subDays(7));
+                } elseif ($period == 'lastMonth') {
+                    return $query->whereDate('created_at', '>', Carbon::now()->subDays(30));
+                }
+            });
 
         if ($search != '') {
             $users = $users->where(function ($query) use ($search) {
@@ -63,7 +77,6 @@ class TaskController extends Controller
 
 
         $users = $users->orderBy($order_col, $order_direction);
-
 
         $users = $users
             ->with('Autor')

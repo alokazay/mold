@@ -12,9 +12,8 @@ class FieldsMutationController extends Controller
 {
     public function getIndex()
     {
-        $data = FieldsMutation::all();
-
-        $roles = array();
+        $users = User::all();
+        $candidates = Candidate::all();
 
         $roles_ids = array(
             "1" => "Администратор",
@@ -27,23 +26,34 @@ class FieldsMutationController extends Controller
             "8" => "Менеджер поддержки",
         );
 
-        foreach ($data as $item) {
-            $user = User::find($item['user_id']);
-            $roles[$user->group_id] = $roles_ids[$user->group_id];
-        }
-
-        return view('fields-mutation.index', compact('roles_ids'));
+        return view('fields-mutation.index', compact('roles_ids', 'users', 'candidates'));
     }
 
     public function getJson(Request $request)
     {
-        $data = null;
-
-        if ($request->roles) {
-            $data = FieldsMutation::where('user_role', $request->roles)->orderBy('created_at', 'DESC')->get();
-        } else {
-            $data = FieldsMutation::orderBy('created_at', 'DESC')->get();
-        }
+        $data = FieldsMutation::when($request->period, function ($query, $period) {
+                if ($period == 'today') {
+                    return $query->whereDate('created_at', Carbon::now());
+                } elseif ($period == 'yesterday') {
+                    return $query->whereDate('created_at', Carbon::now()->subDays(1));
+                } elseif ($period == 'lastWeek') {
+                    return $query->whereDate('created_at', '>', Carbon::now()->subDays(7));
+                } elseif ($period == 'lastMonth') {
+                    return $query->whereDate('created_at', '>', Carbon::now()->subDays(30));
+                }
+            })
+            ->when($request->roles, function ($query, $role) {
+                return $query->where('user_role', $role);
+            })
+            ->when($request->candidate_id, function ($query, $candidate_id) {
+                return $query->where('model_obj_id', $candidate_id)
+                    ->orWhere('parent_model_id', $candidate_id);
+            })
+            ->when($request->user_id, function ($query, $user_id) {
+                return $query->where('user_id', $user_id);
+            })
+            ->orderBy('created_at', 'DESC')
+            ->get();
 
         $result = array();
 
