@@ -119,13 +119,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('candidates/getJson', [CandidateController::class, 'getJson'])->name('candidates.json')->middleware('roles:1|2|3|4|5|6');
     Route::post('candidates/arrivals/getJson', [CandidateController::class, 'getArrivalsJson'])->name('candidates.arrivals.json')->middleware('roles:1|4|5|6');
     Route::post('candidates/arrivals/all/getJson', [CandidateController::class, 'getArrivalsallJson'])->name('candidates.arrivals.all.json')->middleware('roles:1|4|5');
-    Route::get('candidate/set_status', [CandidateController::class, 'setStatus'])->middleware(['roles:1|2|3|4|5|6', 'fieldsMutationLog:Candidate.setStatus']);
+    Route::get('candidate/set_status', [CandidateController::class, 'setStatus'])->middleware('roles:1|2|3|4|5|6');
     Route::get('candidate/add', [CandidateController::class, 'getAdd'])->middleware('roles:1|2|3|4|5|6');
-    Route::post('candidate/add', [CandidateController::class, 'postAdd'])->name('candidate.add')->middleware(['roles:1|2|3|4', 'fieldsMutationLog:Candidate']);
+    Route::post('candidate/add', [CandidateController::class, 'postAdd'])->name('candidate.add')->middleware('roles:1|2|3|4');
     Route::post('candidate/files/doc/add', [CandidateController::class, 'filesDocAdd'])->middleware('roles:1|2|3');
     Route::post('candidate/files/ticket/add', [CandidateController::class, 'filesTicketAdd'])->middleware('roles:1|2|3|4');
-    Route::post('candidates/arrivals/add', [CandidateController::class, 'postArrivalAdd'])->middleware(['roles:1|4', 'fieldsMutationLog:CandidateArrival']);
-    Route::get('candidates/arrivals/activation', [CandidateController::class, 'postArrivalsActivation'])->middleware(['roles:1|4|5', 'fieldsMutationLog:CandidateArrival.setStatus']);
+    Route::post('candidates/arrivals/add', [CandidateController::class, 'postArrivalAdd'])->middleware('roles:1|4');
+    Route::get('candidates/arrivals/activation', [CandidateController::class, 'postArrivalsActivation'])->middleware('roles:1|4|5');
 
     Route::get('leads', [CandidateController::class, 'getLeads'])->middleware('roles:1|2|3|4|5|6');
     Route::post('leads/getJson', [CandidateController::class, 'getLeadsJson'])->name('leads.json')->middleware('roles:1|2|3|4|5|6');
@@ -191,10 +191,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('search/candidate/coordinators/client', [SearchController::class, 'getAjaxCandidateCoordinatorsClient'])->middleware('roles:1|2|3|4|5|6|7|8');
 
     Route::get('search/requests/freelacnsers', [SearchController::class, 'getAjaxCandidateFreelacnsers'])->middleware('roles:1|7');
-
-    // fields mutation
-    Route::get('fields-mutation', [FieldsMutationController::class, 'getIndex'])->middleware('roles:1');
-    Route::post('fields-mutation/getJson', [FieldsMutationController::class, 'getJson'])->name('fields-mutation.json')->middleware('roles:1');
 });
 
 
