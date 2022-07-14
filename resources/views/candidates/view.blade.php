@@ -118,7 +118,7 @@
                                                 <!--begin::Name-->
                                                 <div class="d-flex align-items-center ">
                                                     <span href="#"
-                                                          class="text-gray-900 text-hover-primary fs-2 fw-bolder me-1">
+                                                          class="text-gray-900 text-hover-primary fs-2 fw-bolder me-1 text-uppercase">
                                                         {{$canddaite->lastName}} {{$canddaite->firstName}}</span>
                                                 </div>
                                                 <div class=" mb-2">

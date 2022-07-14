@@ -764,6 +764,7 @@
 
     $('#dateOfBirth').flatpickr({
         dateFormat: 'd.m.Y',
+        maxDate: "{{\Carbon\Carbon::now()->subYear(17)->format('d.m.Y')}}",
         locale: {
             firstDayOfWeek: 1
         },

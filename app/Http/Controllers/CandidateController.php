@@ -829,6 +829,7 @@ class CandidateController extends Controller
         $candidate->viber = $r->viber;
 
         if ($r->dateOfBirth != '' && $r->dateOfBirth != 'undefined') {
+
             $candidate->dateOfBirth = Carbon::createFromFormat('d.m.Y', $r->dateOfBirth);
         }
         if ($r->phone_parent != '' && $r->phone_parent != 'undefined') {
