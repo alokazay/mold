@@ -20,6 +20,111 @@ class Candidate extends Model
         return $this->hasOne(C_file::class)->where('type', 3);
     }
 
+    public function D_file_karta()
+    {
+        return $this->hasOne(C_file::class)->where('type', 103);
+    }
+    public function D_file_driver()
+    {
+        return $this->hasOne(C_file::class)->where('type', 104);
+    }
+    public function D_file_diplom()
+    {
+        return $this->hasOne(C_file::class)->where('type', 105);
+    }
+    public function D_file_legitim()
+    {
+        return $this->hasOne(C_file::class)->where('type', 106);
+    }
+    public function D_file_else()
+    {
+        return $this->hasOne(C_file::class)->where('type', 107);
+    }
+
+    public function getPasportLink()
+    {
+        if ($this->D_file != null) {
+            if (config('app.env') === 'local') {
+                $path_url = url('/');
+            } else {
+                $path_url = url('/') . '/public';
+            }
+            return $path_url . $this->D_file->path;
+        } else {
+            return '';
+        }
+    }
+
+    public function getKartapobytu()
+    {
+        if ($this->D_file_karta != null) {
+            if (config('app.env') === 'local') {
+                $path_url = url('/');
+            } else {
+                $path_url = url('/') . '/public';
+            }
+            return $path_url . $this->D_file_karta->path;
+        } else {
+            return '';
+        }
+    }
+
+    public function getDriverLicense()
+    {
+        if ($this->D_file_driver != null) {
+            if (config('app.env') === 'local') {
+                $path_url = url('/');
+            } else {
+                $path_url = url('/') . '/public';
+            }
+            return $path_url . $this->D_file_driver->path;
+        } else {
+            return '';
+        }
+    }
+
+    public function getDiplom()
+    {
+        if ($this->D_file_diplom != null) {
+            if (config('app.env') === 'local') {
+                $path_url = url('/');
+            } else {
+                $path_url = url('/') . '/public';
+            }
+            return $path_url . $this->D_file_diplom->path;
+        } else {
+            return '';
+        }
+    }
+
+    public function getLegitim()
+    {
+        if ($this->D_file_legitim != null) {
+            if (config('app.env') === 'local') {
+                $path_url = url('/');
+            } else {
+                $path_url = url('/') . '/public';
+            }
+            return $path_url . $this->D_file_legitim->path;
+        } else {
+            return '';
+        }
+    }
+
+    public function getElsefile()
+    {
+        if ($this->D_file_else != null) {
+            if (config('app.env') === 'local') {
+                $path_url = url('/');
+            } else {
+                $path_url = url('/') . '/public';
+            }
+            return $path_url . $this->D_file_else->path;
+        } else {
+            return '';
+        }
+    }
+
     public function Citizenship()
     {
         return $this->belongsTo(Handbook::class)->where('handbook_category_id', 10);
@@ -54,6 +159,7 @@ class Candidate extends Model
     {
         return $this->hasMany(Candidate_arrival::class);
     }
+
     public function Client()
     {
         return $this->belongsTo(Client::class);
@@ -62,6 +168,35 @@ class Candidate extends Model
     public function Transport()
     {
         return $this->belongsTo(Handbook::class)->where('handbook_category_id', 7);
+    }
+
+    public function getStatus(){
+        $status = '';
+        $arr = [
+            ['1', 'Новый кандидат'],
+            ['2', 'Лид'],
+            ['3', 'Отказ'],
+            ['4', 'Готов к выезду'],
+            ['5', 'Архив'],
+            ['6', 'Подтвердил Выезд'],
+            ['7', 'Готов к Работе'],
+            ['8', 'Трудоустроен'],
+            ['9', 'Приступил к Работе'],
+            ['10', 'Отработал 7 дней'],
+            ['11', 'Уволен'],
+            ['12', 'Приехал'],
+            ['13', 'Архив (отказ)'],
+            ['14', 'Перезвонить'],
+            ['15', 'Недозвон'],
+            ['16', 'Оформление'],
+        ];
+        $status = $this->active;
+        foreach ($arr as $a){
+            if($this->active == $a[0] ){
+                $status  = $a[1];
+            }
+        }
+        return $status;
     }
 
     public function getStatusOptions()
@@ -79,14 +214,23 @@ class Candidate extends Model
             ['10', 'Отработал 7 дней'],
             ['11', 'Уволен'],
             ['12', 'Приехал'],
+            ['13', 'Архив (отказ)'],
+            ['14', 'Перезвонить'],
+            ['15', 'Недозвон'],
+            ['16', 'Оформление'],
         ];
 
         if (Auth::user()->isRecruter()) {
             $arr = [
                 ['1', 'Новый кандидат'],
+                ['2', 'Лид'],
                 ['3', 'Отказ'],
                 ['4', 'Готов к выезду'],
-                ['5', 'Архив']
+                ['5', 'Архив'],
+                ['13', 'Архив (отказ)'],
+                ['14', 'Перезвонить'],
+                ['15', 'Недозвон'],
+                ['16', 'Оформление'],
             ];
         }
 

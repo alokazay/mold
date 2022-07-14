@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('freelancer_id')->nullable();
             $table->integer('status');
             $table->text('title');
+            $table->timestamp('start')->nullable();
             $table->timestamps();
         });
     }

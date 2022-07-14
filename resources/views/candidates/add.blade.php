@@ -19,6 +19,30 @@
             float: right;
             margin-bottom: 10px;
         }
+
+        #kt_file_doc .dz-details, #kt_file_doc .dz-progress, #kt_file_doc .dz-error-mark, #kt_file_doc .dz-success-mark, #kt_file_doc .dz-remove {
+            display: none;
+        }
+
+        #kt_file_doc1 .dz-details, #kt_file_doc1 .dz-progress, #kt_file_doc1 .dz-error-mark, #kt_file_doc1 .dz-success-mark, #kt_file_doc1 .dz-remove {
+            display: none;
+        }
+
+        #kt_file_doc2 .dz-details, #kt_file_doc2 .dz-progress, #kt_file_doc2 .dz-error-mark, #kt_file_doc2 .dz-success-mark, #kt_file_doc2 .dz-remove {
+            display: none;
+        }
+
+        #kt_file_doc3 .dz-details, #kt_file_doc3 .dz-progress, #kt_file_doc3 .dz-error-mark, #kt_file_doc3 .dz-success-mark, #kt_file_doc3 .dz-remove {
+            display: none;
+        }
+
+        #kt_file_doc4 .dz-details, #kt_file_doc4 .dz-progress, #kt_file_doc4 .dz-error-mark, #kt_file_doc4 .dz-success-mark, #kt_file_doc4 .dz-remove {
+            display: none;
+        }
+
+        #kt_file_doc5 .dz-details, #kt_file_doc5 .dz-progress, #kt_file_doc5 .dz-error-mark, #kt_file_doc5 .dz-success-mark, #kt_file_doc5 .dz-remove {
+            display: none;
+        }
     </style>
 
 </head>
@@ -133,7 +157,7 @@
                                                     <label class="required fs-5 fw-bold mb-2">Фамилия</label>
                                                     <input
                                                         @if($canddaite != null) value="{{$canddaite->lastName}}" @endif
-                                                    id="lastName"  style="text-transform: uppercase"
+                                                    id="lastName" style="text-transform: uppercase"
                                                         class="form-control form-control-sm form-control-solid"
                                                         type="text"/>
                                                 </div>
@@ -141,11 +165,12 @@
                                             <div class="col-6">
                                                 <div class="d-flex flex-column mb-0 fv-row">
                                                     <label class="required fs-5 fw-bold mb-2">Имя</label>
-                                                    <input  style="text-transform: uppercase"
-                                                        @if($canddaite != null) value="{{$canddaite->firstName}}" @endif
-                                                    id="firstName"
-                                                        class="form-control form-control-sm form-control-solid"
-                                                        type="text"/>
+                                                    <input style="text-transform: uppercase"
+                                                           @if($canddaite != null) value="{{$canddaite->firstName}}"
+                                                           @endif
+                                                           id="firstName"
+                                                           class="form-control form-control-sm form-control-solid"
+                                                           type="text"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -166,7 +191,8 @@
                                                     <label class="required fs-5 fw-bold mb-2">Телефон</label>
                                                     <input
                                                         @if($canddaite != null) value="{{$canddaite->phone}}" @endif
-                                                    id="phone" placeholder="Писать в междунаробном формате, например Украина +380664252585"
+                                                    id="phone"
+                                                        placeholder="Писать в междунаробном формате, например Украина +380664252585"
                                                         class="form-control form-control-sm form-control-solid"
                                                         title="Писать в междунаробном формате, например Украина +380664252585"
                                                         type="text"/>
@@ -251,8 +277,9 @@
                                     <div class="col">
 
                                         <div class="row mb-5">
-                                            <div @if(Auth::user()->isFreelancer() || Auth::user()->isRecruter()) style="display:none;"
-                                                 @endif class="col-6">
+                                            <div
+                                                @if(Auth::user()->isFreelancer() || Auth::user()->isRecruter()) style="display:none;"
+                                                @endif class="col-6">
                                                 <div class="d-flex flex-column mb-0 fv-row">
                                                     <label class="fs-5 fw-bold mb-2">Рекрутер</label>
 
@@ -283,24 +310,14 @@
                                         <div class="row mb-5">
                                             <div class="col">
                                                 <div class="d-flex flex-column mb-0 fv-row">
-                                                    <!--begin::Dropzone-->
-                                                    <div class="dropzone" id="kt_file_doc">
-                                                        <!--begin::Message-->
-                                                        <div class="dz-message needsclick">
-                                                            <!--begin::Icon-->
-                                                            <i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
-                                                            <!--end::Icon-->
-
-                                                            <!--begin::Info-->
-                                                            <div class="ms-4">
-                                                                <h3 class="fs-5 fw-bolder text-gray-900 mb-1 required">Загрузить
-                                                                    документ</h3>
-                                                                <span class="fs-7 fw-bold text-gray-400">Перетащите документ сюда</span>
-                                                            </div>
-                                                            <!--end::Info-->
-                                                        </div>
-                                                    </div>
-                                                    <!--end::Dropzone-->
+                                                    <a id="kt_file_doc" href="#">Загрузить паспорт</a>
+                                                    <a id="kt_file_doc1" href="#">Загрузить карта по быту(вместе с
+                                                        децизией)</a>
+                                                    <a id="kt_file_doc2" href="#">Загрузить водительское
+                                                        удостоверение</a>
+                                                    <a id="kt_file_doc3" href="#">Загрузить диплом(сертификаты)</a>
+                                                    <a id="kt_file_doc4" href="#">Загрузить легитимация из Универа</a>
+                                                    <a id="kt_file_doc5" href="#">Загрузить прочий документ</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -312,6 +329,13 @@
                                                               class="form-control form-control-sm form-control-solid"
                                                               cols="20"
                                                               rows="6"> @if($canddaite != null){{$canddaite->comment}}@endif</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-5">
+                                            <div class="col">
+                                                <div class="d-flex flex-column mb-0 fv-row">
+                                                    {!! $select_active !!}
                                                 </div>
                                             </div>
                                         </div>
@@ -392,9 +416,9 @@
 
                                     <div class="table-responsive">
 
-                                            <button id="add_arrivals" type="button" class="btn btn-primary btn-sm">
-                                                Добавить
-                                            </button>
+                                        <button id="add_arrivals" type="button" class="btn btn-primary btn-sm">
+                                            Добавить
+                                        </button>
 
 
                                         <table class="table align-middle table-row-dashed fs-6 gy-3" id="users">
@@ -518,8 +542,8 @@
                 <div class="row mb-5">
                     <div class="col-6">
                         <label for="modal__comment" class="required fs-5 fw-bold mb-2">Комментарий</label>
-                        <textarea  class="form-control form-control-sm form-control-solid"
-                                   cols="20" id="modal__comment"></textarea>
+                        <textarea class="form-control form-control-sm form-control-solid"
+                                  cols="20" id="modal__comment"></textarea>
                     </div>
                 </div>
 
@@ -541,6 +565,8 @@
 <script src="{{url('/')}}/assets/plugins/custom/datatables/datatables.bundle.js"></script>
 <!--end::Page Vendors Javascript-->
 <script>
+
+
     @if(Auth::user()->isAdmin() || Auth::user()->isLogist() )
 
 
@@ -552,7 +578,8 @@
                 url: "{{url('/')}}/candidates/arrivals/add_ticket", // Set the url for your upload script location
                 paramName: "file",
                 maxFiles: 1,
-                maxFilesize: 10, // MB
+                maxFilesize: 5,
+                acceptedFiles: ".jpeg,.jpg,.png,.gif,.pdf",
                 addRemoveLinks: true,
                 sending: function (file, xhr, formData) {
                     formData.append('_token', $('input[name=_token]').val());
@@ -1104,8 +1131,6 @@
     @endif
 
 
-
-
     @if($canddaite != null && $canddaite->Citizenship != null)
     $('#citizenship_id').append(new Option('{{ $canddaite->Citizenship->name }}', {{ $canddaite->Citizenship->id }}, true, true)).trigger('change');
     @endif
@@ -1132,12 +1157,16 @@
     $('#client_id').append(new Option('{{ $canddaite->Client->name }}', {{ $canddaite->Client->id }}, true, true)).trigger('change');
     @endif
 
+
+
     @if(Auth::user()->isAdmin() || Auth::user()->isLogist() )
     var myDropzoneD = new Dropzone("#kt_file_ticket", {
+
         url: "{{url('/')}}/candidate/files/ticket/add", // Set the url for your upload script location
         paramName: "file",
         maxFiles: 1,
-        maxFilesize: 10, // MB
+        maxFilesize: 5,
+        acceptedFiles: ".jpeg,.jpg,.png,.gif,.pdf",
         addRemoveLinks: true,
         sending: function (file, xhr, formData) {
             formData.append('_token', $('input[name=_token]').val());
@@ -1156,15 +1185,24 @@
         url: "{{url('/')}}/candidate/files/doc/add", // Set the url for your upload script location
         paramName: "file",
         maxFiles: 1,
-        maxFilesize: 10, // MB
+        dictInvalidFileType: 'Данный тип файла не допустим',
+        maxFilesize: 5,
+        acceptedFiles: ".jpeg,.jpg,.png,.gif,.pdf",
         addRemoveLinks: true,
         sending: function (file, xhr, formData) {
             formData.append('_token', $('input[name=_token]').val());
+            formData.append('lastName', $('#lastName').val());
+            formData.append('firstName', $('#firstName').val());
+            formData.append('dateOfBirth', $('#dateOfBirth').val());
+            formData.append('phone', $('#phone').val());
+            formData.append('viber', $('#viber').val());
             formData.append('id', $('#id').val());
+            formData.append('type', 3);
         },
         success: function (file, done) {
             if (done.error) {
                 toastr.error(done.error);
+                myDropzoneT.removeFile(file);
             } else {
                 $('#id').val(done.id);
             }
@@ -1176,7 +1214,180 @@
         }
     });
 
+    var myDropzoneT1 = new Dropzone("#kt_file_doc1", {
+        url: "{{url('/')}}/candidate/files/doc/add", // Set the url for your upload script location
+        paramName: "file",
+        maxFiles: 1,
+        dictInvalidFileType: 'Данный тип файла не допустим',
+        maxFilesize: 5,
+        acceptedFiles: ".jpeg,.jpg,.png,.gif,.pdf",
+        addRemoveLinks: true,
+        sending: function (file, xhr, formData) {
+            formData.append('_token', $('input[name=_token]').val());
+            formData.append('lastName', $('#lastName').val());
+            formData.append('firstName', $('#firstName').val());
+            formData.append('dateOfBirth', $('#dateOfBirth').val());
+            formData.append('phone', $('#phone').val());
+            formData.append('viber', $('#viber').val());
+            formData.append('id', $('#id').val());
+            formData.append('type', 103);
+        },
+        success: function (file, done) {
+            if (done.error) {
+                toastr.error(done.error);
+                myDropzoneT.removeFile(file);
+            } else {
+                $('#id').val(done.id);
+            }
+
+        },
+
+        accept: function (file, done) {
+            done();
+        }
+    });
+
+    var myDropzoneT2 = new Dropzone("#kt_file_doc2", {
+        url: "{{url('/')}}/candidate/files/doc/add", // Set the url for your upload script location
+        paramName: "file",
+        maxFiles: 1,
+        dictInvalidFileType: 'Данный тип файла не допустим',
+        maxFilesize: 5,
+        acceptedFiles: ".jpeg,.jpg,.png,.gif,.pdf",
+        addRemoveLinks: true,
+        sending: function (file, xhr, formData) {
+            formData.append('_token', $('input[name=_token]').val());
+            formData.append('lastName', $('#lastName').val());
+            formData.append('firstName', $('#firstName').val());
+            formData.append('dateOfBirth', $('#dateOfBirth').val());
+            formData.append('phone', $('#phone').val());
+            formData.append('viber', $('#viber').val());
+            formData.append('id', $('#id').val());
+            formData.append('type', 104);
+        },
+        success: function (file, done) {
+            if (done.error) {
+                toastr.error(done.error);
+                myDropzoneT.removeFile(file);
+            } else {
+                $('#id').val(done.id);
+            }
+
+        },
+
+        accept: function (file, done) {
+            done();
+        }
+    });
+
+    var myDropzoneT3 = new Dropzone("#kt_file_doc3", {
+        url: "{{url('/')}}/candidate/files/doc/add", // Set the url for your upload script location
+        paramName: "file",
+        maxFiles: 1,
+        dictInvalidFileType: 'Данный тип файла не допустим',
+        maxFilesize: 5,
+        acceptedFiles: ".jpeg,.jpg,.png,.gif,.pdf",
+        addRemoveLinks: true,
+        sending: function (file, xhr, formData) {
+            formData.append('_token', $('input[name=_token]').val());
+            formData.append('lastName', $('#lastName').val());
+            formData.append('firstName', $('#firstName').val());
+            formData.append('dateOfBirth', $('#dateOfBirth').val());
+            formData.append('phone', $('#phone').val());
+            formData.append('viber', $('#viber').val());
+            formData.append('id', $('#id').val());
+            formData.append('type', 105);
+        },
+        success: function (file, done) {
+            if (done.error) {
+                toastr.error(done.error);
+                myDropzoneT.removeFile(file);
+            } else {
+                $('#id').val(done.id);
+            }
+
+        },
+
+        accept: function (file, done) {
+            done();
+        }
+    });
+
+    var myDropzoneT4 = new Dropzone("#kt_file_doc4", {
+        url: "{{url('/')}}/candidate/files/doc/add", // Set the url for your upload script location
+        paramName: "file",
+        maxFiles: 1,
+        dictInvalidFileType: 'Данный тип файла не допустим',
+        maxFilesize: 5,
+        acceptedFiles: ".jpeg,.jpg,.png,.gif,.pdf",
+        addRemoveLinks: true,
+        sending: function (file, xhr, formData) {
+            formData.append('_token', $('input[name=_token]').val());
+            formData.append('lastName', $('#lastName').val());
+            formData.append('firstName', $('#firstName').val());
+            formData.append('dateOfBirth', $('#dateOfBirth').val());
+            formData.append('phone', $('#phone').val());
+            formData.append('viber', $('#viber').val());
+            formData.append('id', $('#id').val());
+            formData.append('type', 106);
+        },
+        success: function (file, done) {
+            if (done.error) {
+                toastr.error(done.error);
+                myDropzoneT.removeFile(file);
+            } else {
+                $('#id').val(done.id);
+            }
+
+        },
+
+        accept: function (file, done) {
+            done();
+        }
+    });
+
+    var myDropzoneT5 = new Dropzone("#kt_file_doc5", {
+        url: "{{url('/')}}/candidate/files/doc/add", // Set the url for your upload script location
+        paramName: "file",
+        maxFiles: 1,
+        dictInvalidFileType: 'Данный тип файла не допустим',
+        maxFilesize: 5,
+        acceptedFiles: ".jpeg,.jpg,.png,.gif,.pdf",
+        addRemoveLinks: true,
+        sending: function (file, xhr, formData) {
+            formData.append('_token', $('input[name=_token]').val());
+            formData.append('lastName', $('#lastName').val());
+            formData.append('firstName', $('#firstName').val());
+            formData.append('dateOfBirth', $('#dateOfBirth').val());
+            formData.append('phone', $('#phone').val());
+            formData.append('viber', $('#viber').val());
+            formData.append('id', $('#id').val());
+            formData.append('type', 107);
+        },
+        success: function (file, done) {
+            if (done.error) {
+                toastr.error(done.error);
+                myDropzoneT.removeFile(file);
+            } else {
+                $('#id').val(done.id);
+            }
+
+        },
+
+        accept: function (file, done) {
+            done();
+        }
+    });
+
+
+    myDropzoneT.options.dropzoneForm = {
+        dictFileTooBig: "Максимальный размер файла 5 мб",
+        dictMaxFilesExceeded: "Данный тип файла не допустим",
+        dictInvalidFileType: "Данный тип файла не допустим",
+    }
+
 </script>
+@include('candidates.include.change_status')
 </body>
 <!--end::Body-->
 </html>

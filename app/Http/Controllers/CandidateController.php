@@ -66,7 +66,7 @@ class CandidateController extends Controller
 
 
         if ($status == '') {
-            $users = Candidate::whereIn('active', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+            $users = Candidate::whereIn('active', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
         } else {
             $users = Candidate::where('active', $status);
         }
@@ -79,7 +79,7 @@ class CandidateController extends Controller
 
         if (Auth::user()->isRecruter()) {
             $users = $users->where('recruiter_id', Auth::user()->id);
-            $users = $users->whereIn('active', [1, 2, 3, 4, 5]);
+            $users = $users->whereIn('active', [1, 2, 3, 5, 13, 14, 15, 16]);
         }
 
         if (Auth::user()->isLogist()) {
@@ -135,7 +135,13 @@ class CandidateController extends Controller
         foreach ($users as $u) {
 
             if ($u->D_file != null) {
-                $file = '<a target="_blank" href="' . url('/') . $u->D_file->path . '" style="cursor: pointer;" class="svg-icon svg-icon-2x svg-icon-primary me-4">
+                if (config('app.env') === 'local') {
+                    $path_url = url('/');
+                } else {
+                    $path_url = url('/') . '/public';
+                }
+
+                $file = '<a target="_blank" href="' . $path_url . $u->D_file->path . '" style="cursor: pointer;" class="svg-icon svg-icon-2x svg-icon-primary me-4">
 																<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
 																	<path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22Z" fill="currentColor"></path>
 																	<path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor"></path>
@@ -150,11 +156,15 @@ class CandidateController extends Controller
             if ($reason_reject != '') {
                 $reason_reject = '<br> ' . $u->reason_reject;
             }
-            $select_active = '<select onchange="changeActivation(' . $u->id . ')"
+            $count_failed_call_btn = '';
+            if ($u->active == 15) {
+                $count_failed_call_btn = '<button  onclick="setCountFailCall(' . $u->id . ',' . $u->count_failed_call . ')">Недозвон ' . ($u->count_failed_call + 1) . '</button>';
+            }
+            $select_active = '<select onchange="changeActivation(' . $u->id . ',' . $u->count_failed_call . ')"
                                     class="form-select form-select-sm form-select-solid changeActivation' . $u->id . '">
                                         <option value="">Статус</option>
                                              ' . $u->getStatusOptions() . '
-                            </select>' . $reason_reject;
+                            </select>' . $reason_reject . $count_failed_call_btn;
 
 
             $Vacancy = '';
@@ -170,7 +180,7 @@ class CandidateController extends Controller
 
             $temp_arr = [
                 //  $checkbox,
-                '<a href="candidate/add?id=' . $u->id . '">' . $u->id . '</a>',
+                '<a href="candidate/view?id=' . $u->id . '">' . $u->id . '</a>',
                 mb_strtoupper($u->firstName),
                 mb_strtoupper($u->lastName),
                 $u->phone,
@@ -263,7 +273,12 @@ class CandidateController extends Controller
         foreach ($users as $u) {
 
             if ($u->D_file != null) {
-                $file = '<a target="_blank" href="' . url('/') . $u->D_file->path . '" style="cursor: pointer;" class="svg-icon svg-icon-2x svg-icon-primary me-4">
+                if (config('app.env') === 'local') {
+                    $path_url = url('/');
+                } else {
+                    $path_url = url('/') . '/public';
+                }
+                $file = '<a target="_blank" href="' . $path_url . $u->D_file->path . '" style="cursor: pointer;" class="svg-icon svg-icon-2x svg-icon-primary me-4">
 																<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
 																	<path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22Z" fill="currentColor"></path>
 																	<path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor"></path>
@@ -293,7 +308,7 @@ class CandidateController extends Controller
 
             $temp_arr = [
                 //  $checkbox,
-                '<a href="candidate/add?id=' . $u->id . '">' . $u->id . '</a>',
+                '<a href="candidate/view?id=' . $u->id . '">' . $u->id . '</a>',
                 mb_strtoupper($u->firstName),
                 mb_strtoupper($u->lastName),
                 $u->phone,
@@ -324,6 +339,7 @@ class CandidateController extends Controller
 
 
         $candidate = Candidate::find($r->id);
+        $candidate->count_failed_call = 0;
         if ($candidate->active == 10) {
             if (!Auth::user()->isAdmin()) {
                 return response(array('success' => "true", 'error' => 'Статус менять больше нельзя'), 200);
@@ -332,7 +348,11 @@ class CandidateController extends Controller
         if ($r->s == 10) {
             return response(array('success' => "true", 'error' => 'Статус менять нельзя, это автостату'), 200);
         }
-
+        if ($r->s == 4) {
+            if ($candidate->D_file == null) {
+                return response(array('success' => "false", 'error' => 'Загрузите документ'), 200);
+            }
+        }
         if ($candidate->active == 4) {
             if ($r->s == 6) {
                 if (Candidate_arrival::where('candidate_id', $candidate->id)->count() == 0) {
@@ -366,6 +386,7 @@ class CandidateController extends Controller
             if (Auth::user()->isFreelancer()) {
                 if ($candidate->active == 3) {
                     $task = new Task();
+                    $task->start = Carbon::now();
                     $task->title = 'Связаться с кандидатом';
                     $task->autor_id = Auth::user()->id;
                     $task->to_user_id = Auth::user()->id;
@@ -377,6 +398,7 @@ class CandidateController extends Controller
 
                 if ($candidate->active == 2) {
                     $task = new Task();
+                    $task->start = Carbon::now();
                     $task->title = 'Обработать лид';
                     $task->autor_id = Auth::user()->id;
                     $task->to_user_id = Auth::user()->recruter_id;
@@ -392,6 +414,7 @@ class CandidateController extends Controller
 
                 if ($candidate->active == 3) {
                     $task = new Task();
+                    $task->start = Carbon::now();
                     $task->title = 'Связаться с кандидатом';
                     $task->autor_id = Auth::user()->id;
                     $task->to_user_id = Auth::user()->id;
@@ -406,6 +429,7 @@ class CandidateController extends Controller
                 $logists = User::where('group_id', 4)->where('activation', 1)->get();
                 foreach ($logists as $logist) {
                     $task = new Task();
+                    $task->start = Carbon::now();
                     $task->title = 'Утвердить дату приезда';
                     $task->autor_id = Auth::user()->id;
                     $task->to_user_id = $logist->id;
@@ -420,6 +444,7 @@ class CandidateController extends Controller
                 $trudos = User::where('group_id', 5)->where('activation', 1)->get();
                 foreach ($trudos as $trudo) {
                     $task = new Task();
+                    $task->start = Carbon::now();
                     $task->title = 'Встретить кандидата и подписать договор';
                     $task->autor_id = Auth::user()->id;
                     $task->to_user_id = $trudo->id;
@@ -448,6 +473,7 @@ class CandidateController extends Controller
 
                 foreach ($Clinets_c_id as $Cl_id) {
                     $task = new Task();
+                    $task->start = Carbon::now();
                     $task->title = 'Указать первый рабочий день';
                     $task->autor_id = Auth::user()->id;
                     $task->to_user_id = $Cl_id;
@@ -460,6 +486,91 @@ class CandidateController extends Controller
             }
 
         }
+
+        return response(array('success' => "true"), 200);
+    }
+
+    function setStatusSpecial(Request $r)
+    {
+        $candidate = Candidate::find($r->id);
+
+        if ($candidate != null) {
+            if ($r->status != '') {
+                $history = new History_candidate();
+                $history->preview_value = $candidate->active;
+                $history->new_value = $r->status;
+                $history->user_id = Auth::user()->id;
+                $history->table_id = 'candidates_active';
+                $history->save();
+            }
+
+            if ($r->status == 13) {
+                $candidate->active = $r->status;
+                $candidate->reason_reject = $r->comment;
+                $candidate->save();
+            }
+            if ($r->status == 14) {
+                $candidate->active = $r->status;
+                $candidate->reason_reject = $r->comment;
+                $candidate->save();
+
+                $task = new Task();
+                $task->title = 'Перезвонить: ' . $r->comment;
+                $task->start = Carbon::createFromFormat('d.m.Y', $r->date);
+                $task->autor_id = Auth::user()->id;
+                $task->to_user_id = Auth::user()->id;
+                $task->status = 1;
+                $task->type = 10;
+                $task->candidate_id = $candidate->id;
+                $task->save();
+            }
+            if ($r->status == 15) {
+                $candidate->active = $r->status;
+                $candidate->save();
+
+                if ($candidate->count_failed_call > 3) {
+                    $candidate->count_failed_call = 0;
+                    $candidate->save();
+                }
+
+
+                if ($candidate->count_failed_call == 2) {
+
+                    $candidate->count_failed_call = 0;
+                    $candidate->save();
+
+                    $task = new Task();
+                    $task->title = $r->comment;
+                    $task->start = Carbon::createFromFormat('d.m.Y', $r->date);
+                    $task->autor_id = Auth::user()->id;
+                    $task->to_user_id = Auth::user()->id;
+                    $task->status = 1;
+                    $task->type = 11;
+                    $task->candidate_id = $candidate->id;
+                    $task->save();
+                } else {
+                    $candidate->count_failed_call = $candidate->count_failed_call + 1;
+                    $candidate->save();
+                }
+
+            }
+            if ($r->status == 16) {
+                $candidate->active = $r->status;
+                $candidate->reason_reject = $r->comment;
+                $candidate->save();
+
+                $task = new Task();
+                $task->title = $r->comment;
+                $task->start = Carbon::createFromFormat('d.m.Y', $r->date);
+                $task->autor_id = Auth::user()->id;
+                $task->to_user_id = Auth::user()->id;
+                $task->status = 1;
+                $task->type = 12;
+                $task->candidate_id = $candidate->id;
+                $task->save();
+            }
+        }
+
 
         return response(array('success' => "true"), 200);
     }
@@ -488,8 +599,24 @@ class CandidateController extends Controller
                 ->with('Transport')
                 ->with('Client')
                 ->first();
+
+            $reason_reject = $canddaite->reason_reject;
+            if ($reason_reject != '') {
+                $reason_reject = '<br> ' . $canddaite->reason_reject;
+            }
+            $count_failed_call_btn = '';
+            if ($canddaite->active == 15) {
+                $count_failed_call_btn = '<button  onclick="setCountFailCall(' . $canddaite->id . ',' . $canddaite->count_failed_call . ')">Недозвон ' . ($canddaite->count_failed_call + 1) . '</button>';
+            }
+            $select_active = '<select onchange="changeActivation(' . $canddaite->id . ',' . $canddaite->count_failed_call . ')"
+                                    class="form-select form-select-sm form-select-solid changeActivation' . $canddaite->id . '">
+                                        <option value="">Статус</option>
+                                             ' . $canddaite->getStatusOptions() . '
+                            </select>' . $reason_reject . $count_failed_call_btn;
+
         } else {
             $canddaite = null;
+            $select_active = null;
 
             if ($r->has('vid')) {
                 $vacancy = Vacancy::find($r->vid);
@@ -504,7 +631,69 @@ class CandidateController extends Controller
                 $recruter = User::find($canddaite->recruiter_id);
             }
         }
+
+
         return view('candidates.add')
+            ->with('select_active', $select_active)
+            ->with('recruter', $recruter)
+            ->with('vacancy', $vacancy)
+            ->with('canddaite', $canddaite);
+    }
+    public function getView(Request $r)
+    {
+
+        if (Auth::user()->isFreelancer()) {
+            if (Auth::user()->fl_status != 2) {
+                return response(array('success' => "false"), 200);
+            }
+        }
+
+        $vacancy = null;
+
+
+        if ($r->has('id')) {
+            $canddaite = Candidate::where('id', $r->id)
+                ->with('Vacancy')
+                ->with('Citizenship')
+                ->with('Nacionality')
+                ->with('Country')
+                ->with('Type_doc')
+                ->with('Logist_place_arrive')
+                ->with('Real_status_work')
+                ->with('Transport')
+                ->with('Client')
+                ->first();
+
+            $reason_reject = $canddaite->reason_reject;
+            if ($reason_reject != '') {
+                $reason_reject = '<br> ' . $canddaite->reason_reject;
+            }
+            $count_failed_call_btn = '';
+            if ($canddaite->active == 15) {
+                $count_failed_call_btn = '<button  onclick="setCountFailCall(' . $canddaite->id . ',' . $canddaite->count_failed_call . ')">Недозвон ' . ($canddaite->count_failed_call + 1) . '</button>';
+            }
+            $select_active = '<select onchange="changeActivation(' . $canddaite->id . ',' . $canddaite->count_failed_call . ')"
+                                    class="form-select form-select-sm form-select-solid changeActivation' . $canddaite->id . '">
+                                        <option value="">Статус</option>
+                                             ' . $canddaite->getStatusOptions() . '
+                            </select>' . $reason_reject . $count_failed_call_btn;
+
+        } else {
+            return response(array('success' => "false", 'error' => 'candidate not found'), 200);
+        }
+
+        $recruter = null;
+        if ($r->has('r_id')) {
+            $recruter = User::find($r->r_id);
+        } else {
+            if ($canddaite != null) {
+                $recruter = User::find($canddaite->recruiter_id);
+            }
+        }
+
+
+        return view('candidates.view')
+            ->with('select_active', $select_active)
             ->with('recruter', $recruter)
             ->with('vacancy', $vacancy)
             ->with('canddaite', $canddaite);
@@ -588,7 +777,7 @@ class CandidateController extends Controller
             ];
             $validator = Validator::make($r->all(), [
                 'phone' => 'required|regex:/\+[0-9]{9,12}/|unique:candidates,phone,' . $candidate->id,
-                'inn' => 'required|unique:candidates,inn,' . $candidate->id
+                'inn' => 'required|numeric|unique:candidates,inn,' . $candidate->id
             ], [], $niceNames);
             if ($validator->fails()) {
                 $error = $validator->errors()->first();
@@ -655,6 +844,9 @@ class CandidateController extends Controller
             $candidate->country_id = $r->country_id;
         }
         if ($r->date_arrive != '' && $r->date_arrive != 'undefined') {
+            if (Carbon::now()->diffInYears(Carbon::createFromFormat('d.m.Y', $r->date_arrive)) > 10) {
+                return response(array('success' => "false", 'error' => 'Исправте дату приезда'), 200);
+            }
             $candidate->date_arrive = Carbon::createFromFormat('d.m.Y', $r->date_arrive);
         }
         if ($r->type_doc_id != '' && $r->type_doc_id != 'undefined') {
@@ -672,6 +864,7 @@ class CandidateController extends Controller
 
         // logist
         if ($r->logist_date_arrive != '' && $r->logist_date_arrive != 'undefined') {
+
             $candidate->logist_date_arrive = Carbon::createFromFormat('d.m.Y H:i', $r->logist_date_arrive);
         }
         if ($r->logist_place_arrive_id != '' && $r->logist_place_arrive_id != 'undefined') {
@@ -705,6 +898,7 @@ class CandidateController extends Controller
         if ($is_new) {
             if (Auth::user()->isFreelancer()) {
                 $task = new Task();
+                $task->start = Carbon::now();
                 $task->title = 'Обработать кандидата';
                 $task->autor_id = Auth::user()->id;
                 $task->to_user_id = Auth::user()->id;
@@ -724,6 +918,29 @@ class CandidateController extends Controller
 
         $c_id = request()->get('id');
         if ($c_id == '') {
+
+
+            $niceNames = [
+                'lastName' => '«Фамилия»',
+                'firstName' => '«Имя»',
+                'phone' => '«Телефон»',
+                'viber' => '«viber»',
+                'dateOfBirth' => '«Дата»',
+            ];
+            $validate_arr = [
+                'lastName' => 'required',
+                'firstName' => 'required',
+                'phone' => 'required|regex:/\+[0-9]{9,12}/',
+                'viber' => 'required|regex:/\+[0-9]{9,12}/',
+                'dateOfBirth' => 'required|date_format:d.m.Y',
+            ];
+
+            $validator = Validator::make(request()->all(), $validate_arr, [], $niceNames);
+            if ($validator->fails()) {
+                $error = $validator->errors()->first();
+                return response(array('success' => "false", 'error' => $error), 200);
+            }
+
             $candidate = new Candidate();
             $candidate->user_id = Auth::user()->id;
             $candidate->active = 1;
@@ -741,11 +958,13 @@ class CandidateController extends Controller
             $file_link = $path . $name;
 
 
+            C_file::where('candidate_id',$c_id)->where('type', request('type'))->delete();
+
             $file = new C_file();
             $file->autor_id = Auth::user()->id;
             $file->candidate_id = $c_id;
             $file->user_id = Auth::user()->id;
-            $file->type = 3;
+            $file->type = request('type');
             $file->original_name = request()->file('file')->getClientOriginalName();
             $file->ext = request()->file('file')->getClientOriginalExtension();
             $file->path = $file_link;
@@ -865,8 +1084,15 @@ class CandidateController extends Controller
 
 
             if ($u->D_file != null) {
+
+                if (config('app.env') === 'local') {
+                    $path_url = url('/');
+                } else {
+                    $path_url = url('/') . '/public';
+                }
+
                 $file = '<a   href="javascript:;"><i data-id="' . $u->id . '" id="file_' . $u->id . '"  class="fa fa-pen add_file"></i></a>';
-                $file .= '<a target="_blank" href="' . url('/') . $u->D_file->path . '" style="cursor: pointer;" class="svg-icon svg-icon-2x svg-icon-primary me-4">
+                $file .= '<a target="_blank" href="' . $path_url . $u->D_file->path . '" style="cursor: pointer;" class="svg-icon svg-icon-2x svg-icon-primary me-4">
 																<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
 																	<path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22Z" fill="currentColor"></path>
 																	<path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor"></path>
@@ -1008,7 +1234,14 @@ class CandidateController extends Controller
         foreach ($users as $u) {
 
             if ($u->D_file != null) {
-                $file = '<a target="_blank" href="' . url('/') . $u->D_file->path . '" style="cursor: pointer;" class="svg-icon svg-icon-2x svg-icon-primary me-4">
+
+                if (config('app.env') === 'local') {
+                    $path_url = url('/');
+                } else {
+                    $path_url = url('/') . '/public';
+                }
+
+                $file = '<a target="_blank" href="' . $path_url . $u->D_file->path . '" style="cursor: pointer;" class="svg-icon svg-icon-2x svg-icon-primary me-4">
 																<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
 																	<path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22Z" fill="currentColor"></path>
 																	<path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="currentColor"></path>
@@ -1056,7 +1289,7 @@ class CandidateController extends Controller
 
             $temp_arr = [
                 //  $checkbox,
-                '<a href="' . url('/') . '/candidate/add?id=' . $u->candidate_id . '">' . $u->id . '</a>',
+                '<a href="' . url('/') . '/candidate/view?id=' . $u->candidate_id . '">' . $u->id . '</a>',
                 mb_strtoupper($u->Candidate->firstName),
                 mb_strtoupper($u->Candidate->lastName),
                 $u->Candidate->phone,
@@ -1131,8 +1364,23 @@ class CandidateController extends Controller
 
         if ($arrival == null) {
             $arrival = new  Candidate_arrival();
+
+
+            //  Auto task
+            $task = new Task();
+            $task->title = 'Перезвонить  кандидату';
+            $task->autor_id = Auth::user()->id;
+            $task->to_user_id = Auth::user()->id;
+            $task->start = Carbon::createFromFormat('d.m.Y H:i', $r->date_arrive)->subDays(1);
+            $task->status = 1;
+            $task->type = 13;
+            $task->candidate_id = $candidate->id;
+            $task->save();
+
             $arrival->status = 0;
+            $arrival->task_id = $task->id;
         }
+
 
         $arrival->place_arrive_id = $r->place_arrive_id;
         $arrival->transport_id = $r->transport_id;
@@ -1140,6 +1388,14 @@ class CandidateController extends Controller
         $arrival->date_arrive = Carbon::createFromFormat('d.m.Y H:i', $r->date_arrive);
         $arrival->candidate_id = $candidate->id;
         $arrival->save();
+
+        // Update task
+        $task = Task::find($arrival->task_id);
+        if ($task !== null) {
+            $task->start = Carbon::createFromFormat('d.m.Y H:i', $r->date_arrive)->subDays(1);
+            $task->save();
+        }
+
 
         /*       $candidate->transport_id = $r->transport_id;
                $candidate->logist_place_arrive_id = $r->place_arrive_id;

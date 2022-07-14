@@ -200,13 +200,13 @@ class VacancyController extends Controller
         $vacancy->deadline_from = Carbon::createFromFormat('d.m.Y', $r->deadline_from);
         $vacancy->deadline_to = Carbon::createFromFormat('d.m.Y', $r->deadline_to);
 
-        if(!Auth::user()->isRecruter()){
+        if (!Auth::user()->isRecruter()) {
             $vacancy->recruting_cost = $r->recruting_cost;
             $vacancy->cost_pay_lead = $r->cost_pay_lead;
         } else {
-           if($vacancy->recruting_cost == '' ||  $vacancy->cost_pay_lead == ''){
-               return response(array('success' => "false", 'error' => 'Заполните стоимость'), 200);
-           }
+            if ($vacancy->recruting_cost == '' || $vacancy->cost_pay_lead == '') {
+                return response(array('success' => "false", 'error' => 'Заполните стоимость'), 200);
+            }
         }
 
         $vacancy->save();
@@ -420,7 +420,7 @@ class VacancyController extends Controller
                 $count_women = '';
                 $count_people = '';
 
-                if (Auth::user()->isFreelancer()) {
+                if (Auth::user()->isFreelancer() || Auth::user()->isRecruter()) {
                     if ($u->count_men > 0) $count_men = 'М';
                     if ($u->count_women > 0) $count_women = 'Ж';
                     if ($u->count_people > 0) $count_people = 'Н';

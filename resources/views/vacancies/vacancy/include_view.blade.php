@@ -8,11 +8,11 @@
     <style>
         .disnone {
             display: none !important;
-        } 
+        }
 
         .select2-container .select2-selection--multiple {
             cursor: default!important;
-         }       
+         }
 
         .sorting_disabled.sorting_asc:after {
             display: none !important;
@@ -56,6 +56,14 @@
 
         .mb-5 {
             margin-bottom: 0!important;
+        }
+        .form-select {
+            background-image: none;
+            cursor: default!important;
+        }
+
+        .form-control {
+            cursor: default!important;
         }
 
     </style>
@@ -200,11 +208,6 @@
                                             </div>
                                         </div>
                                         <div class="row mb-5">
-                                            <div class="col disabled disnone">
-                                                <label for="client_id" class="form-label">Клиент</label>
-                                                <select  id="client_id" multiple="multiple"
-                                                        class="form-select form-select-sm form-select-solid"></select>
-                                            </div>
                                             <div class="col">
                                                 <label for="industry_id" class="form-label">Отрасль</label>
                                                 <select disabled id="industry_id" multiple="multiple"
@@ -605,13 +608,6 @@
     $('#work_place_id').append(new Option('{{$industry[1]}}', {{$industry[0]}}, true, true)).trigger('change');
     @endforeach
     @endif
-
-    @if($Clients != null)
-    @foreach($Clients as $industry)
-    $('#client_id').append(new Option('{{$industry[1]}}', {{$industry[0]}}, true, true)).trigger('change');
-    @endforeach
-    @endif
-
 
 </script>
 
