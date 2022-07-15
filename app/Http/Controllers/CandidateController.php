@@ -552,6 +552,16 @@ class CandidateController extends Controller
                 } else {
                     $candidate->count_failed_call = $candidate->count_failed_call + 1;
                     $candidate->save();
+
+                    $task = new Task();
+                    $task->title = 'Не дозвон';
+                    $task->start = Carbon::createFromFormat('d.m.Y', $r->date);
+                    $task->autor_id = Auth::user()->id;
+                    $task->to_user_id = Auth::user()->id;
+                    $task->status = 1;
+                    $task->type = 11;
+                    $task->candidate_id = $candidate->id;
+                    $task->save();
                 }
 
             }
