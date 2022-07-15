@@ -25,7 +25,7 @@ class TaskController extends Controller
         $rowperpage = request()->get("length"); // Rows display per page
 
         //ordering
-        $order_col = 'created_at';
+        $order_col = 'start';
         $order_direction = 'desc';
         $cols = request('columns');
         $order = request('order');
@@ -59,13 +59,16 @@ class TaskController extends Controller
             })
             ->when($filter__period, function ($query, $period) {
                 if ($period == 'today') {
-                    return $query->whereDate('created_at', '>=', Carbon::now()->subDays(1));
+                    return $query->whereDate('start', '>=', Carbon::now()->subDays(1))
+                        ->whereDate('start', '<', Carbon::now()->addDays(1));
                 } elseif ($period == 'yesterday') {
-                    return $query->whereDate('created_at', Carbon::now()->subDays(1));
+                    return $query->whereDate('start', Carbon::now()->subDays(1));
                 } elseif ($period == 'lastWeek') {
-                    return $query->whereDate('created_at', '>', Carbon::now()->subDays(7));
+                    return $query->whereDate('start', '>', Carbon::now()->subDays(7))
+                        ->whereDate('start', '<', Carbon::now()->addDays(1));
                 } elseif ($period == 'lastMonth') {
-                    return $query->whereDate('created_at', '>', Carbon::now()->subDays(30));
+                    return $query->whereDate('start', '>', Carbon::now()->subDays(30))
+                        ->whereDate('start', '<', Carbon::now()->addDays(1));
                 }
             });
 
