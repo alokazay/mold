@@ -519,13 +519,15 @@
             }
 
         });
-
-        $('.view_doc a').click(function (){
-            let href = $(this).data('href');
-            $('#modal_view_doc_iframe').attr('src',href);
-            $('#modal_view_doc').modal('show');
-        })
     </script>
 @endif
+
+<script>
+    $('.view_doc a').click(function (){
+        let href = $(this).data('href');
+        $('#modal_view_doc_iframe').attr('src',href);
+        $('#modal_view_doc').modal('show');
+    })
+</script>
 </body>
 </html>
