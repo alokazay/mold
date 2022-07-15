@@ -371,7 +371,7 @@ class CandidateController extends Controller
         if ($candidate != null) {
             if ($r->s != '') {
                 $history = new History_candidate();
-                $history->preview_value = $candidate->active;
+                $history->preview_value = $candidate->active || 0;
                 $history->new_value = $r->s;
                 $history->user_id = Auth::user()->id;
                 $history->table_id = 'candidates_active';
@@ -455,7 +455,6 @@ class CandidateController extends Controller
                 }
 
             }
-
             if ($candidate->active == 8) {
                 $Clinets_c_id = [];
 
@@ -484,10 +483,12 @@ class CandidateController extends Controller
                 }
 
             }
-
+            return response(array('success' => "true"), 200);
+        } else {
+            return response(array('success' => "false", 'error' => 'Ошибка'), 200);
         }
 
-        return response(array('success' => "true"), 200);
+
     }
 
     function setStatusSpecial(Request $r)
@@ -1103,16 +1104,11 @@ class CandidateController extends Controller
                 $file = '<a data-id="' . $u->id . '" id="file_' . $u->id . '" class="add_file" href="javascript:;">загрузить</a>';
             }
 
-            $select_active = '<select onchange="changeActivation(' . $u->id . ')"
-                                    class="form-select form-select-sm form-select-solid changeActivation' . $u->id . '">
+            $select_active = '<select onchange="changeArrivalActivation(' . $u->id . ')"
+                                    class="form-select form-select-sm form-select-solid changeArrivalActivation' . $u->id . '">
                                         <option value="">Статус</option>
                                              ' . $u->getStatusOptions() . '
                             </select>';
-
-
-            if ($u->Vacancy != null) {
-                $Vacancy = $u->Vacancy->title;
-            }
 
             if ($u->date_arrive != null) {
                 $date_arrive = Carbon::parse($u->date_arrive)->format('d.m.Y');

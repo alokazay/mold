@@ -596,9 +596,9 @@
     }
 
 
-    function changeActivation(id) {
-        var changeActivation = $('.changeActivation' + id).val();
-        $.get('{{url('/')}}/candidates/arrivals/activation?s=' + changeActivation + '&id=' + id, function (res) {
+    function changeArrivalActivation(id) {
+        var changeArrivalActivation = $('.changeArrivalActivation' + id).val();
+        $.get('{{url('/')}}/candidates/arrivals/activation?s=' + changeArrivalActivation + '&id=' + id, function (res) {
             if (res.error) {
                 toastr.error(res.error);
             } else {
